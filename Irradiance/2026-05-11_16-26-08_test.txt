@@ -1,0 +1,2 @@
+Datetime	Eg_front 	Eg_rear	T1	T2	T3	T4	T5
+2026-05-11 16:26	942,58	88,46					
