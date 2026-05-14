@@ -1,0 +1,3 @@
+Steca Elektronik GmbH;MPPT6000;760749IH008963540005
+Date;Time;SOC[%];Kaptest[Ah];Vbat[V];Ibat_M[A];Vbat.sense[V];VPV1_M[V];VPV2_M[V];PVpower_M[W];PV1power_M[W];PV2power_M[W];Ophours[h];Ibat_total[A]SOC;Icharge_total[A];Iload_total[A];BatPower_total[W];BatTemp[°C];ChargeMode;ErrorState;ErrorNr;StateAux1;StateAux2;StateAux3;IntTemp1[°C];IntTemp2[°C];Derating;Ah_in_24h_M[Ah];Ah_in_total_M[Ah];Ah_in_24h_SYS[Ah];Ah_in_total_SYS[Ah];Ah_out_24h_SYS[Ah];Ah_out_total_SYS[Ah];Day_night;Status_AUXIO
+2014/01/01;15:05:00;82;-; 54.15; 21.8;-; 70.8; 70.3; 1184.1; 605.5; 578.6;1151; 43.8; 21.7; 0.0;2330; 23.3;F;0;-;Off;On;Off; 36.1; 35.4;0;170;171;170;171;0;0;1;-
