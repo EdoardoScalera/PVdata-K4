@@ -1,2 +1,0 @@
-Datetime	Irradiance Panel W/m^2 	Irradiance Sky W/m^2 	Temp back C	Temp amb C 	Temp Vert Front C	Temp Horizontal Front (C) 	Temp test (C) 
-2026-05-18 19:02	70,03	11,67					
