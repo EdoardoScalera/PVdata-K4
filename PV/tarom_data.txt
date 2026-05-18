@@ -1,1 +1,2 @@
 ﻿date	time	battery_voltage_V	pv1_voltage_V	pv2_voltage_V	ext_batt_sense_V	reserved_1	mppt_charge_current_A	total_batt_current_A	total_batt_discharge_current_A	pv_power_total_W	pv_power_1_W	pv_power_2_W	battery_temperature_C	soc_percent	operating_state	error_flag	warning_flag	day_night_flag	operating_hours_h	daily_yield_Wh	total_yield_Wh	reserved_2	checksum
+1	2026/05/18	17:55	51.0	66.8	66.1	#	#	7.7	2.0	2.0	#	4.0	#	4.0	24.5	0	B	1	1	0	38	2107	38	1921	0	DB90
