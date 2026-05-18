@@ -1,3 +1,5 @@
 ﻿op	date	time	battery_voltage_V	pv1_voltage_V	pv2_voltage_V	ext_batt_sense_V	reserved_1	mppt_charge_current_A	total_batt_current_A	total_batt_discharge_current_A	pv_power_total_W	pv_power_1_W	pv_power_2_W	battery_temperature_C	soc_percent	operating_state	error_flag	warning_flag	day_night_flag	operating_hours_h	daily_yield_Wh	total_yield_Wh	reserved_2	checksum
 1	2026/05/18	17:57	50.4	67.1	66.8	#	#	7.5	2.0	2.0	#	3.9	#	3.9	24.6	0	B	1	1	0	38	2107	38	1921	0	CD7D
 1	2026/05/18	17:58	50.8	66.9	65.9	#	#	7.5	1.9	2.0	#	3.9	#	3.9	24.6	0	B	1	1	0	38	2107	38	1921	0	304E
+1	2026/05/18	17:59	50.4	67.2	66.7	#	#	7.4	1.9	2.0	#	3.9	#	3.9	24.6	0	B	1	1	0	38	2107	38	1921	0	5BBE
+1	2026/05/18	18:00	51.8	67.6	67.3	#	#	7.3	1.8	1.9	#	3.9	#	3.9	24.6	0	B	1	1	0	38	2107	38	1921	0	7137
