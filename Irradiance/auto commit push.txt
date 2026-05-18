@@ -1,0 +1,2 @@
+this file is a test for the automatic file upload to github. 
+git -c gc.auto=0 push origin $Branch
