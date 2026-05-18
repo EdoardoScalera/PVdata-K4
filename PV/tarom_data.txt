@@ -1,3 +1,1 @@
-﻿tarom_line
-1;2026/05/18;17:36;51.6;67.0;67.2;#;#;9.9;2.5;2.5;#;5.1;#;5.1;24.4;0;B;1;1;0;37;2106;37;1920;0;B3DF
-1;2026/05/18;17:37;51.6;67.1;67.2;#;#;9.7;2.5;2.4;#;5.0;#;5.0;24.4;0;B;1;1;0;37;2106;37;1920;0;E0B0
+﻿date	time	battery_voltage_V	pv1_voltage_V	pv2_voltage_V	ext_batt_sense_V	reserved_1	mppt_charge_current_A	total_batt_current_A	total_batt_discharge_current_A	pv_power_total_W	pv_power_1_W	pv_power_2_W	battery_temperature_C	soc_percent	operating_state	error_flag	warning_flag	day_night_flag	operating_hours_h	daily_yield_Wh	total_yield_Wh	reserved_2	checksum
