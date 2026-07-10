@@ -1,0 +1,26 @@
+{
+    "scenario":  {
+                    "current_target_w":  1798,
+                    "active_scenario":  "all_on",
+                    "source_ts_local":  "2026-07-09 18:32:35"
+                },
+    "load":  {
+                 "source_ts_local":  "2026-07-09 18:46:00",
+                 "load_active_total_w":  1767.8
+                },
+    "pv":  {
+               "source_ts_local":  "2026-07-09 18:17:12",
+               "pv1_power_w":  850.1,
+               "pv2_power_w":  790.5,
+               "pv_power_total_w":  1640.6
+            },
+    "sensors": {
+                "Ge_front": 0,
+                "Ge_back": 0,
+                "TC1": 0,
+                "TC2": 0,
+                "TC3": 0,
+                "TC4": 0
+            },
+    "ts_local":  "2026-07-09 18:46:04"
+}
