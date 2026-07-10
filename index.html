@@ -108,7 +108,7 @@
           <div class="eyebrow">Health</div>
           <h2 class="section-title">Data source</h2>
           <div class="kv"><span class="k">Status</span><strong class="v accent-success" id="statusText">Starting</strong></div>
-          <div class="kv"><span class="k">Source path</span><span class="v">./dashboard_values.json</span></div>
+          <div class="kv"><span class="k">Source path</span><span class="v">./Dashboard/dashboard_values.json</span></div>
           <div class="kv"><span class="k">Auto refresh</span><span class="v">Enabled</span></div>
         </aside>
       </section>
@@ -165,7 +165,7 @@
 
     async function loadDashboardData() {
       try {
-        const response = await fetch(`./dashboard_values.json?ts=${Date.now()}`, { cache: 'no-store' });
+        const response = await fetch(`./Dashboard/dashboard_values.json?ts=${Date.now()}`, { cache: 'no-store' });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
 
