@@ -1,0 +1,3 @@
+﻿device_status	date	time	battery_voltage_V	pv1_voltage_V	pv2_voltage_V	SOC	capacity_Ah	total_charge_discharge_battery_A	pv1_current_A	pv2_current_A	module_current_A	total_batt_current_A	load_current_A	total_batt_discharge_current_A	temperature_C	error	charging_mode	AUX1	AUX2	AUX3	energy_input_24h_Ah	energy_input_tot_Ah	energy_output_24h_Ah	energy_output_tot_Ah	derating_Ah	checksum	end_of_data	pv1_power_W	pv2_power_W	pv_power_total_W
+665.52	736.7	1402.22
+760.82	734.58	1495.4
