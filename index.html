@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PV data dashboard</title>
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=cabinet-grotesk@500,700&display=swap" rel="stylesheet" />
+  <style>
+    :root, [data-theme="light"] {
+      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+      --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
+      --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem; --space-12: 3rem;
+      --radius-sm: 0.375rem; --radius-md: 0.5rem; --radius-lg: 0.75rem; --radius-xl: 1rem; --radius-full: 9999px;
+      --color-bg: #f7f6f2; --color-surface: #f9f8f5; --color-surface-2: #fbfbf9; --color-surface-offset: #edeae5;
+      --color-border: #d4d1ca; --color-divider: #dcd9d5; --color-text: #28251d; --color-text-muted: #7a7974;
+      --color-text-faint: #bab9b4; --color-primary: #01696f; --color-primary-hover: #0c4e54; --color-primary-highlight: #cedcd8;
+      --color-success: #437a22; --color-orange: #da7101; --shadow-sm: 0 1px 2px oklch(0.2 0.01 80 / 0.06); --shadow-md: 0 4px 12px oklch(0.2 0.01 80 / 0.08);
+      --font-display: 'Cabinet Grotesk', 'Inter', sans-serif; --font-body: 'Satoshi', 'Inter', sans-serif;
+    }
+    [data-theme="dark"] {
+      --color-bg: #171614; --color-surface: #1c1b19; --color-surface-2: #201f1d; --color-surface-offset: #22211f;
+      --color-border: #393836; --color-divider: #262523; --color-text: #cdccca; --color-text-muted: #979592; --color-text-faint: #5a5957;
+      --color-primary: #4f98a3; --color-primary-hover: #227f8b; --color-primary-highlight: #313b3b; --color-success: #6daa45; --color-orange: #fdab43;
+      --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.2); --shadow-md: 0 4px 12px oklch(0 0 0 / 0.3);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: none; text-size-adjust: none; scroll-behavior: smooth; }
+    body { margin: 0; min-height: 100dvh; font-family: var(--font-body); font-size: var(--text-base); line-height: 1.6; color: var(--color-text); background:
+      radial-gradient(circle at top right, color-mix(in oklab, var(--color-primary) 10%, transparent), transparent 28%), var(--color-bg); }
+    h1, h2, h3, p { margin: 0; }
+    button { font: inherit; cursor: pointer; }
+    .skip-link { position: absolute; left: -999px; top: var(--space-2); background: var(--color-primary); color: white; padding: var(--space-2) var(--space-4); border-radius: var(--radius-md); }
+    .skip-link:focus { left: var(--space-2); }
+    .shell { max-width: 1200px; margin: 0 auto; padding: var(--space-6); }
+    .topbar { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); padding: var(--space-6) 0 var(--space-8); }
+    .brand { display: flex; align-items: center; gap: var(--space-3); }
+    .logo { width: 40px; height: 40px; color: var(--color-primary); }
+    .eyebrow { font-size: var(--text-xs); letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-muted); }
+    h1 { font-family: var(--font-display); font-size: var(--text-xl); }
+    .theme-toggle { min-width: 44px; min-height: 44px; border: 1px solid color-mix(in oklab, var(--color-text) 12%, transparent); border-radius: var(--radius-full); background: var(--color-surface); color: var(--color-text); box-shadow: var(--shadow-sm); }
+    .hero { display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-6); margin-bottom: var(--space-8); }
+    .panel, .metric, .sensor-card { background: color-mix(in oklab, var(--color-surface) 88%, transparent); border: 1px solid color-mix(in oklab, var(--color-text) 10%, transparent); border-radius: var(--radius-xl); box-shadow: var(--shadow-sm); backdrop-filter: blur(12px); }
+    .panel { padding: var(--space-6); }
+    .status-row { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+    .pill { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3); border-radius: var(--radius-full); background: var(--color-primary-highlight); color: var(--color-text); font-size: var(--text-sm); }
+    .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); margin-bottom: var(--space-8); }
+    .metric { padding: var(--space-5); }
+    .metric-label { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-muted); }
+    .metric-value { font-size: clamp(1.75rem, 1.5rem + 1vw, 2.4rem); font-family: var(--font-display); line-height: 1.05; margin: var(--space-3) 0 var(--space-2); }
+    .metric-note { color: var(--color-text-muted); font-size: var(--text-sm); }
+    .section-title { font-size: var(--text-lg); margin-bottom: var(--space-4); }
+    .detail-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--space-4); margin-bottom: var(--space-8); }
+    .kv { display: grid; grid-template-columns: 1fr auto; gap: var(--space-3); padding: var(--space-3) 0; border-bottom: 1px solid var(--color-divider); }
+    .kv:last-child { border-bottom: 0; }
+    .k { color: var(--color-text-muted); }
+    .v { font-variant-numeric: tabular-nums; }
+    .sensor-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+    .sensor-card { padding: var(--space-4); }
+    .sensor-name { font-size: var(--text-sm); color: var(--color-text-muted); }
+    .sensor-value { margin-top: var(--space-2); font-size: var(--text-lg); font-family: var(--font-display); }
+    .footer-note { color: var(--color-text-muted); font-size: var(--text-sm); }
+    .accent-success { color: var(--color-success); }
+    .accent-warn { color: var(--color-orange); }
+    @media (max-width: 900px) {
+      .hero, .detail-grid, .grid, .sensor-grid { grid-template-columns: 1fr; }
+      .shell { padding: var(--space-4); }
+      .topbar { align-items: flex-start; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 64 64" fill="none" aria-label="PV data logo">
+          <path d="M10 46L22 18L32 38L42 10L54 46" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8 52H56" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <div class="eyebrow">PV data collection</div>
+          <h1>Live power dashboard</h1>
+        </div>
+      </div>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <article class="panel">
+          <div class="eyebrow">System snapshot</div>
+          <h2 class="section-title">Current scenario and refresh status</h2>
+          <p id="scenarioText">Waiting for data…</p>
+          <div class="status-row">
+            <span class="pill">Refresh every 60 seconds</span>
+            <span class="pill" id="lastUpdated">No data loaded yet</span>
+          </div>
+        </article>
+        <aside class="panel">
+          <div class="eyebrow">Health</div>
+          <h2 class="section-title">Data source</h2>
+          <div class="kv"><span class="k">Status</span><strong class="v accent-success" id="statusText">Starting</strong></div>
+          <div class="kv"><span class="k">Source path</span><span class="v">./Dashboard/dashboard_values.json</span></div>
+          <div class="kv"><span class="k">Auto refresh</span><span class="v">Enabled</span></div>
+        </aside>
+      </section>
+
+      <section class="grid" aria-label="Key values">
+        <article class="metric"><div class="metric-label">Target power</div><div class="metric-value" id="targetPower">—</div><div class="metric-note">Scenario target in watts</div></article>
+        <article class="metric"><div class="metric-label">Load total</div><div class="metric-value" id="loadTotal">—</div><div class="metric-note">Active load demand</div></article>
+        <article class="metric"><div class="metric-label">PV total</div><div class="metric-value" id="pvTotal">—</div><div class="metric-note">Combined PV output</div></article>
+        <article class="metric"><div class="metric-label">PV balance</div><div class="metric-value" id="pvBalance">—</div><div class="metric-note">PV total minus load total</div></article>
+      </section>
+
+      <section class="detail-grid">
+        <article class="panel">
+          <h2 class="section-title">Power details</h2>
+          <div class="kv"><span class="k">Active scenario</span><span class="v" id="activeScenario">—</span></div>
+          <div class="kv"><span class="k">PV1 power</span><span class="v" id="pv1Power">—</span></div>
+          <div class="kv"><span class="k">PV2 power</span><span class="v" id="pv2Power">—</span></div>
+          <div class="kv"><span class="k">Scenario timestamp</span><span class="v" id="scenarioTs">—</span></div>
+          <div class="kv"><span class="k">Load timestamp</span><span class="v" id="loadTs">—</span></div>
+          <div class="kv"><span class="k">PV timestamp</span><span class="v" id="pvTs">—</span></div>
+        </article>
+        <article class="panel">
+          <h2 class="section-title">Collection notes</h2>
+          <p class="footer-note">This page reads a JSON file from the same GitHub Pages repository, then redraws the values every minute. Replace the JSON file content in GitHub and the dashboard will show the latest values after the next refresh cycle.</p>
+          <div class="status-row" style="margin-top: var(--space-5);">
+            <span class="pill">Static HTML</span>
+            <span class="pill">GitHub Pages ready</span>
+            <span class="pill">No backend required</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel">
+        <h2 class="section-title">Sensors</h2>
+        <div class="sensor-grid" id="sensorGrid"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const state = { theme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light' };
+    const root = document.documentElement;
+    const toggle = document.querySelector('[data-theme-toggle]');
+    root.setAttribute('data-theme', state.theme);
+    const themeIcon = () => state.theme === 'dark'
+      ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+      : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+    const syncTheme = () => { toggle.innerHTML = themeIcon(); toggle.setAttribute('aria-label', `Switch to ${state.theme === 'dark' ? 'light' : 'dark'} mode`); };
+    toggle.addEventListener('click', () => { state.theme = state.theme === 'dark' ? 'light' : 'dark'; root.setAttribute('data-theme', state.theme); syncTheme(); });
+    syncTheme();
+
+    const formatWatts = (value) => Number.isFinite(value) ? `${value.toFixed(1)} W` : '—';
+    const setText = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
+
+    async function loadDashboardData() {
+      try {
+        const response = await fetch(`./Dashboard/dashboard_values.json?ts=${Date.now()}`, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+
+        const target = Number(data?.scenario?.current_target_w);
+        const load = Number(data?.load?.load_active_total_w);
+        const pv = Number(data?.pv?.pv_power_total_w);
+        const pv1 = Number(data?.pv?.pv1_power_w);
+        const pv2 = Number(data?.pv?.pv2_power_w);
+        const balance = Number.isFinite(pv) && Number.isFinite(load) ? pv - load : NaN;
+
+        setText('targetPower', formatWatts(target));
+        setText('loadTotal', formatWatts(load));
+        setText('pvTotal', formatWatts(pv));
+        setText('pvBalance', Number.isFinite(balance) ? `${balance >= 0 ? '+' : ''}${balance.toFixed(1)} W` : '—');
+        setText('activeScenario', data?.scenario?.active_scenario ?? '—');
+        setText('pv1Power', formatWatts(pv1));
+        setText('pv2Power', formatWatts(pv2));
+        setText('scenarioTs', data?.scenario?.source_ts_local ?? '—');
+        setText('loadTs', data?.load?.source_ts_local ?? '—');
+        setText('pvTs', data?.pv?.source_ts_local ?? '—');
+        setText('lastUpdated', `JSON timestamp: ${data?.ts_local ?? '—'}`);
+        setText('statusText', 'Connected');
+        document.getElementById('statusText').className = 'v accent-success';
+        document.getElementById('scenarioText').textContent = `Scenario ${data?.scenario?.active_scenario ?? '—'} is targeting ${Number.isFinite(target) ? target.toFixed(0) : '—'} W while the active load reads ${Number.isFinite(load) ? load.toFixed(1) : '—'} W.`;
+
+        const sensors = data?.sensors ?? {};
+        const sensorGrid = document.getElementById('sensorGrid');
+        sensorGrid.innerHTML = Object.entries(sensors).map(([name, value]) => `
+          <article class="sensor-card">
+            <div class="sensor-name">${name}</div>
+            <div class="sensor-value">${value}</div>
+          </article>
+        `).join('');
+      } catch (error) {
+        setText('statusText', 'Fetch error');
+        document.getElementById('statusText').className = 'v accent-warn';
+        document.getElementById('scenarioText').textContent = `Unable to read dashboard_values.json. Check that the JSON file is in the same folder as this HTML page.`;
+      }
+    }
+
+    loadDashboardData();
+    setInterval(loadDashboardData, 60000);
+  </script>
+</body>
+</html>
