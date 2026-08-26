@@ -1,0 +1,19 @@
+{
+    "load":  {
+                 "load_active_total_w":  0,
+                 "ts_local":  "2026-08-26 13:23:54"
+             },
+    "pv":  {
+               "pv2_power_w":  404.43,
+               "pv1_power_w":  387.6,
+               "pv_power_total_w":  792.03,
+               "source_ts_local":  "2026-08-26 13:25:24"
+           },
+    "scenario":  {
+                     "current_target_w":  1200,
+                     "ts_local":  "2026-08-26 12:48:31",
+                     "active_scenario":  "constant_1kw",
+                     "source_ts_local":  "2026-08-26 12:48:31"
+                 },
+    "ts_local":  "2026-08-26 13:25:24"
+}
