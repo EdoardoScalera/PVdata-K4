@@ -72,6 +72,9 @@
     .download-controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); align-items: end; }
     .download-controls label { display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--text-sm); color: var(--color-text-muted); }
     .download-controls input { width: 100%; padding: var(--space-2); border: 1px solid var(--color-divider); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-text); }
+    .manifest-filters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+    .manifest-filters label { display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--text-sm); color: var(--color-text-muted); }
+    .manifest-filters select { width: 100%; padding: var(--space-2); border: 1px solid var(--color-divider); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-text); }
     .download-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
     .download-button { padding: var(--space-3) var(--space-4); border: none; border-radius: var(--radius-md); background: var(--color-primary); color: white; font-weight: 700; cursor: pointer; }
     .download-button.secondary { background: var(--color-surface); color: var(--color-primary); border: 1px solid var(--color-divider); }
@@ -286,6 +289,14 @@
           <section class="panel download-panel">
             <p class="footer-note" style="margin-bottom: var(--space-3);">Select a dataset and date range, then click download. If no range is selected, the full file will be downloaded.</p>
             <div class="panel-block">
+              <div class="sensor-group-title">Filter by configuration</div>
+              <div class="manifest-filters">
+                <label>Tilt<select id="downloadTilt"><option value="">All tilts</option></select></label>
+                <label>Distance<select id="downloadDistance"><option value="">All distances</option></select></label>
+                <label>Load scenario<select id="downloadScenario"><option value="">All scenarios</option></select></label>
+              </div>
+            </div>
+            <div class="panel-block">
               <div class="sensor-group-title">Choose files</div>
               <div class="toggle-list" id="downloadFileSelector"></div>
             </div>
@@ -353,7 +364,11 @@
             path: entry.path,
             name: entry.name,
             label: entry.label,
-            type: entry.type
+            type: entry.type,
+            tilt: entry.tilt,
+            distance: entry.distance,
+            scenario: entry.scenario,
+            constantTargetW: entry.constant_target_w
           };
         });
       } catch (error) {
@@ -364,7 +379,18 @@
     const renderDownloadFileOptions = () => {
       const container = document.getElementById('downloadFileSelector');
       if (!container) return;
+      const selectedTilt = document.getElementById('downloadTilt')?.value || '';
+      const selectedDistance = document.getElementById('downloadDistance')?.value || '';
+      const selectedScenario = document.getElementById('downloadScenario')?.value || '';
+      const filteredEntries = Object.entries(dataFiles).filter(([, fileInfo]) => {
+        if (selectedTilt && String(fileInfo.tilt) !== selectedTilt) return false;
+        if (selectedDistance && String(fileInfo.distance) !== selectedDistance) return false;
+        if (selectedScenario && fileInfo.scenario !== selectedScenario) return false;
+        return true;
+      });
+      const filteredKeys = new Set(filteredEntries.map(([key]) => key));
       const groupedEntries = Object.entries(dataFiles).reduce((groups, [key, fileInfo]) => {
+        if (!filteredKeys.has(key)) return groups;
         const groupName = key.split('/')[0] || 'Repository';
         if (!groups[groupName]) groups[groupName] = [];
         groups[groupName].push([key, fileInfo]);
@@ -403,6 +429,25 @@
         input.addEventListener('change', handleDownloadSelection);
       });
       updateSelectionStates();
+    };
+
+    const populateManifestFilters = () => {
+      const values = {
+        downloadTilt: [...new Set(Object.values(dataFiles).map(file => file.tilt).filter(value => value !== null && value !== undefined))].sort((a, b) => a - b),
+        downloadDistance: [...new Set(Object.values(dataFiles).map(file => file.distance).filter(value => value !== null && value !== undefined))].sort((a, b) => a - b),
+        downloadScenario: [...new Set(Object.values(dataFiles).map(file => file.scenario).filter(Boolean))].sort()
+      };
+      Object.entries(values).forEach(([id, options]) => {
+        const select = document.getElementById(id);
+        if (!select) return;
+        options.forEach(value => {
+          const option = document.createElement('option');
+          option.value = value;
+          option.textContent = value;
+          select.appendChild(option);
+        });
+        select.addEventListener('change', renderDownloadFileOptions);
+      });
     };
 
     const parseFileDate = (type, row) => {
@@ -487,7 +532,18 @@
       if (!window.JSZip) throw new Error('ZIP export is unavailable in this browser.');
       const { fromDate, toDate } = getDateRange();
       const zip = new JSZip();
-      for (const fileKey of Object.keys(dataFiles)) {
+      const selectedTilt = document.getElementById('downloadTilt')?.value || '';
+      const selectedDistance = document.getElementById('downloadDistance')?.value || '';
+      const selectedScenario = document.getElementById('downloadScenario')?.value || '';
+      const fileKeys = Object.entries(dataFiles)
+        .filter(([, fileInfo]) => {
+          if (selectedTilt && String(fileInfo.tilt) !== selectedTilt) return false;
+          if (selectedDistance && String(fileInfo.distance) !== selectedDistance) return false;
+          if (selectedScenario && fileInfo.scenario !== selectedScenario) return false;
+          return true;
+        })
+        .map(([fileKey]) => fileKey);
+      for (const fileKey of fileKeys) {
         const payload = await buildCsvPayload(fileKey, fromDate, toDate);
         zip.file(formatDownloadName(fileKey, fromDate, toDate), payload);
       }
@@ -575,6 +631,7 @@
 
     async function initializeDownloadSection() {
       await loadDataFileManifest();
+      populateManifestFilters();
       renderDownloadFileOptions();
     }
 
