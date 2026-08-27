@@ -291,9 +291,29 @@
             <div class="panel-block">
               <div class="sensor-group-title">Filter by configuration</div>
               <div class="manifest-filters">
-                <label>Tilt<select id="downloadTilt"><option value="">All tilts</option></select></label>
-                <label>Distance<select id="downloadDistance"><option value="">All distances</option></select></label>
-                <label>Load scenario<select id="downloadScenario"><option value="">All scenarios</option></select></label>
+                <label>
+                  Tilt
+                  <select id="downloadTilt">
+                    <option value="">All tilts</option>
+                  </select>
+                </label>
+                <label>
+                  Distance
+                  <select id="downloadDistance">
+                    <option value="">All distances</option>
+                  </select>
+                </label>
+                <label>
+                  Load scenario
+                  <select id="downloadScenario">
+                    <option value="">All scenarios</option>
+                  </select>
+                </label>
+              </div>
+              <div class="download-actions">
+                <button class="download-button secondary" id="clearDownloadFilters" type="button">
+                  Clear selection
+                </button>
               </div>
             </div>
             <div class="panel-block">
@@ -376,21 +396,31 @@
       }
     };
 
+    const getSelectedFilterValues = () => ({
+      tilt: document.getElementById('downloadTilt')?.value || '',
+      distance: document.getElementById('downloadDistance')?.value || '',
+      scenario: document.getElementById('downloadScenario')?.value || ''
+    });
+
+    const fileMatchesFilters = (fileInfo, filters, ignoredField = null) => {
+      return Object.entries(filters).every(([field, value]) => {
+        if (field === ignoredField || !value) return true;
+        return String(fileInfo[field] ?? '') === String(value);
+      });
+    };
+
+    const getFilteredEntries = (filters = getSelectedFilterValues()) => {
+      return Object.entries(dataFiles).filter(([, fileInfo]) =>
+        fileMatchesFilters(fileInfo, filters)
+      );
+    };
+
     const renderDownloadFileOptions = () => {
       const container = document.getElementById('downloadFileSelector');
       if (!container) return;
-      const selectedTilt = document.getElementById('downloadTilt')?.value || '';
-      const selectedDistance = document.getElementById('downloadDistance')?.value || '';
-      const selectedScenario = document.getElementById('downloadScenario')?.value || '';
-      const filteredEntries = Object.entries(dataFiles).filter(([, fileInfo]) => {
-        if (selectedTilt && String(fileInfo.tilt) !== selectedTilt) return false;
-        if (selectedDistance && String(fileInfo.distance) !== selectedDistance) return false;
-        if (selectedScenario && fileInfo.scenario !== selectedScenario) return false;
-        return true;
-      });
-      const filteredKeys = new Set(filteredEntries.map(([key]) => key));
-      const groupedEntries = Object.entries(dataFiles).reduce((groups, [key, fileInfo]) => {
-        if (!filteredKeys.has(key)) return groups;
+
+      const filteredEntries = getFilteredEntries();
+      const groupedEntries = filteredEntries.reduce((groups, [key, fileInfo]) => {
         const groupName = key.split('/')[0] || 'Repository';
         if (!groups[groupName]) groups[groupName] = [];
         groups[groupName].push([key, fileInfo]);
@@ -400,35 +430,46 @@
       container.innerHTML = '';
       const fragment = document.createDocumentFragment();
 
-      Object.entries(groupedEntries).sort(([a], [b]) => a.localeCompare(b)).forEach(([groupName, items]) => {
-        const group = document.createElement('details');
-        group.className = 'file-group';
-        const summary = document.createElement('summary');
-        summary.textContent = groupName;
-        const content = document.createElement('div');
-        content.className = 'file-group-content';
-        items.forEach(([key, fileInfo]) => {
-          const label = document.createElement('label');
-          label.className = 'file-option';
-          const displayName = (fileInfo.label || key).replace(/\.txt$/i, '');
-          label.innerHTML = `<input type="checkbox" name="dataFile" value="${key}"><span>${displayName}</span>`;
-          content.appendChild(label);
+      Object.entries(groupedEntries)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .forEach(([groupName, items]) => {
+          const group = document.createElement('details');
+          group.className = 'file-group';
+
+          const summary = document.createElement('summary');
+          summary.textContent = groupName;
+
+          const content = document.createElement('div');
+          content.className = 'file-group-content';
+
+          items.forEach(([key, fileInfo]) => {
+            const label = document.createElement('label');
+            label.className = 'file-option';
+            const displayName = fileInfo.label || key.replace(/^.*[\\/]/, '');
+            label.innerHTML = `
+              <input type="checkbox" name="dataFile" value="${key}">
+              <span>${displayName}</span>
+            `;
+            content.appendChild(label);
+          });
+
+          group.appendChild(summary);
+          group.appendChild(content);
+          fragment.appendChild(group);
         });
-        group.appendChild(summary);
-        group.appendChild(content);
-        fragment.appendChild(group);
-      });
 
       const allLabel = document.createElement('label');
       allLabel.className = 'file-option download-all-option';
-      allLabel.innerHTML = '<input type="checkbox" name="dataFile" value="__ALL__"><span>Download all as ZIP</span>';
+      allLabel.innerHTML = `
+        <input type="checkbox" name="dataFile" value="ALL">
+        <span>Download all as ZIP</span>
+      `;
       fragment.appendChild(allLabel);
       container.appendChild(fragment);
 
-      document.querySelectorAll('.file-option input[name="dataFile"]').forEach((input) => {
+      container.querySelectorAll('.file-option input[name="dataFile"]').forEach(input => {
         input.addEventListener('change', handleDownloadSelection);
       });
-      updateSelectionStates();
     };
 
     const populateManifestFilters = () => {
@@ -437,37 +478,47 @@
         downloadDistance: 'distance',
         downloadScenario: 'scenario'
       };
-      const selected = Object.fromEntries(
-        Object.keys(selectors).map(id => [selectors[id], document.getElementById(id)?.value || ''])
-      );
-      const metadataEntries = Object.values(dataFiles).filter(file =>
-        file.tilt !== null && file.tilt !== undefined &&
-        file.distance !== null && file.distance !== undefined &&
-        file.scenario
+      const filters = getSelectedFilterValues();
+      const entries = Object.values(dataFiles).filter(file =>
+        file.tilt != null || file.distance != null || file.scenario != null
       );
 
       Object.entries(selectors).forEach(([id, field]) => {
         const select = document.getElementById(id);
         if (!select) return;
-        const compatibleValues = [...new Set(metadataEntries
-          .filter(file => Object.entries(selected).every(([otherField, value]) => (
-            otherField === field || !value || String(file[otherField]) === value
-          )))
-          .map(file => file[field]))]
-          .sort((a, b) => typeof a === 'number' && typeof b === 'number' ? a - b : String(a).localeCompare(String(b)));
-        const currentValue = selected[field];
-        select.innerHTML = `<option value="">All ${field}s</option>`;
+
+        const compatibleValues = [...new Set(
+          entries
+            .filter(file => fileMatchesFilters(file, filters, field))
+            .map(file => file[field])
+            .filter(value => value != null && value !== '')
+        )].sort((a, b) => {
+          const aNumber = Number(a);
+          const bNumber = Number(b);
+          return Number.isFinite(aNumber) && Number.isFinite(bNumber)
+            ? aNumber - bNumber
+            : String(a).localeCompare(String(b));
+        });
+
+        const currentValue = filters[field];
+        select.innerHTML = '<option value="">All</option>';
+
         compatibleValues.forEach(value => {
           const option = document.createElement('option');
           option.value = value;
           option.textContent = value;
           select.appendChild(option);
         });
-        select.value = compatibleValues.some(value => String(value) === currentValue) ? currentValue : '';
+
+        select.value = compatibleValues.some(value => String(value) === String(currentValue))
+          ? currentValue
+          : '';
       });
     };
 
     const updateManifestFiltersAndFiles = () => {
+      // Rebuild every selector from the current selections. This makes each
+      // dropdown show only values that remain compatible with the other filters.
       populateManifestFilters();
       renderDownloadFileOptions();
     };
@@ -557,14 +608,11 @@
       const selectedTilt = document.getElementById('downloadTilt')?.value || '';
       const selectedDistance = document.getElementById('downloadDistance')?.value || '';
       const selectedScenario = document.getElementById('downloadScenario')?.value || '';
-      const fileKeys = Object.entries(dataFiles)
-        .filter(([, fileInfo]) => {
-          if (selectedTilt && String(fileInfo.tilt) !== selectedTilt) return false;
-          if (selectedDistance && String(fileInfo.distance) !== selectedDistance) return false;
-          if (selectedScenario && fileInfo.scenario !== selectedScenario) return false;
-          return true;
-        })
-        .map(([fileKey]) => fileKey);
+      const fileKeys = getFilteredEntries({
+        tilt: selectedTilt,
+        distance: selectedDistance,
+        scenario: selectedScenario
+      }).map(([fileKey]) => fileKey);
       for (const fileKey of fileKeys) {
         const payload = await buildCsvPayload(fileKey, fromDate, toDate);
         zip.file(formatDownloadName(fileKey, fromDate, toDate), payload);
@@ -657,6 +705,15 @@
       renderDownloadFileOptions();
       ['downloadTilt', 'downloadDistance', 'downloadScenario'].forEach(id => {
         document.getElementById(id)?.addEventListener('change', updateManifestFiltersAndFiles);
+      });
+
+      document.getElementById('clearDownloadFilters')?.addEventListener('click', () => {
+        ['downloadTilt', 'downloadDistance', 'downloadScenario'].forEach(id => {
+          const select = document.getElementById(id);
+          if (select) select.value = '';
+        });
+
+        updateManifestFiltersAndFiles();
       });
     }
 
