@@ -1,5 +1,5 @@
 ﻿{
-    "generated_at":  "2026-08-27 13:23:34",
+    "generated_at":  "2026-08-27 13:28:55",
     "files":  [
                   {
                       "key":  "Irradiance/irradiance.txt",
@@ -143,6 +143,17 @@
                       "distance":  50,
                       "scenario":  "all_on",
                       "constant_target_w":  null
+                  },
+                  {
+                      "key":  "Load/load_tilt30_distance50_constant_500W.txt",
+                      "path":  "../Load/load_tilt30_distance50_constant_500W.txt",
+                      "name":  "load_tilt30_distance50_constant_500W.txt",
+                      "label":  "load_tilt30_distance50_constant_500W.txt",
+                      "type":  "load",
+                      "tilt":  30,
+                      "distance":  50,
+                      "scenario":  "constant",
+                      "constant_target_w":  500
                   },
                   {
                       "key":  "Load/load_tilt30_distance50_whole_house.txt",
