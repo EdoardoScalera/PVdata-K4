@@ -594,3 +594,11 @@
 2026-08-27 16:15:02	INFO	online	ps1	206ef102c9d8		device reachable again
 2026-08-27 16:15:05	INFO	online	ps2	98a3167b6a8c		device reachable again
 2026-08-27 16:15:09	INFO	online	ps3	98a3166b6128		device reachable again
+2026-08-27 16:22:36	INFO	startup				Loaded config from C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\shelly_load_control_scenarios.json; startup_scenario=all_off; scenario_request_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_request.json; scenario_status_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_status.json; constant_target_w=1200
+2026-08-27 16:22:37	INFO	strip_plan	ps1	206ef102c9d8		slot=2026-08-27 16:15; scenario=all_off; target_strip_w=0; states=[0,0,0,0]
+2026-08-27 16:22:37	INFO	strip_plan	ps2	98a3167b6a8c		slot=2026-08-27 16:15; scenario=all_off; target_strip_w=0; states=[0,0,0,0]
+2026-08-27 16:22:37	INFO	strip_plan	ps3	98a3166b6128		slot=2026-08-27 16:15; scenario=all_off; target_strip_w=0; states=[0,0,0,0]
+2026-08-27 16:22:37	INFO	load_change				SCENARIO=all_off slot=2026-08-27 16:15 target=0W nominal=0W overshoot=0W states: ps1=[0,0,0,0]; ps2=[0,0,0,0]; ps3=[0,0,0,0]
+2026-08-27 16:22:37	INFO	online	ps1	206ef102c9d8		device reachable again
+2026-08-27 16:22:40	INFO	online	ps2	98a3167b6a8c		device reachable again
+2026-08-27 16:22:43	INFO	online	ps3	98a3166b6128		device reachable again
