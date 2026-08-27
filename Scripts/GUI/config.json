@@ -1,0 +1,26 @@
+{
+  "paths": {
+    "scripts_dir": "C:/Users/5CG7471GSJ/Documents/DATA/Scripts/GUI/scripts",
+    "shelly_logger": "shelly_logger_v2.ps1",
+    "tarom_logger": "tarom_logger_v1.ps1",
+    "shelly_scenario": "shelly_load_control_scenarios.ps1",
+    "shelly_scenario_config": "shelly_load_control_scenarios.json",
+    "upload_github": "upload_to_repo.ps1"
+  },
+  "dashboard_url": "http://localhost:8000/index.html",
+  "log_dirs": {
+    "shelly": "C:/Users/5CG7471GSJ/Documents/DATA/Load",
+    "tarom":  "C:/Users/5CG7471GSJ/Documents/DATA/PV"
+  },
+  "defaults": {
+    "tilt_deg": 30,
+    "distance_mm": 50,
+    "scenario": "all_on"
+  },
+  "scheduling": {
+    "start_enabled": false,
+    "start_datetime": null,
+    "stop_enabled": false,
+    "stop_datetime": null
+  }
+}

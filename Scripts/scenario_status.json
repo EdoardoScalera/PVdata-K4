@@ -1,0 +1,16 @@
+﻿{
+    "ts_local":  "2026-08-26 13:33:39",
+    "active_scenario":  "constant_1kw",
+    "pending_scenario":  null,
+    "current_slot":  null,
+    "current_target_w":  0,
+    "constant_target_w":  1200,
+    "scenario_request_path":  ".\\scenario_request.json",
+    "scenario_request_file_present":  true,
+    "scenario_request_file":  {
+                                  "scenario":  "constant_1kw",
+                                  "requested_at_local":  "2026-08-26 13:32:00",
+                                  "requested_for_slot":  "2026-08-26 13:45:00",
+                                  "constant_target_w":  1200
+                              }
+}
