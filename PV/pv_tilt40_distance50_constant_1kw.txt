@@ -1,0 +1,6 @@
+﻿device_status	date	time	battery_voltage_V	pv1_voltage_V	pv2_voltage_V	SOC	capacity_Ah	total_charge_discharge_battery_A	pv1_current_A	pv2_current_A	module_current_A	total_batt_current_A	load_current_A	total_batt_discharge_current_A	temperature_C	error	charging_mode	AUX1	AUX2	AUX3	energy_input_24h_Ah	energy_input_tot_Ah	energy_output_24h_Ah	energy_output_tot_Ah	derating_Ah	checksum	pv1_power_W	pv2_power_W	pv_power_total_W
+1	2026/08/27	10:55	50.8	66.3	66.2	#	#	35.5	9.6	9.5	#	17.6	#	17.6	23.1	0	B	1	1	0	27	3984	27	3798	0	29F0	636.48	628.9	1265.38
+1	2026/08/27	10:56	50.7	66.3	66.0	#	#	38.4	9.5	9.6	#	18.8	#	18.8	23.1	0	B	1	1	0	27	3984	27	3798	0	17A5	629.85	633.6	1263.45
+1	2026/08/27	10:57	50.6	66.1	67.1	#	#	39.1	9.8	9.3	#	19.1	#	19.1	23.1	0	B	1	1	0	28	3985	28	3799	0	EBE0	647.78	624.03	1271.81
+1	2026/08/27	10:58	50.6	66.0	65.7	#	#	39.5	9.8	9.8	#	19.4	#	19.4	23.1	0	B	1	1	0	28	3985	28	3799	0	DCCC	646.8	643.86	1290.66
+1	2026/08/27	10:59	50.1	65.3	65.1	#	#	39.8	10.2	10.2	#	19.5	#	19.5	23.2	0	B	1	1	0	28	3985	28	3799	0	6030	666.06	664.02	1330.08
