@@ -1,5 +1,5 @@
 ﻿{
-    "generated_at":  "2026-08-27 15:45:39",
+    "generated_at":  "2026-08-27 15:54:02",
     "files":  [
                   {
                       "key":  "Irradiance/irradiance.txt",
@@ -134,6 +134,17 @@
                       "constant_target_w":  null
                   },
                   {
+                      "key":  "Load/load_tilt25_distance30_all_on.txt",
+                      "path":  "../Load/load_tilt25_distance30_all_on.txt",
+                      "name":  "load_tilt25_distance30_all_on.txt",
+                      "label":  "load_tilt25_distance30_all_on.txt",
+                      "type":  "load",
+                      "tilt":  25,
+                      "distance":  30,
+                      "scenario":  "all_on",
+                      "constant_target_w":  null
+                  },
+                  {
                       "key":  "Load/load_tilt28_distance50_all_on.txt",
                       "path":  "../Load/load_tilt28_distance50_all_on.txt",
                       "name":  "load_tilt28_distance50_all_on.txt",
@@ -165,6 +176,17 @@
                       "distance":  50,
                       "scenario":  "all_on",
                       "constant_target_w":  null
+                  },
+                  {
+                      "key":  "Load/load_tilt30_distance50_constant_1500W.txt",
+                      "path":  "../Load/load_tilt30_distance50_constant_1500W.txt",
+                      "name":  "load_tilt30_distance50_constant_1500W.txt",
+                      "label":  "load_tilt30_distance50_constant_1500W.txt",
+                      "type":  "load",
+                      "tilt":  30,
+                      "distance":  50,
+                      "scenario":  "constant",
+                      "constant_target_w":  1500
                   },
                   {
                       "key":  "Load/load_tilt30_distance50_constant_500W.txt",
@@ -362,6 +384,17 @@
                       "tilt":  15,
                       "distance":  15,
                       "scenario":  "whole_house",
+                      "constant_target_w":  null
+                  },
+                  {
+                      "key":  "PV/pv_tilt25_distance30_all_on.txt",
+                      "path":  "../PV/pv_tilt25_distance30_all_on.txt",
+                      "name":  "pv_tilt25_distance30_all_on.txt",
+                      "label":  "pv_tilt25_distance30_all_on.txt",
+                      "type":  "pv",
+                      "tilt":  25,
+                      "distance":  30,
+                      "scenario":  "all_on",
                       "constant_target_w":  null
                   },
                   {
