@@ -345,7 +345,7 @@
 
     const loadDataFileManifest = async () => {
       try {
-        const response = await fetch('./DATA/Dashboard/data-file-manifest.json', { cache: 'no-store' });
+        const response = await fetch('./data-file-manifest.json', { cache: 'no-store' });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const manifest = await response.json();
         manifest?.files?.forEach((entry) => {
@@ -582,7 +582,7 @@
 
     async function loadDashboardData() {
       try {
-        const response = await fetch(`./DATA/Dashboard/dashboard_values.json?ts=${Date.now()}`, { cache: 'no-store' });
+        const response = await fetch(`./dashboard_values.json?ts=${Date.now()}`, { cache: 'no-store' });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
 

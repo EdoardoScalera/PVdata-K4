@@ -3,42 +3,42 @@
     {
       "key": "Irradiance/irradiance.txt",
       "label": "irradiance.txt",
-      "path": "./Irradiance/irradiance.txt",
+      "path": "../Irradiance/irradiance.txt",
       "name": "irradiance.txt",
       "type": "irradiance"
     },
     {
       "key": "PV/tarom_data.txt",
       "label": "tarom_data.txt",
-      "path": "./PV/tarom_data.txt",
+      "path": "../PV/tarom_data.txt",
       "name": "tarom_data.txt",
       "type": "pv"
     },
     {
       "key": "PV/mppt_data.txt",
       "label": "mppt_data.txt",
-      "path": "./PV/mppt_data.txt",
+      "path": "../PV/mppt_data.txt",
       "name": "mppt_data.txt",
       "type": "pv"
     },
     {
       "key": "Load/load1.txt",
       "label": "load1.txt",
-      "path": "./Load/load1.txt",
+      "path": "../Load/load1.txt",
       "name": "load1.txt",
       "type": "load"
     },
     {
       "key": "Weather/weather_20260-3-20.txt",
       "label": "weather_20260-3-20.txt",
-      "path": "./Weather/weather_20260-3-20.txt",
+      "path": "../Weather/weather_20260-3-20.txt",
       "name": "weather_20260-3-20.txt",
       "type": "weather"
     },
     {
       "key": "Weather/weather_234.txt",
       "label": "weather_234.txt",
-      "path": "./Weather/weather_234.txt",
+      "path": "../Weather/weather_234.txt",
       "name": "weather_234.txt",
       "type": "weather"
     }
