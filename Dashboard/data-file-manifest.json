@@ -1,11 +1,22 @@
 ﻿{
-    "generated_at":  "2026-08-27 16:27:07",
+    "generated_at":  "2026-08-27 17:34:07",
     "files":  [
                   {
                       "key":  "Irradiance/irradiance.txt",
                       "path":  "../Irradiance/irradiance.txt",
                       "name":  "irradiance.txt",
                       "label":  "irradiance.txt",
+                      "type":  "irradiance",
+                      "tilt":  null,
+                      "distance":  null,
+                      "scenario":  null,
+                      "constant_target_w":  null
+                  },
+                  {
+                      "key":  "Irradiance/irradiance_test.txt",
+                      "path":  "../Irradiance/irradiance_test.txt",
+                      "name":  "irradiance_test.txt",
+                      "label":  "irradiance_test.txt",
                       "type":  "irradiance",
                       "tilt":  null,
                       "distance":  null,
