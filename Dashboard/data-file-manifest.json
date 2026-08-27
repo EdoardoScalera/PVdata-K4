@@ -1,5 +1,5 @@
 ﻿{
-    "generated_at":  "2026-08-27 16:21:08",
+    "generated_at":  "2026-08-27 16:22:13",
     "files":  [
                   {
                       "key":  "Irradiance/irradiance.txt",
@@ -519,76 +519,10 @@
                       "constant_target_w":  null
                   },
                   {
-                      "key":  "Scripts/GUI/scripts/shelly_reconnect_events.txt",
-                      "path":  "../Scripts/GUI/scripts/shelly_reconnect_events.txt",
+                      "key":  "Scripts/scripts/shelly_reconnect_events.txt",
+                      "path":  "../Scripts/scripts/shelly_reconnect_events.txt",
                       "name":  "shelly_reconnect_events.txt",
                       "label":  "shelly_reconnect_events.txt",
-                      "type":  "scripts",
-                      "tilt":  null,
-                      "distance":  null,
-                      "scenario":  null,
-                      "constant_target_w":  null
-                  },
-                  {
-                      "key":  "Scripts/mods.txt",
-                      "path":  "../Scripts/mods.txt",
-                      "name":  "mods.txt",
-                      "label":  "mods.txt",
-                      "type":  "scripts",
-                      "tilt":  null,
-                      "distance":  null,
-                      "scenario":  null,
-                      "constant_target_w":  null
-                  },
-                  {
-                      "key":  "Scripts/shelly_README.txt",
-                      "path":  "../Scripts/shelly_README.txt",
-                      "name":  "shelly_README.txt",
-                      "label":  "shelly_README.txt",
-                      "type":  "scripts",
-                      "tilt":  null,
-                      "distance":  null,
-                      "scenario":  null,
-                      "constant_target_w":  null
-                  },
-                  {
-                      "key":  "Scripts/shelly_reconnect_events.tsv",
-                      "path":  "../Scripts/shelly_reconnect_events.tsv",
-                      "name":  "shelly_reconnect_events.tsv",
-                      "label":  "shelly_reconnect_events.tsv",
-                      "type":  "scripts",
-                      "tilt":  null,
-                      "distance":  null,
-                      "scenario":  null,
-                      "constant_target_w":  null
-                  },
-                  {
-                      "key":  "Scripts/shelly_reconnect_events.txt",
-                      "path":  "../Scripts/shelly_reconnect_events.txt",
-                      "name":  "shelly_reconnect_events.txt",
-                      "label":  "shelly_reconnect_events.txt",
-                      "type":  "scripts",
-                      "tilt":  null,
-                      "distance":  null,
-                      "scenario":  null,
-                      "constant_target_w":  null
-                  },
-                  {
-                      "key":  "Scripts/tarom_README.txt",
-                      "path":  "../Scripts/tarom_README.txt",
-                      "name":  "tarom_README.txt",
-                      "label":  "tarom_README.txt",
-                      "type":  "scripts",
-                      "tilt":  null,
-                      "distance":  null,
-                      "scenario":  null,
-                      "constant_target_w":  null
-                  },
-                  {
-                      "key":  "Scripts/Upload Github_README.txt",
-                      "path":  "../Scripts/Upload Github_README.txt",
-                      "name":  "Upload Github_README.txt",
-                      "label":  "Upload Github_README.txt",
                       "type":  "scripts",
                       "tilt":  null,
                       "distance":  null,

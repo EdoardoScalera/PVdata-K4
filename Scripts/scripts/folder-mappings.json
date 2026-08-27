@@ -24,6 +24,10 @@
     {
       "Source": "C:\\Users\\5CG7471GSJ\\Documents\\DATA\\Dashboard",
       "Target": "Dashboard"
+    },
+    {
+      "Source": "C:\\Users\\5CG7471GSJ\\Documents\\DATA\\Scripts\\GUI",
+      "Target": "Scripts"
     }
   ]
 }
