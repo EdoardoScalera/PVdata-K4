@@ -1,5 +1,5 @@
 ﻿{
-    "generated_at":  "2026-08-27 15:09:26",
+    "generated_at":  "2026-08-27 15:26:32",
     "files":  [
                   {
                       "key":  "Irradiance/irradiance.txt",
@@ -340,6 +340,17 @@
                       "tilt":  15,
                       "distance":  15,
                       "scenario":  "whole_house",
+                      "constant_target_w":  null
+                  },
+                  {
+                      "key":  "PV/pv_tilt28_distance50_all_on.txt",
+                      "path":  "../PV/pv_tilt28_distance50_all_on.txt",
+                      "name":  "pv_tilt28_distance50_all_on.txt",
+                      "label":  "pv_tilt28_distance50_all_on.txt",
+                      "type":  "pv",
+                      "tilt":  28,
+                      "distance":  50,
+                      "scenario":  "all_on",
                       "constant_target_w":  null
                   },
                   {

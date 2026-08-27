@@ -432,22 +432,44 @@
     };
 
     const populateManifestFilters = () => {
-      const values = {
-        downloadTilt: [...new Set(Object.values(dataFiles).map(file => file.tilt).filter(value => value !== null && value !== undefined))].sort((a, b) => a - b),
-        downloadDistance: [...new Set(Object.values(dataFiles).map(file => file.distance).filter(value => value !== null && value !== undefined))].sort((a, b) => a - b),
-        downloadScenario: [...new Set(Object.values(dataFiles).map(file => file.scenario).filter(Boolean))].sort()
+      const selectors = {
+        downloadTilt: 'tilt',
+        downloadDistance: 'distance',
+        downloadScenario: 'scenario'
       };
-      Object.entries(values).forEach(([id, options]) => {
+      const selected = Object.fromEntries(
+        Object.keys(selectors).map(id => [selectors[id], document.getElementById(id)?.value || ''])
+      );
+      const metadataEntries = Object.values(dataFiles).filter(file =>
+        file.tilt !== null && file.tilt !== undefined &&
+        file.distance !== null && file.distance !== undefined &&
+        file.scenario
+      );
+
+      Object.entries(selectors).forEach(([id, field]) => {
         const select = document.getElementById(id);
         if (!select) return;
-        options.forEach(value => {
+        const compatibleValues = [...new Set(metadataEntries
+          .filter(file => Object.entries(selected).every(([otherField, value]) => (
+            otherField === field || !value || String(file[otherField]) === value
+          )))
+          .map(file => file[field]))]
+          .sort((a, b) => typeof a === 'number' && typeof b === 'number' ? a - b : String(a).localeCompare(String(b)));
+        const currentValue = selected[field];
+        select.innerHTML = `<option value="">All ${field}s</option>`;
+        compatibleValues.forEach(value => {
           const option = document.createElement('option');
           option.value = value;
           option.textContent = value;
           select.appendChild(option);
         });
-        select.addEventListener('change', renderDownloadFileOptions);
+        select.value = compatibleValues.some(value => String(value) === currentValue) ? currentValue : '';
       });
+    };
+
+    const updateManifestFiltersAndFiles = () => {
+      populateManifestFilters();
+      renderDownloadFileOptions();
     };
 
     const parseFileDate = (type, row) => {
@@ -633,6 +655,9 @@
       await loadDataFileManifest();
       populateManifestFilters();
       renderDownloadFileOptions();
+      ['downloadTilt', 'downloadDistance', 'downloadScenario'].forEach(id => {
+        document.getElementById(id)?.addEventListener('change', updateManifestFiltersAndFiles);
+      });
     }
 
     initializeDownloadSection();
