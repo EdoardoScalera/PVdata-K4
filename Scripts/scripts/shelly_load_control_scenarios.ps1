@@ -124,7 +124,7 @@ function Write-ConsoleLoadChange {
     Write-Host ("[{0}] {1}" -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $Message)
 }
 
-function Ensure-ParentDirectory {
+function New-ParentDirectory {
     param([string]$Path)
     $dir = Split-Path -Parent $Path
     if ($dir -and -not (Test-Path $dir)) {
@@ -132,9 +132,9 @@ function Ensure-ParentDirectory {
     }
 }
 
-function Ensure-EventLogFile {
+function New-EventLogFile {
     param([string]$Path)
-    Ensure-ParentDirectory -Path $Path
+    New-ParentDirectory -Path $Path
     if (-not (Test-Path $Path)) {
         "ts_local`tlevel`tevent`tstrip_name`tdevice_id`tchannel`tmessage" | Out-File -FilePath $Path -Encoding utf8
     }
@@ -143,7 +143,7 @@ function Ensure-EventLogFile {
 function Write-EventLog {
     param(
         [string]$Level,
-        [string]$Event,
+        [string]$Eventname,
         [string]$StripName = '',
         [string]$DeviceId = '',
         [string]$Channel = '',
@@ -151,19 +151,19 @@ function Write-EventLog {
     )
 
     if (-not $script:LogPath) { return }
-    Ensure-EventLogFile -Path $script:LogPath
+    New-EventLogFile -Path $script:LogPath
     $ts = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
-    $line = @($ts, $Level, $Event, $StripName, $DeviceId, $Channel, $Message) -join "`t"
+    $line = @($ts, $Level, $Eventname, $StripName, $DeviceId, $Channel, $Message) -join "`t"
     Add-Content -Path $script:LogPath -Value $line -Encoding utf8
 }
 
-function Load-Config {
+function Get-Config {
     param([string]$Path)
     if (-not (Test-Path $Path)) { throw "Config file not found: $Path" }
     Get-Content -Path $Path -Raw | ConvertFrom-Json
 }
 
-function Normalize-ScenarioName {
+function ConvertTo-ScenarioName {
     param([string]$Value)
     if ([string]::IsNullOrWhiteSpace($Value)) { return $null }
 
@@ -207,7 +207,7 @@ function Resolve-RequestedScenario {
         return $helperFlags[0].Value
     }
 
-    return (Normalize-ScenarioName -Value $Scenario)
+    return (ConvertTo-ScenarioName -Value $Scenario)
 }
 
 function Convert-TimeToMinutes {
@@ -223,9 +223,9 @@ function Get-MinutesOfDay {
 }
 
 function Get-ProfileTarget {
-    param([array]$Profile,[int]$MinutesOfDay)
-    $selected = $Profile[0]
-    foreach ($point in ($Profile | Sort-Object { Convert-TimeToMinutes $_.time })) {
+    param([array]$LoadProfile,[int]$MinutesOfDay)
+    $selected = $LoadProfile[0]
+    foreach ($point in ($LoadProfile | Sort-Object { Convert-TimeToMinutes $_.time })) {
         if ((Convert-TimeToMinutes $point.time) -le $MinutesOfDay) { $selected = $point } else { break }
     }
     [double]$selected.target_w
@@ -430,7 +430,7 @@ function Get-ScenarioPlan {
             return Get-AllOnPlan -Strips $Config.strips
         }
         'whole_house' {
-            $wholeTarget = Get-ProfileTarget -Profile $Config.whole_house_profile -MinutesOfDay $minutes
+            $wholeTarget = Get-ProfileTarget -LoadProfile $Config.whole_house_profile -MinutesOfDay $minutes
             $script:CurrentWholeTarget = $wholeTarget
             return Get-BestFitPlan -Strips $Config.strips -WholeHouseTargetW $wholeTarget
         }
@@ -440,7 +440,7 @@ function Get-ScenarioPlan {
         }
         'adaptive' {
             $script:CurrentWholeTarget = 0.0
-            Write-EventLog -Level 'INFO' -Event 'adaptive_placeholder' -Message 'Adaptive scenario placeholder active; applying all-off fallback.'
+            Write-EventLog -Level 'INFO' -Eventname 'adaptive_placeholder' -Message 'Adaptive scenario placeholder active; applying all-off fallback.'
             return Get-AllOffPlan -Strips $Config.strips
         }
         'all_off' {
@@ -544,7 +544,7 @@ function Set-CloudRelayStateSafe {
 
     try {
         Invoke-ShellyCloud -ServerUri $ServerUri -Path '/device/relay/control' -Body $body -MinGapMs $MinGapMs | Out-Null
-        Write-EventLog -Level 'INFO' -Event 'send' -StripName $StripName -DeviceId $DeviceId -Channel ([string]$Channel) -Message ("turn={0}" -f $turn)
+        Write-EventLog -Level 'INFO' -Eventname 'send' -StripName $StripName -DeviceId $DeviceId -Channel ([string]$Channel) -Message ("turn={0}" -f $turn)
         return $true
     }
     catch {
@@ -576,14 +576,14 @@ function Sync-StripToDesiredState {
 
     $script:DeviceOnlineState[$Strip.device_id] = $true
     if (-not $prevOnline) {
-        Write-EventLog -Level 'INFO' -Event 'online' -StripName $Strip.name -DeviceId $Strip.device_id -Message 'device reachable again'
+        Write-EventLog -Level 'INFO' -Eventname 'online' -StripName $Strip.name -DeviceId $Strip.device_id -Message 'device reachable again'
     }
 
     $actualStates = Get-ActualOutputStates -StatusPayload $statusResult.payload -ChannelCount $DesiredStates.Count
 
     for ($i = 0; $i -lt $DesiredStates.Count; $i++) {
         if ($actualStates[$i] -ne $DesiredStates[$i]) {
-            Write-EventLog -Level 'INFO' -Event 'reconcile' -StripName $Strip.name -DeviceId $Strip.device_id -Channel ([string]$i) -Message ("actual={0}; desired={1}" -f $(if($actualStates[$i]){'on'}else{'off'}), $(if($DesiredStates[$i]){'on'}else{'off'}))
+            Write-EventLog -Level 'INFO' -Eventname 'reconcile' -StripName $Strip.name -DeviceId $Strip.device_id -Channel ([string]$i) -Message ("actual={0}; desired={1}" -f $(if($actualStates[$i]){'on'}else{'off'}), $(if($DesiredStates[$i]){'on'}else{'off'}))
             [void](Set-CloudRelayStateSafe -ServerUri $ServerUri -AuthKey $AuthKey -DeviceId $Strip.device_id -Channel $i -On $DesiredStates[$i] -StripName $Strip.name -MinGapMs $MinGapMs)
         }
     }
@@ -604,7 +604,7 @@ function Write-JsonFile {
         [object]$Payload
     )
 
-    Ensure-ParentDirectory -Path $Path
+    New-ParentDirectory -Path $Path
     $Payload | ConvertTo-Json -Depth 8 | Set-Content -Path $Path -Encoding utf8
 }
 
@@ -632,7 +632,7 @@ function Get-RequestedScenarioFromFile {
     try {
         $request = Get-Content -Path $Path -Raw | ConvertFrom-Json
         if ($null -eq $request.scenario) { return $null }
-        return (Normalize-ScenarioName -Value ([string]$request.scenario))
+        return (ConvertTo-ScenarioName -Value ([string]$request.scenario))
     }
     catch {
         Write-EventLog -Level 'WARN' -Event 'scenario_request_read_failed' -Message $_.Exception.Message
@@ -690,7 +690,7 @@ function Update-PendingScenario {
 
     if ($requested -ne $script:ActiveScenario -and $requested -ne $script:PendingScenario) {
         $script:PendingScenario = $requested
-        Write-EventLog -Level 'INFO' -Event 'scenario_requested' -Message "pending_scenario=$requested; effective_next_slot=true"
+        Write-EventLog -Level 'INFO' -Eventname 'scenario_requested' -Message "pending_scenario=$requested; effective_next_slot=true"
         Write-ConsoleLoadChange -Message "Scenario request accepted: $requested. It will activate at the next 15-minute boundary."
     }
 }
@@ -703,15 +703,15 @@ function Update-PlanIfBoundaryChanged {
     )
 
     $slotKey = Get-SlotKey -Timestamp $Now -StepMinutes $ProfileStepMinutes
-    if ($script:CurrentPlan -ne $null -and $script:CurrentSlotKey -eq $slotKey) {
-        return
+    if ($null -ne $script:CurrentPlan -and $script:CurrentSlotKey -eq $slotKey) {
+    return
     }
 
     if ($script:PendingScenario -and $script:PendingScenario -ne $script:ActiveScenario) {
         $oldScenario = $script:ActiveScenario
         $script:ActiveScenario = $script:PendingScenario
         $script:PendingScenario = $null
-        Write-EventLog -Level 'INFO' -Event 'scenario_activated' -Message "old=$oldScenario; new=$($script:ActiveScenario); slot=$slotKey"
+        Write-EventLog -Level 'INFO' -Eventname 'scenario_activated' -Message "old=$oldScenario; new=$($script:ActiveScenario); slot=$slotKey"
     }
 
     $plan = Get-ScenarioPlan -Config $Config -Now $Now -Scenario $script:ActiveScenario -ConstantTargetW $script:ConstantTargetW
@@ -723,12 +723,12 @@ function Update-PlanIfBoundaryChanged {
     foreach ($strip in $Config.strips) {
         $stripPlan = $plan.by_strip[$strip.name]
         $statesSummary += ("{0}=[{1}]" -f $strip.name, (($stripPlan.states | ForEach-Object { if ($_){1}else{0} }) -join ','))
-        Write-EventLog -Level 'INFO' -Event 'strip_plan' -StripName $strip.name -DeviceId $strip.device_id -Message ("slot={0}; scenario={1}; target_strip_w={2}; states=[{3}]" -f $slotKey, $script:ActiveScenario, ([Math]::Round([double]$stripPlan.target_strip_w,2)), (($stripPlan.states | ForEach-Object { if ($_){1}else{0} }) -join ','))
+        Write-EventLog -Level 'INFO' -Eventname 'strip_plan' -StripName $strip.name -DeviceId $strip.device_id -Message ("slot={0}; scenario={1}; target_strip_w={2}; states=[{3}]" -f $slotKey, $script:ActiveScenario, ([Math]::Round([double]$stripPlan.target_strip_w,2)), (($stripPlan.states | ForEach-Object { if ($_){1}else{0} }) -join ','))
     }
 
     $message = "SCENARIO=$($script:ActiveScenario) slot=$slotKey target=$([Math]::Round([double]$script:CurrentWholeTarget,2))W nominal=$([Math]::Round([double]$plan.applied_total_w,2))W overshoot=$([Math]::Round([double]$plan.overshoot_w,2))W states: $($statesSummary -join '; ')"
     Write-ConsoleLoadChange -Message $message
-    Write-EventLog -Level 'INFO' -Event 'load_change' -Message $message
+    Write-EventLog -Level 'INFO' -Eventname 'load_change' -Message $message
 }
 
 $resolvedScenario = Resolve-RequestedScenario
@@ -762,7 +762,7 @@ if ($ShowScenario) {
     exit 0
 }
 
-$config = Load-Config -Path $ConfigPath
+$config = Get-Config -Path $ConfigPath
 
 if (-not $config.server_uri) { throw 'Config must contain server_uri.' }
 if (-not $config.auth_key) { throw 'Config must contain auth_key.' }
@@ -798,8 +798,8 @@ if ($config.PSObject.Properties.Name -contains 'constant_target_w' -and $config.
 }
 
 $script:ActiveScenario = $resolvedScenario
-Ensure-EventLogFile -Path $script:LogPath
-Write-EventLog -Level 'INFO' -Event 'startup' -Message "Loaded config from $ConfigPath; startup_scenario=$($script:ActiveScenario); scenario_request_path=$($script:ScenarioRequestPath); scenario_status_path=$($script:StatusPath); constant_target_w=$($script:ConstantTargetW)"
+New-EventLogFile -Path $script:LogPath
+Write-EventLog -Level 'INFO' -Eventname 'startup' -Message "Loaded config from $ConfigPath; startup_scenario=$($script:ActiveScenario); scenario_request_path=$($script:ScenarioRequestPath); scenario_status_path=$($script:StatusPath); constant_target_w=$($script:ConstantTargetW)"
 Write-ConsoleLoadChange -Message "Starting controller with scenario '$($script:ActiveScenario)'."
 Write-StatusFile -Path $script:StatusPath
 
@@ -843,4 +843,12 @@ while ($true) {
     if ($sleepSeconds -gt 0) {
         Start-Sleep -Milliseconds ([int]([Math]::Round($sleepSeconds * 1000)))
     }
+}
+
+# Final shutdown feedback for one-shot all_off calls
+if ($RunOnce -and $script:ActiveScenario -eq 'all_off') {
+    Write-ConsoleLoadChange -Message `
+        "Shutdown GUI: loggers stopped, controller processes terminated, all loads switched OFF."
+    Write-EventLog -Level 'INFO' -Eventname 'shutdown_complete' -Message `
+        'RunOnce all_off completed; all loads off.'
 }
