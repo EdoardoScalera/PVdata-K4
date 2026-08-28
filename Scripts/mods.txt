@@ -1,9 +1,12 @@
-labview data are not uploaded to the dashboard on github. 
-
+in gui.py, and all relative sub files:
 check if github support every 1 minute upload or if it create problems 
-
 add open github repo button link: https://github.com/EdoardoScalera/PVdata-K4
-
 rename scenario "constant" to "constant load"
+in the status section: add last github push to repo, remove requested scenario (same info as in pending scenario)
+rename "scenario state" box into "logger state"
+shelly and controller share the same check box, remove controller checkbox
+make sure that "stop shelly+controller" shut all the sockets off 
 
-add in the status section: last github push to repo
+in index.html:
+labview data are not uploaded to the dashboard on github. 
+fix "Download failed: can't access property "replace", time is undefined" this happen when try to download all file as zip

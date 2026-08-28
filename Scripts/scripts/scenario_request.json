@@ -1,6 +1,6 @@
 ﻿{
-    "scenario":  "all_on",
-    "requested_at_local":  "2026-08-28 17:03:09",
-    "requested_for_slot":  "2026-08-28 17:15:00",
+    "scenario":  "all_off",
+    "requested_at_local":  "2026-08-28 17:19:57",
+    "requested_for_slot":  "2026-08-28 17:30:00",
     "constant_target_w":  1200
 }

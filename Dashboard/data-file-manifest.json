@@ -1,5 +1,5 @@
 ﻿{
-    "generated_at":  "2026-08-28 17:09:31",
+    "generated_at":  "2026-08-28 17:21:09",
     "files":  [
                   {
                       "key":  "Irradiance/irradiance.txt",
@@ -65,6 +65,17 @@
                       "tilt":  null,
                       "distance":  null,
                       "scenario":  null,
+                      "constant_target_w":  null
+                  },
+                  {
+                      "key":  "Load/load_tilt1_distance1_all_on.txt",
+                      "path":  "../Load/load_tilt1_distance1_all_on.txt",
+                      "name":  "load_tilt1_distance1_all_on.txt",
+                      "label":  "load_tilt1_distance1_all_on.txt",
+                      "type":  "load",
+                      "tilt":  1,
+                      "distance":  1,
+                      "scenario":  "all_on",
                       "constant_target_w":  null
                   },
                   {
@@ -186,6 +197,17 @@
                       "tilt":  null,
                       "distance":  null,
                       "scenario":  null,
+                      "constant_target_w":  null
+                  },
+                  {
+                      "key":  "PV/pv_tilt1_distance1_all_on.txt",
+                      "path":  "../PV/pv_tilt1_distance1_all_on.txt",
+                      "name":  "pv_tilt1_distance1_all_on.txt",
+                      "label":  "pv_tilt1_distance1_all_on.txt",
+                      "type":  "pv",
+                      "tilt":  1,
+                      "distance":  1,
+                      "scenario":  "all_on",
                       "constant_target_w":  null
                   },
                   {
