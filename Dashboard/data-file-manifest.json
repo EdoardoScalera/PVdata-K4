@@ -1,5 +1,5 @@
 ﻿{
-    "generated_at":  "2026-08-28 14:34:43",
+    "generated_at":  "2026-08-28 14:53:04",
     "files":  [
                   {
                       "key":  "Irradiance/irradiance.txt",
@@ -90,6 +90,28 @@
                       "constant_target_w":  null
                   },
                   {
+                      "key":  "Load/load_tilt32_distance50_all_off.txt",
+                      "path":  "../Load/load_tilt32_distance50_all_off.txt",
+                      "name":  "load_tilt32_distance50_all_off.txt",
+                      "label":  "load_tilt32_distance50_all_off.txt",
+                      "type":  "load",
+                      "tilt":  32,
+                      "distance":  50,
+                      "scenario":  "all_off",
+                      "constant_target_w":  null
+                  },
+                  {
+                      "key":  "Load/load_tilt32_distance50_constant_150W.txt",
+                      "path":  "../Load/load_tilt32_distance50_constant_150W.txt",
+                      "name":  "load_tilt32_distance50_constant_150W.txt",
+                      "label":  "load_tilt32_distance50_constant_150W.txt",
+                      "type":  "load",
+                      "tilt":  32,
+                      "distance":  50,
+                      "scenario":  "constant",
+                      "constant_target_w":  150
+                  },
+                  {
                       "key":  "Load/load_v0.txt",
                       "path":  "../Load/load_v0.txt",
                       "name":  "load_v0.txt",
@@ -165,6 +187,28 @@
                       "distance":  50,
                       "scenario":  "all_on",
                       "constant_target_w":  null
+                  },
+                  {
+                      "key":  "PV/pv_tilt32_distance50_all_off.txt",
+                      "path":  "../PV/pv_tilt32_distance50_all_off.txt",
+                      "name":  "pv_tilt32_distance50_all_off.txt",
+                      "label":  "pv_tilt32_distance50_all_off.txt",
+                      "type":  "pv",
+                      "tilt":  32,
+                      "distance":  50,
+                      "scenario":  "all_off",
+                      "constant_target_w":  null
+                  },
+                  {
+                      "key":  "PV/pv_tilt32_distance50_constant_150W.txt",
+                      "path":  "../PV/pv_tilt32_distance50_constant_150W.txt",
+                      "name":  "pv_tilt32_distance50_constant_150W.txt",
+                      "label":  "pv_tilt32_distance50_constant_150W.txt",
+                      "type":  "pv",
+                      "tilt":  32,
+                      "distance":  50,
+                      "scenario":  "constant",
+                      "constant_target_w":  150
                   },
                   {
                       "key":  "PV/tarom_data_v1.txt",
