@@ -7,7 +7,7 @@
     "shelly_scenario": "shelly_load_control_scenarios.ps1",
     "shelly_scenario_config": "shelly_load_control_scenarios.json",
     "upload_github": "upload_to_repo.ps1",
-    "labview_logger": "labview_logger.ps1",
+    "labview_logger": "labview_logger.ps1",  
     "scenario_request": "scenario_request.json",
     "scenario_status": "scenario_status.json"
   },
@@ -29,6 +29,6 @@
   },
   "labview": {
     "labview_path": "C:/Program Files/National Instruments/LabVIEW 2021/LabVIEW.exe",
-    "vi_path": "C:/Users/5CG7471GSJ/Documents/DATA/Scripts/GUI/scripts/ghi_tc_poa_logger.vi"
+    "vi_path": "C:/Users/5CG7471GSJ/Documents/DATA/Scripts/GUI/scripts/labview_logger/I/poa_logger/ghi_tc_poa_logger.vi"
   }
 }
