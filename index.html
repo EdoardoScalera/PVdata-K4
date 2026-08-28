@@ -53,14 +53,14 @@
     .hero { display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-6); margin-bottom: var(--space-8); }
     .panel, .metric, .sensor-card { background: color-mix(in oklab, var(--color-surface) 88%, transparent); border: 1px solid color-mix(in oklab, var(--color-text) 10%, transparent); border-radius: var(--radius-xl); box-shadow: var(--shadow-sm); backdrop-filter: blur(12px); }
     .panel { padding: var(--space-6); }
-    .panel-block { background: var(--color-surface-2); border: 1px solid var(--color-divider); border-radius: var(--radius-lg); padding: var(--space-4); }
+    .panel-block { background: var(--color-surface-2); border: 1px solid var(--color-divider); border-radius: var(--radius-lg); padding: var(--space-6); }
     .panel-block + .panel-block { margin-top: var(--space-4); }
     .download-panel { display: grid; gap: var(--space-4); }
     .toggle-list { display: flex; flex-direction: column; gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
     .file-group { border: 1px solid var(--color-divider); border-radius: var(--radius-lg); background: var(--color-surface); overflow: hidden; }
     .file-group summary { display: flex; align-items: center; justify-content: space-between; padding: var(--space-3) var(--space-4); cursor: pointer; font-weight: 700; color: var(--color-text); background: color-mix(in oklab, var(--color-surface) 92%, transparent); }
     .file-group summary::-webkit-details-marker { display: none; }
-    .file-group-content { display: grid; gap: var(--space-2); padding: var(--space-3) var(--space-4) var(--space-4); }
+    .file-group-content { display: grid; gap: var(--space-3); padding: var(--space-5) var(--space-6); }
     .file-option { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3); background: var(--color-surface-2); border: 1px solid var(--color-divider); border-radius: var(--radius-full); cursor: pointer; transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease; }
     .file-option.is-selected { background: var(--color-primary); border-color: var(--color-primary); color: white; box-shadow: var(--shadow-sm); }
     .file-option.is-selected span { color: white; }
@@ -114,7 +114,7 @@
     .collapsible-section > summary::after { content: '▾'; color: var(--color-text-muted); font-size: 1rem; }
     .collapsible-section[open] > summary::after { content: '▸'; }
     .section-content { padding: 0 var(--space-5) var(--space-5); }
-    .intro-copy { display: grid; gap: var(--space-3); color: var(--color-text-muted); }
+    .intro-copy { display: grid; gap: var(--space-6); color: var(--color-text-muted); }
     .main-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); margin-bottom: var(--space-8); }
     .status-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin-top: var(--space-4); }
     .status-row p { margin: 0; }
@@ -126,7 +126,7 @@
     .metric-note { color: var(--color-text-muted); font-size: var(--text-sm); }
     .section-title { font-size: var(--text-lg); margin-bottom: var(--space-4); }
     .detail-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--space-4); margin-bottom: var(--space-8); }
-    .kv { display: grid; grid-template-columns: 1fr auto; gap: var(--space-3); padding: var(--space-3) 0; border-bottom: 1px solid var(--color-divider); }
+    .kv { display: grid; grid-template-columns: 1fr auto; gap: var(--space-4); padding: var(--space-4) 0; border-bottom: 1px solid var(--color-divider); }
     .kv:last-child { border-bottom: 0; }
     .k { color: var(--color-text-muted); }
     .v { font-variant-numeric: tabular-nums; }
@@ -136,6 +136,12 @@
     .sensor-value { margin-top: var(--space-2); font-size: var(--text-lg); font-family: var(--font-display); }
     .sensor-group-title { font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-muted); margin-bottom: var(--space-4); }
     .footer-note { color: var(--color-text-muted); font-size: var(--text-sm); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); margin-top: var(--space-8); }
+    .about-block { background: var(--color-surface-2); border: 1px solid var(--color-divider); border-radius: var(--radius-lg); padding: var(--space-6); }
+    .about-links { display: flex; flex-direction: column; gap: var(--space-3); list-style: none; margin: 0; padding: 0; }
+    .about-links a { color: var(--color-primary); text-decoration: none; word-break: break-word; }
+    .about-links a:hover, .about-links a:focus-visible { text-decoration: underline; }
+    .about-link-placeholder { color: var(--color-text-faint); font-style: italic; }
     .back-to-top {
       position: fixed;
       right: var(--space-4);
@@ -161,7 +167,7 @@
     .accent-success { color: var(--color-success); }
     .accent-warn { color: var(--color-orange); }
     @media (max-width: 900px) {
-      .hero, .detail-grid, .main-grid, .grid, .sensor-grid { grid-template-columns: 1fr; }
+      .hero, .detail-grid, .main-grid, .grid, .sensor-grid, .about-grid { grid-template-columns: 1fr; }
       .shell { padding: var(--space-4); }
       .topbar { align-items: flex-start; }
     }
@@ -186,8 +192,7 @@
       <div class="topbar-meta">
         <article class="panel">
           <div class="eyebrow">Connection</div>
-          <div class="kv"><span class="k">Status</span><strong class="v accent-success" id="statusText">Starting</strong></div>
-          <div class="kv"><span class="k">Auto refresh</span><span class="v">Enabled</span></div>
+<div class="kv"><span class="k">Status</span><strong class="v accent-success" id="statusText">Starting</strong></div>
         </article>
         <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
@@ -196,31 +201,16 @@
 
     <main id="main">
       <nav class="page-nav" aria-label="Section navigation">
+        <button class="nav-button" type="button" data-scroll-target="live-section">Dashboard</button>
+        <button class="nav-button" type="button" data-scroll-target="download-section">Download dataset</button>
         <button class="nav-button" type="button" data-scroll-target="info-section">Info</button>
-        <button class="nav-button" type="button" data-scroll-target="live-section">Live</button>
-        <button class="nav-button" type="button" data-scroll-target="download-section">Download</button>
       </nav>
-
-      <details class="collapsible-section" id="info-section" open>
-        <summary>
-          <div>
-            <div class="eyebrow">Overview</div>
-            <h2 class="section-title">About the dashboard</h2>
-          </div>
-        </summary>
-        <div class="section-content">
-          <div class="intro-copy">
-            <p>This dashboard gives a compact view of the photovoltaic system performance and the current operating scenario.</p>
-            <p>Data is collected from the PV, load, irradiance, and weather sources by a local logging pipeline and stored in the repository as structured text files. The live view reads the latest dashboard snapshot, while the download section lets you export selected datasets for a chosen date range as CSV files or a ZIP archive.</p>
-          </div>
-        </div>
-      </details>
 
       <details class="collapsible-section" id="live-section" open>
         <summary>
           <div>
             <div class="eyebrow">Live data</div>
-            <h2 class="section-title">Live dashboard</h2>
+            <h2 class="section-title">Dashboard</h2>
           </div>
         </summary>
         <div class="section-content">
@@ -312,6 +302,9 @@
               </div>
               <div class="download-actions">
                 <button class="download-button secondary" id="clearDownloadFilters" type="button">
+                  Clear filters
+                </button>
+                <button class="download-button secondary" id="clearFileSelection" type="button">
                   Clear selection
                 </button>
               </div>
@@ -328,6 +321,43 @@
               </div>
             </div>
           </section>
+        </div>
+      </details>
+
+      <details class="collapsible-section" id="info-section">
+        <summary>
+          <div>
+            <div class="eyebrow">Overview</div>
+            <h2 class="section-title">About the dashboard</h2>
+          </div>
+        </summary>
+        <div class="section-content">
+          <div class="intro-copy">
+            <p>This dashboard gives a compact view of the photovoltaic system performance and the current operating scenario.</p>
+            <p>Data is collected from the PV, load, irradiance, and weather sources by a local logging pipeline and stored in the repository as structured text files. The live view reads the latest dashboard snapshot, while the download section lets you export selected datasets for a chosen date range as CSV files or a ZIP archive.</p>
+          </div>
+          <div class="about-grid">
+            <div class="about-block">
+              <div class="sensor-group-title">Related links</div>
+              <ul class="about-links">
+                <li>
+                  <a href="https://www.aalto.fi/en/school-of-engineering/renewable-energy-lab" target="_blank" rel="noopener noreferrer">
+                    RELab – Renewable Energy Laboratory (Aalto University)
+                  </a>
+                </li>
+                <li class="about-link-placeholder">[ Link placeholder – additional links will be added here ]</li>
+                <li class="about-link-placeholder">[ Link placeholder – additional links will be added here ]</li>
+              </ul>
+            </div>
+            <div class="about-block">
+              <div class="sensor-group-title">Contact</div>
+              <ul class="about-links">
+                <li>
+                  <a href="mailto:edoardo.scalera@aalto.fi">edoardo.scalera@aalto.fi</a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </details>
     </main>
@@ -703,6 +733,14 @@
         });
 
         updateManifestFiltersAndFiles();
+      });
+
+      document.getElementById('clearFileSelection')?.addEventListener('click', () => {
+        document.querySelectorAll('input[name="dataFile"]:checked').forEach((input) => {
+          input.checked = false;
+        });
+
+        updateSelectionStates();
       });
     }
 
