@@ -12,9 +12,11 @@
     "scenario_status": "scenario_status.json"
   },
   "dashboard_url": "http://localhost:8000/index.html",
+  "dashboard_values_file": "C:/Users/5CG7471GSJ/Documents/DATA/Dashboard/dashboard_values.json",
   "log_dirs": {
     "shelly": "C:/Users/5CG7471GSJ/Documents/DATA/Load",
-    "tarom":  "C:/Users/5CG7471GSJ/Documents/DATA/PV"
+    "tarom":  "C:/Users/5CG7471GSJ/Documents/DATA/PV",
+    "irradiance": "C:/Users/5CG7471GSJ/Documents/DATA/Data/irradiance"
   },
   "defaults": {
     "tilt_deg": 30,

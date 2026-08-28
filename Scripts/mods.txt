@@ -1,10 +1,11 @@
-start all must start labview as well. stop all shut labview together with the other scripts.
+start all button must start labview as well. stop all button shut labview together with the other scripts.
 
-change scenario section for when the logging is running: when "constant" is selected the text box activates. Create more space between the dropdown, that can be reduced in horizontal size, and the "turn off now" button.
+change in scenario section for when the logging is running: when "constant" is selected the text box activates. The dropdow selector can be reduced in width. Make more space between "request scenario" and the "turn off now" button.
 turnoff should not return "shutting down: stopping loggers,..." feedbak text. The button only turn off the sockets, the shelly controller stays active and the gui open, and the status feedback should be something like "turning off sockets now"  
 
-start and stop for shelly and controller must be combined so that when a measurement start the controller boot up and shelly logger logs the desired load otherwise the sockets remain set to the last setting 
+start and stop for shelly and controller buttons must be combined into one and only button so that when a measurement start the controller boot up and shelly logger logs the desired load otherwise the sockets remain set to the last setting 
 
-path passed to labview logger must be .../Data/irradiance/file_name and file_name is variableName_tiltXX_distanceYY_loadScenario.txt 
+path passed to labview logger must be basepath/.../Data/irradiance/file_name and file_name is variableName_tiltXX_distanceYY_loadScenario.txt. 
+from base = f"tilt{tilt}_distance{distance}_{scenario_suffix}" the labview_name will be set as labview_name = f"poa_{base}.txt"
 
 make the scenario state a more comprehensive section, including also logged values from shelly and tarom (include the values that are sent to the dashboard)
