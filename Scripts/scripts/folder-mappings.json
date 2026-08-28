@@ -22,6 +22,10 @@
       "Target": "Load"
     },
     {
+      "Source": "C:\\Users\\5CG7471GSJ\\Documents\\DATA\\Weather",
+      "Target": "Weather"
+    },
+    {
       "Source": "C:\\Users\\5CG7471GSJ\\Documents\\DATA\\Dashboard",
       "Target": "Dashboard"
     },
