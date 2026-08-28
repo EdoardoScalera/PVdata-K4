@@ -1,5 +1,5 @@
 ﻿{
-    "generated_at":  "2026-08-28 14:26:28",
+    "generated_at":  "2026-08-28 14:34:43",
     "files":  [
                   {
                       "key":  "Irradiance/irradiance.txt",
@@ -68,6 +68,28 @@
                       "constant_target_w":  null
                   },
                   {
+                      "key":  "Load/load_tilt30_distance50_all_off.txt",
+                      "path":  "../Load/load_tilt30_distance50_all_off.txt",
+                      "name":  "load_tilt30_distance50_all_off.txt",
+                      "label":  "load_tilt30_distance50_all_off.txt",
+                      "type":  "load",
+                      "tilt":  30,
+                      "distance":  50,
+                      "scenario":  "all_off",
+                      "constant_target_w":  null
+                  },
+                  {
+                      "key":  "Load/load_tilt30_distance50_all_on.txt",
+                      "path":  "../Load/load_tilt30_distance50_all_on.txt",
+                      "name":  "load_tilt30_distance50_all_on.txt",
+                      "label":  "load_tilt30_distance50_all_on.txt",
+                      "type":  "load",
+                      "tilt":  30,
+                      "distance":  50,
+                      "scenario":  "all_on",
+                      "constant_target_w":  null
+                  },
+                  {
                       "key":  "Load/load_v0.txt",
                       "path":  "../Load/load_v0.txt",
                       "name":  "load_v0.txt",
@@ -120,6 +142,17 @@
                       "tilt":  null,
                       "distance":  null,
                       "scenario":  null,
+                      "constant_target_w":  null
+                  },
+                  {
+                      "key":  "PV/pv_tilt30_distance50_all_off.txt",
+                      "path":  "../PV/pv_tilt30_distance50_all_off.txt",
+                      "name":  "pv_tilt30_distance50_all_off.txt",
+                      "label":  "pv_tilt30_distance50_all_off.txt",
+                      "type":  "pv",
+                      "tilt":  30,
+                      "distance":  50,
+                      "scenario":  "all_off",
                       "constant_target_w":  null
                   },
                   {
