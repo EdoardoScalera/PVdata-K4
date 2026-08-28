@@ -316,46 +316,72 @@ class PVControlApp(tk.Tk):
         actions_frame.grid(row=3, column=0, columnspan=2, padx=10, pady=5, sticky="nsew")
         actions_frame.grid_columnconfigure(0, weight=1)
 
-        # Logging section: spans the full width of the window
+        # Logging section: spans the full width of the window.
+        # Each row is Start | state checkbox | Stop; stop buttons are narrower.
         logging_frame = tk.LabelFrame(actions_frame, text="Logging")
         logging_frame.grid(row=0, column=0, sticky="nsew")
-        logging_frame.grid_columnconfigure(0, weight=1)
-        logging_frame.grid_columnconfigure(1, weight=1)
+        logging_frame.grid_columnconfigure(0, weight=2)
+        logging_frame.grid_columnconfigure(1, weight=0)
+        logging_frame.grid_columnconfigure(2, weight=1)
 
-        # Start / Stop pairs
-        tk.Button(logging_frame, text="Start Shelly", command=self.start_shelly_logger).grid(row=0, column=0, padx=3, pady=3, sticky="we")
-        tk.Button(logging_frame, text="Stop Shelly", command=self.stop_shelly_logger).grid(row=0, column=1, padx=3, pady=3, sticky="we")
-        tk.Button(logging_frame, text="Start Tarom", command=self.start_tarom_logger).grid(row=1, column=0, padx=3, pady=3, sticky="we")
-        tk.Button(logging_frame, text="Stop Tarom", command=self.stop_tarom_logger).grid(row=1, column=1, padx=3, pady=3, sticky="we")
-        tk.Button(logging_frame, text="Start controller", command=self.start_scenario_controller).grid(row=2, column=0, padx=3, pady=3, sticky="we")
-        tk.Button(logging_frame, text="Stop controller", command=self.stop_scenario_controller).grid(row=2, column=1, padx=3, pady=3, sticky="we")
-        tk.Button(logging_frame, text="Upload GitHub", command=self.upload_github).grid(row=3, column=0, padx=3, pady=3, sticky="we")
-        tk.Button(logging_frame, text="Stop GitHub", command=self.stop_github_upload).grid(row=3, column=1, padx=3, pady=3, sticky="we")
-        tk.Button(logging_frame, text="Start LabVIEW VI", command=self.start_labview_logger).grid(row=4, column=0, padx=3, pady=3, sticky="we")
-        tk.Button(logging_frame, text="Stop LabVIEW VI", command=self.stop_labview_logger).grid(row=4, column=1, padx=3, pady=3, sticky="we")
+        self.start_shelly_btn = tk.Button(logging_frame, text="Start Shelly", command=self.start_shelly_logger)
+        self.start_shelly_btn.grid(row=0, column=0, padx=3, pady=3, sticky="we")
+        tk.Checkbutton(logging_frame, text="Shelly", variable=self.shelly_running_var, state="disabled").grid(row=0, column=1, sticky="w", padx=3)
+        tk.Button(logging_frame, text="Stop Shelly", command=self.stop_shelly_logger).grid(row=0, column=2, padx=3, pady=3, sticky="we")
 
-        # Running-state checkboxes
-        tk.Checkbutton(logging_frame, text="Shelly", variable=self.shelly_running_var, state="disabled").grid(row=5, column=0, sticky="w", padx=3)
-        tk.Checkbutton(logging_frame, text="Tarom", variable=self.tarom_running_var, state="disabled").grid(row=5, column=1, sticky="w", padx=3)
-        tk.Checkbutton(logging_frame, text="Controller", variable=self.scenario_running_var, state="disabled").grid(row=6, column=0, sticky="w", padx=3)
-        tk.Checkbutton(logging_frame, text="GitHub", variable=self.github_running_var, state="disabled").grid(row=6, column=1, sticky="w", padx=3)
-        tk.Checkbutton(logging_frame, text="LabVIEW", variable=self.labview_running_var, state="disabled").grid(row=7, column=0, columnspan=2, sticky="w", padx=3)
+        self.start_tarom_btn = tk.Button(logging_frame, text="Start Tarom", command=self.start_tarom_logger)
+        self.start_tarom_btn.grid(row=1, column=0, padx=3, pady=3, sticky="we")
+        tk.Checkbutton(logging_frame, text="Tarom", variable=self.tarom_running_var, state="disabled").grid(row=1, column=1, sticky="w", padx=3)
+        tk.Button(logging_frame, text="Stop Tarom", command=self.stop_tarom_logger).grid(row=1, column=2, padx=3, pady=3, sticky="we")
 
-        # Scenario control: full width, placed below the logging section
+        self.start_controller_btn = tk.Button(logging_frame, text="Start controller", command=self.start_scenario_controller)
+        self.start_controller_btn.grid(row=2, column=0, padx=3, pady=3, sticky="we")
+        tk.Checkbutton(logging_frame, text="Controller", variable=self.scenario_running_var, state="disabled").grid(row=2, column=1, sticky="w", padx=3)
+        tk.Button(logging_frame, text="Stop controller", command=self.stop_scenario_controller).grid(row=2, column=2, padx=3, pady=3, sticky="we")
+
+        self.start_labview_btn = tk.Button(logging_frame, text="Start LabVIEW VI", command=self.start_labview_logger)
+        self.start_labview_btn.grid(row=3, column=0, padx=3, pady=3, sticky="we")
+        tk.Checkbutton(logging_frame, text="LabVIEW", variable=self.labview_running_var, state="disabled").grid(row=3, column=1, sticky="w", padx=3)
+        tk.Button(logging_frame, text="Stop LabVIEW VI", command=self.stop_labview_logger).grid(row=3, column=2, padx=3, pady=3, sticky="we")
+
+        # GitHub is kept as the last entry in the logging section
+        self.start_github_btn = tk.Button(logging_frame, text="Upload GitHub", command=self.upload_github)
+        self.start_github_btn.grid(row=4, column=0, padx=3, pady=3, sticky="we")
+        tk.Checkbutton(logging_frame, text="GitHub", variable=self.github_running_var, state="disabled").grid(row=4, column=1, sticky="w", padx=3)
+        tk.Button(logging_frame, text="Stop GitHub", command=self.stop_github_upload).grid(row=4, column=2, padx=3, pady=3, sticky="we")
+
+        # Scenario control: full width, placed below the logging section.
+        # A profile dropdown + request button (mimics the measurement section),
+        # with the immediate all-off button kept as-is.
         scenario_frame = tk.LabelFrame(actions_frame, text="Scenario control")
         scenario_frame.grid(row=1, column=0, pady=(8, 0), sticky="we")
-        for c in range(6):
-            scenario_frame.grid_columnconfigure(c, weight=1)
+        scenario_frame.grid_columnconfigure(1, weight=1)
 
-        tk.Button(scenario_frame, text="All ON", command=self.scenario_all_on).grid(row=0, column=0, padx=3, pady=3, sticky="we")
-        tk.Button(scenario_frame, text="Whole house", command=self.scenario_whole_house).grid(row=0, column=1, padx=3, pady=3, sticky="we")
-        tk.Button(scenario_frame, text="Constant", command=self.scenario_constant).grid(row=0, column=2, padx=3, pady=3, sticky="we")
-        tk.Button(scenario_frame, text="Adaptive", command=self.scenario_adaptive).grid(row=0, column=3, padx=3, pady=3, sticky="we")
-        tk.Button(scenario_frame, text="Turn OFF", command=self.scenario_all_off).grid(row=0, column=4, padx=3, pady=3, sticky="we")
-        tk.Button(scenario_frame, text="Turn OFF NOW", command=self.scenario_all_off_now, bg="orange", fg="white").grid(row=0, column=5, padx=3, pady=3, sticky="we")
+        tk.Label(scenario_frame, text="Scenario profile:").grid(row=0, column=0, sticky="w", padx=(8, 3), pady=3)
+        self.scenario_control_var = tk.StringVar(value=SCENARIOS[0])
+        scenario_control_combo = ttk.Combobox(
+            scenario_frame,
+            textvariable=self.scenario_control_var,
+            values=SCENARIOS + ["all_off"],
+            state="readonly",
+            width=20,
+        )
+        scenario_control_combo.grid(row=0, column=1, padx=3, pady=3, sticky="we")
+        tk.Button(
+            scenario_frame,
+            text="Request scenario",
+            command=self.request_scenario_from_control,
+        ).grid(row=0, column=2, padx=3, pady=3, sticky="we")
+        tk.Button(
+            scenario_frame,
+            text="Turn OFF NOW",
+            command=self.scenario_all_off_now,
+            bg="orange",
+            fg="white",
+        ).grid(row=0, column=3, padx=3, pady=3, sticky="we")
 
         # Constant load entry for the constant scenario (shared with the measurement section)
-        tk.Label(scenario_frame, text="Constant load (W):").grid(row=1, column=0, columnspan=2, sticky="e", padx=(3, 0), pady=3)
+        tk.Label(scenario_frame, text="Constant load (W):").grid(row=1, column=0, sticky="e", padx=(3, 0), pady=3)
         self.scenario_constant_entry = tk.Entry(
             scenario_frame,
             textvariable=self.constant_target_var,
@@ -363,7 +389,9 @@ class PVControlApp(tk.Tk):
             validate="key",
             validatecommand=(self.register(self.validate_constant_target), "%P"),
         )
-        self.scenario_constant_entry.grid(row=1, column=2, columnspan=4, sticky="we", padx=3, pady=3)
+        self.scenario_constant_entry.grid(row=1, column=1, columnspan=3, sticky="w", padx=3, pady=3)
+
+        self.update_start_button_states()
 
         viewer_frame = tk.LabelFrame(self, text="Scenario state", padx=8, pady=4)
         viewer_frame.grid(row=4, column=0, columnspan=2, padx=10, pady=4, sticky="we")
@@ -591,6 +619,7 @@ class PVControlApp(tk.Tk):
             self.start_tarom_logger()
             self.upload_github()
             self.start_scenario_controller()
+            self.update_start_button_states()
             self.status_var.set("All scripts started (Shelly, Tarom, GitHub, controller).")
         except Exception as e:
             messagebox.showerror("Start ALL error", str(e))
@@ -620,6 +649,23 @@ class PVControlApp(tk.Tk):
         if turn_off:
             self.start_immediate_all_off()
 
+    def update_start_button_states(self):
+        """
+        Disable each logging 'Start' button while its process is running so the
+        user cannot start a duplicate/overlapping instance.
+        """
+        running = {
+            "start_shelly_btn": self.shelly_proc is not None and self.shelly_proc.poll() is None,
+            "start_tarom_btn": self.tarom_proc is not None and self.tarom_proc.poll() is None,
+            "start_controller_btn": self.scenario_proc is not None and self.scenario_proc.poll() is None,
+            "start_github_btn": self.github_proc is not None and self.github_proc.poll() is None,
+            "start_labview_btn": self.labview_running_var.get(),
+        }
+        for attr, is_running in running.items():
+            btn = getattr(self, attr, None)
+            if btn is not None:
+                btn.configure(state="disabled" if is_running else "normal")
+
     # --- Individual PS1 actions -------------------------------------
 
     def start_shelly_logger(self):
@@ -640,6 +686,7 @@ class PVControlApp(tk.Tk):
             ]
         )
         self.shelly_running_var.set(True)
+        self.update_start_button_states()
 
     def start_tarom_logger(self):
         self._stop_process("Tarom logger", "tarom_proc", self.tarom_running_var)
@@ -659,6 +706,7 @@ class PVControlApp(tk.Tk):
             ]
         )
         self.tarom_running_var.set(True)
+        self.update_start_button_states()
 
     def upload_github(self):
         self._stop_process("GitHub upload", "github_proc", self.github_running_var)
@@ -674,6 +722,7 @@ class PVControlApp(tk.Tk):
             ]
         )
         self.github_running_var.set(True)
+        self.update_start_button_states()
         self.after(500, self.check_github_process)
 
     def check_github_process(self):
@@ -683,6 +732,7 @@ class PVControlApp(tk.Tk):
             else:
                 self.github_running_var.set(False)
                 self.github_proc = None
+                self.update_start_button_states()
 
     def start_scenario_controller(self):
         """
@@ -718,6 +768,7 @@ class PVControlApp(tk.Tk):
 
         self.scenario_proc = subprocess.Popen(cmd)
         self.scenario_running_var.set(True)
+        self.update_start_button_states()
 
         self.after(1000, self.check_scenario_controller)
 
@@ -732,6 +783,7 @@ class PVControlApp(tk.Tk):
                 self.scenario_running_var.set(False)
                 self.scenario_proc = None
                 self.status_var.set("Scenario controller stopped.")
+                self.update_start_button_states()
 
     def is_measurement_running(self):
         """True if any measurement logger process is currently running."""
@@ -808,17 +860,25 @@ class PVControlApp(tk.Tk):
     def on_measurement_parameter_changed(self, *_args):
         self.update_name_preview()
 
-    def scenario_all_on(self):
-        self.request_scenario_flag("-SetScenarioAllOn", "all_on")
-
-    def scenario_whole_house(self):
-        self.request_scenario_flag("-SetScenarioWholeHouse", "whole_house")
-
-    def scenario_constant(self):
-        self.request_scenario_flag("-SetScenarioConstant1kW", "constant")
-
-    def scenario_adaptive(self):
-        self.request_scenario_flag("-SetScenarioAdaptive", "adaptive")
+    def request_scenario_from_control(self):
+        """
+        Apply the scenario profile selected in the Scenario control dropdown.
+        """
+        scenario = self.scenario_control_var.get()
+        scenario_flags = {
+            "all_on": "-SetScenarioAllOn",
+            "whole_house": "-SetScenarioWholeHouse",
+            "constant": "-SetScenarioConstant1kW",
+            "adaptive": "-SetScenarioAdaptive",
+            "all_off": "-SetScenarioAllOff",
+        }
+        if scenario not in scenario_flags:
+            self.status_var.set("Select a valid scenario profile first.")
+            return
+        if scenario == "all_off":
+            self.scenario_all_off()
+        else:
+            self.request_scenario_flag(scenario_flags[scenario], scenario)
 
     def scenario_all_off(self):
         self.request_scenario_flag("-SetScenarioAllOff", "all_off", immediate=False)
@@ -992,6 +1052,7 @@ class PVControlApp(tk.Tk):
                 setattr(self, attr_name, None)
                 var.set(False)
             self.status_var.set(f"{label} not running.")
+        self.update_start_button_states()
 
     def stop_shelly_logger(self):
         self._stop_process("Shelly logger", "shelly_proc", self.shelly_running_var)
@@ -1042,6 +1103,7 @@ class PVControlApp(tk.Tk):
         except Exception as error:
             self.labview_running_var.set(False)
             messagebox.showerror("LabVIEW start error", str(error))
+        self.update_start_button_states()
 
     def stop_labview_logger(self):
         try:
@@ -1053,6 +1115,7 @@ class PVControlApp(tk.Tk):
             self.status_var.set(f"LabVIEW VI stopped. {result.stdout.strip()}")
         except Exception as error:
             messagebox.showerror("LabVIEW stop error", str(error))
+        self.update_start_button_states()
 
     def stop_scenario_request_processes(self):
         for process in self.scenario_request_procs:
