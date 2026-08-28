@@ -379,9 +379,13 @@
         const response = await fetch('./Dashboard/data-file-manifest.json', { cache: 'no-store' });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const manifest = await response.json();
+        // Manifest paths (e.g. "../Load/load.txt") are relative to the Dashboard
+        // folder that holds the manifest; resolve them against it so fetch()
+        // points at the actual data files on the server.
+        const manifestDirUrl = new URL('./Dashboard/', window.location.href);
         manifest?.files?.forEach((entry) => {
           dataFiles[entry.key] = {
-            path: entry.path,
+            path: new URL(entry.path, manifestDirUrl).href,
             name: entry.name,
             label: entry.label,
             type: entry.type,
@@ -403,6 +407,13 @@
     });
 
     const fileMatchesFilters = (fileInfo, filters, ignoredField = null) => {
+      // Files without any configuration fields (tilt/distance/scenario), such
+      // as weather data, are not tied to the filter criteria and so are always
+      // available regardless of the selected filters.
+      const hasConfiguration = ['tilt', 'distance', 'scenario'].some(
+        (field) => fileInfo[field] != null && fileInfo[field] !== ''
+      );
+      if (!hasConfiguration) return true;
       return Object.entries(filters).every(([field, value]) => {
         if (field === ignoredField || !value) return true;
         return String(fileInfo[field] ?? '') === String(value);
@@ -623,28 +634,6 @@
     };
 
     const updateSelectionStates = () => {
-      const fileInputs = document.querySelectorAll('.file-option input[name="dataFile"]');
-      const zipInput = document.querySelector('.file-option input[name="dataFile"][value="__ALL__"]');
-      const isZipSelected = zipInput?.checked;
-
-      fileInputs.forEach((input) => {
-        const label = input.closest('label');
-        if (!label) return;
-        const isZipOption = input.value === '__ALL__';
-        const shouldSelect = input.checked && !(isZipSelected && !isZipOption);
-        if (label) {
-          label.classList.toggle('is-selected', shouldSelect);
-        }
-      });
-
-      if (isZipSelected) {
-        fileInputs.forEach((input) => {
-          if (input.value !== '__ALL__' && input.checked) {
-            input.checked = false;
-          }
-        });
-      }
-
       document.querySelectorAll('.file-option input[name="dataFile"]').forEach((input) => {
         const label = input.closest('label');
         if (label) {
@@ -656,19 +645,19 @@
     const handleDownloadSelection = (event) => {
       const input = event.target;
       if (!input.matches('input[name="dataFile"]')) return;
-      const zipInput = document.querySelector('.file-option input[name="dataFile"][value="__ALL__"]');
-      if (!zipInput) return;
 
-      if (input.value === '__ALL__') {
-        if (input.checked) {
-          document.querySelectorAll('.file-option input[name="dataFile"]').forEach((otherInput) => {
-            if (otherInput !== input && otherInput.value !== '__ALL__') {
-              otherInput.checked = false;
-            }
-          });
-        }
-      } else if (zipInput.checked) {
-        zipInput.checked = false;
+      if (input.value === 'ALL') {
+        // "Download all as ZIP" mirrors the currently filtered files: check (or
+        // uncheck) the corresponding configuration checkboxes accordingly.
+        document.querySelectorAll('input[name="dataFile"]').forEach((otherInput) => {
+          if (otherInput !== input && otherInput.value !== 'ALL') {
+            otherInput.checked = input.checked;
+          }
+        });
+      } else if (input.checked) {
+        // Selecting a specific file supersedes the ZIP-all selection.
+        const zipInput = document.querySelector('input[name="dataFile"][value="ALL"]');
+        if (zipInput) zipInput.checked = false;
       }
 
       updateSelectionStates();
@@ -676,7 +665,7 @@
 
     const downloadDataset = async () => {
       const selectedInputs = document.querySelectorAll('input[name="dataFile"]:checked');
-      const exportAll = document.querySelector('input[name="dataFile"][value="__ALL__"]:checked');
+      const exportAll = document.querySelector('input[name="dataFile"][value="ALL"]:checked');
       if (exportAll) {
         await downloadAllAsZip();
         return;
