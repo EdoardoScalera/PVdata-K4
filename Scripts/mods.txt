@@ -1,0 +1,9 @@
+labview data are not uploaded to the dashboard on github. 
+
+check if github support every 1 minute upload or if it create problems 
+
+add open github repo button link: https://github.com/EdoardoScalera/PVdata-K4
+
+rename scenario "constant" to "constant load"
+
+add in the status section: last github push to repo

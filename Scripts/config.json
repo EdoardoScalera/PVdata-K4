@@ -11,7 +11,7 @@
     "scenario_request": "scenario_request.json",
     "scenario_status": "scenario_status.json"
   },
-  "dashboard_url": "http://localhost:8000/index.html",
+  "dashboard_url": "https://edoardoscalera.github.io/PVdata-K4",
   "dashboard_values_file": "C:/Users/5CG7471GSJ/Documents/DATA/Dashboard/dashboard_values.json",
   "log_dirs": {
     "shelly": "C:/Users/5CG7471GSJ/Documents/DATA/Load",
