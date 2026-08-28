@@ -826,8 +826,7 @@ class PVControlApp(tk.Tk):
 
     def start_immediate_all_off(self):
         self._stop_process("Scenario controller", "scenario_proc", self.scenario_running_var)
-        self.statusvar.set( "Shutting down: stopping loggers, terminating processes, and turning all loads off...")
-        self.status_var.set("Turning all sockets off now...")
+        self.status_var.set( "Shutting down: stopping loggers, terminating processes, and turning all loads off...")
         self.all_off_proc = subprocess.Popen(
             [
                 "powershell",
@@ -1134,7 +1133,7 @@ class PVControlApp(tk.Tk):
             self.start_timer_id = None
         if self.viewer_refresh_id is not None:
             self.after_cancel(self.viewer_refresh_id)
-        self.statusvar.set("Shutting down: stopping loggers, terminating processes, and turning all loads off...")
+        self.status_var.set("Shutting down: stopping loggers, terminating processes, and turning all loads off...")
         self.stop_loggers()
         self.stop_loggers(turn_off=False)
         self.stop_labview_logger()
