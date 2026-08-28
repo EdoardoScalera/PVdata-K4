@@ -816,3 +816,28 @@
 2026-08-28 14:50:29	INFO	online	ps2	98a3167b6a8c		device reachable again
 2026-08-28 14:50:32	INFO	online	ps3	98a3166b6128		device reachable again
 2026-08-28 14:50:36	INFO	shutdown_complete				RunOnce all_off completed; all loads off.
+2026-08-28 14:53:21	INFO	startup				Loaded config from C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\shelly_load_control_scenarios.json; startup_scenario=all_off; scenario_request_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_request.json; scenario_status_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_status.json; constant_target_w=1200
+2026-08-28 14:53:22	INFO	strip_plan	ps1	206ef102c9d8		slot=2026-08-28 14:45; scenario=all_off; target_strip_w=0; states=[0,0,0,0]
+2026-08-28 14:53:22	INFO	strip_plan	ps2	98a3167b6a8c		slot=2026-08-28 14:45; scenario=all_off; target_strip_w=0; states=[0,0,0,0]
+2026-08-28 14:53:22	INFO	strip_plan	ps3	98a3166b6128		slot=2026-08-28 14:45; scenario=all_off; target_strip_w=0; states=[0,0,0,0]
+2026-08-28 14:53:22	INFO	load_change				SCENARIO=all_off slot=2026-08-28 14:45 target=0W nominal=0W overshoot=0W states: ps1=[0,0,0,0]; ps2=[0,0,0,0]; ps3=[0,0,0,0]
+2026-08-28 14:53:22	INFO	online	ps1	206ef102c9d8		device reachable again
+2026-08-28 14:53:25	INFO	online	ps2	98a3167b6a8c		device reachable again
+2026-08-28 14:53:28	INFO	online	ps3	98a3166b6128		device reachable again
+2026-08-28 14:53:31	INFO	shutdown_complete				RunOnce all_off completed; all loads off.
+2026-08-28 16:53:11	INFO	startup				Loaded config from C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\shelly_load_control_scenarios.json; startup_scenario=constant; scenario_request_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_request.json; scenario_status_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_status.json; constant_target_w=500
+2026-08-28 16:53:11	INFO	strip_plan	ps1	206ef102c9d8		slot=2026-08-28 16:45; scenario=constant; target_strip_w=500; states=[1,1,1,0]
+2026-08-28 16:53:11	INFO	strip_plan	ps2	98a3167b6a8c		slot=2026-08-28 16:45; scenario=constant; target_strip_w=0; states=[0,0,0,0]
+2026-08-28 16:53:11	INFO	strip_plan	ps3	98a3166b6128		slot=2026-08-28 16:45; scenario=constant; target_strip_w=0; states=[0,0,0,0]
+2026-08-28 16:53:11	INFO	load_change				SCENARIO=constant slot=2026-08-28 16:45 target=500W nominal=500W overshoot=0W states: ps1=[1,1,1,0]; ps2=[0,0,0,0]; ps3=[0,0,0,0]
+2026-08-28 16:53:11	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-08-28 16:53:14	INFO	online	ps1	206ef102c9d8		device reachable again
+2026-08-28 16:53:14	INFO	reconcile	ps1	206ef102c9d8	0	actual=off; desired=on
+2026-08-28 16:53:16	INFO	send	ps1	206ef102c9d8	0	turn=on
+2026-08-28 16:53:16	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-08-28 16:53:18	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-08-28 16:53:18	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-08-28 16:53:20	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-08-28 16:53:23	INFO	online	ps2	98a3167b6a8c		device reachable again
+2026-08-28 16:53:26	INFO	online	ps3	98a3166b6128		device reachable again
+2026-08-28 16:54:19	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s

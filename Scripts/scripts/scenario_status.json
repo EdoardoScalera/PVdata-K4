@@ -1,16 +1,11 @@
 ﻿{
-    "ts_local":  "2026-08-28 14:50:35",
-    "active_scenario":  "all_off",
+    "ts_local":  "2026-08-28 16:54:16",
+    "active_scenario":  "constant",
     "pending_scenario":  null,
-    "current_slot":  "2026-08-28 14:45",
-    "current_target_w":  0,
-    "constant_target_w":  1200,
+    "current_slot":  "2026-08-28 16:45",
+    "current_target_w":  500,
+    "constant_target_w":  500,
     "scenario_request_path":  "C:\\Users\\5CG7471GSJ\\Documents\\DATA\\Scripts\\GUI\\scripts\\scenario_request.json",
-    "scenario_request_file_present":  true,
-    "scenario_request_file":  {
-                                  "scenario":  "all_off",
-                                  "requested_at_local":  "2026-08-28 14:50:21",
-                                  "requested_for_slot":  "2026-08-28 15:00:00",
-                                  "constant_target_w":  1200
-                              }
+    "scenario_request_file_present":  false,
+    "scenario_request_file":  null
 }
