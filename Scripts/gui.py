@@ -11,16 +11,12 @@ from tkcalendar import DateEntry  # pip install tkcalendar
 
 import json
 
-CONFIG_PATH = pathlib.Path(
-    r"C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\config.json"
-)
+CONFIG_PATH = pathlib.Path(__file__).resolve().parent / "config.json"
 
 with CONFIG_PATH.open("r", encoding="utf-8") as f:
     CONFIG = json.load(f)
 
-DATA_DIR = pathlib.Path(
-    r"C:\Users\5CG7471GSJ\Documents\DATA"
-)
+DATA_DIR = pathlib.Path(CONFIG["data_dir"])
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 SCRIPTS_DIR = pathlib.Path(CONFIG["paths"]["scripts_dir"])
@@ -30,9 +26,12 @@ TAROM_LOGGER_SCRIPT = SCRIPTS_DIR / CONFIG["paths"]["tarom_logger"]
 SHELLY_SCENARIO_SCRIPT = SCRIPTS_DIR / CONFIG["paths"]["shelly_scenario"]
 SHELLY_SCENARIO_CONFIG = SCRIPTS_DIR / CONFIG["paths"]["shelly_scenario_config"]
 UPLOAD_GITHUB_SCRIPT = SCRIPTS_DIR / CONFIG["paths"]["upload_github"]
-SCENARIO_REQUEST_PATH = SCRIPTS_DIR / "scenario_request.json"
-SCENARIO_STATUS_PATH = SCRIPTS_DIR / "scenario_status.json"
-DASHBOARD_URL = CONFIG.get("dashboard_url", "http://localhost:8000/index.html")
+LABVIEW_LOGGER_SCRIPT = SCRIPTS_DIR / CONFIG["paths"]["labview_logger"]
+LABVIEW_PATH = pathlib.Path(CONFIG["labview"]["labview_path"])
+LABVIEW_VI_PATH = pathlib.Path(CONFIG["labview"]["vi_path"])
+SCENARIO_REQUEST_PATH = SCRIPTS_DIR / CONFIG["paths"]["scenario_request"]
+SCENARIO_STATUS_PATH = SCRIPTS_DIR / CONFIG["paths"]["scenario_status"]
+DASHBOARD_URL = CONFIG["dashboard_url"]
 
 # Single load selector (used for file naming + scenario script)
 SCENARIOS = ["all_on", "whole_house", "constant", "adaptive"]
@@ -58,6 +57,8 @@ class PVControlApp(tk.Tk):
         self.scenario_proc = None
         self.all_off_proc = None
         self.scenario_request_procs = []
+        self.labview_proc = None
+        self.labview_running_var = tk.BooleanVar(value=False)
 
         # Running-status vars (for checkboxes)
         self.shelly_running_var = tk.BooleanVar(value=False)
@@ -333,6 +334,35 @@ class PVControlApp(tk.Tk):
         tk.Button(logging_frame, text="Stop controller", command=self.stop_scenario_controller).grid(row=5, column=0, padx=3, pady=3, sticky="we")
         tk.Button(logging_frame, text="Stop GitHub", command=self.stop_github_upload).grid(row=5, column=1, padx=3, pady=3, sticky="we")
 
+        # LabVIEW logger controls
+        labview_frame = tk.LabelFrame(actions_frame, text="LabVIEW logger")
+        labview_frame.grid(row=1, column=0, columnspan=2, padx=0, pady=(8, 0), sticky="we")
+        labview_frame.grid_columnconfigure(0, weight=1)
+        labview_frame.grid_columnconfigure(1, weight=1)
+
+        tk.Button(
+            labview_frame,
+            text="Start LabVIEW VI",
+            command=self.start_labview_logger,
+            bg="darkgreen",
+            fg="white",
+        ).grid(row=0, column=0, padx=3, pady=3, sticky="we")
+
+        tk.Button(
+            labview_frame,
+            text="Stop LabVIEW VI",
+            command=self.stop_labview_logger,
+            bg="darkred",
+            fg="white",
+        ).grid(row=0, column=1, padx=3, pady=3, sticky="we")
+
+        tk.Checkbutton(
+            labview_frame,
+            text="LabVIEW running",
+            variable=self.labview_running_var,
+            state="disabled",
+        ).grid(row=1, column=0, columnspan=2, sticky="w", padx=3)
+
         scenario_frame = tk.LabelFrame(actions_frame, text="Scenario control")
         scenario_frame.grid(row=0, column=1, padx=(5, 0), sticky="nsew")
         scenario_frame.grid_columnconfigure(0, weight=1)
@@ -592,6 +622,7 @@ class PVControlApp(tk.Tk):
         self._stop_process("Scenario controller", "scenario_proc", self.scenario_running_var)
         self._stop_process("GitHub upload", "github_proc", self.github_running_var)
         self._stop_process("All OFF command", "all_off_proc", tk.BooleanVar(value=False))
+        self.stop_labview_logger()
         self.stop_scenario_request_processes()
         self.clear_scenario_request_file()
         if turn_off:
@@ -977,6 +1008,53 @@ class PVControlApp(tk.Tk):
     def stop_github_upload(self):
         self._stop_process("GitHub upload", "github_proc", self.github_running_var)
 
+    def _run_labview_script(self, action, data_path=None):
+        cmd = [
+            "powershell.exe",
+            "-NoProfile",
+            "-ExecutionPolicy", "Bypass",
+            "-File", str(LABVIEW_LOGGER_SCRIPT),
+            "-Action", action,
+            "-LabVIEWPath", str(LABVIEW_PATH),
+            "-VIPath", str(LABVIEW_VI_PATH),
+        ]
+        if data_path is not None:
+            cmd.extend(["-DataFile", str(data_path)])
+        return subprocess.run(cmd, capture_output=True, text=True, check=False)
+
+    def start_labview_logger(self):
+        try:
+            _, data_path = self.build_measurement_names()
+            if not LABVIEW_LOGGER_SCRIPT.exists():
+                raise FileNotFoundError(f"Launcher not found: {LABVIEW_LOGGER_SCRIPT}")
+            if not LABVIEW_PATH.exists():
+                raise FileNotFoundError(f"LabVIEW.exe not found: {LABVIEW_PATH}")
+            if not LABVIEW_VI_PATH.exists():
+                raise FileNotFoundError(f"VI not found: {LABVIEW_VI_PATH}")
+
+            result = self._run_labview_script("Start", data_path)
+            if result.returncode != 0:
+                raise RuntimeError(result.stderr.strip() or result.stdout.strip())
+
+            self.labview_running_var.set(True)
+            self.status_var.set(
+                f"LabVIEW VI started: {data_path.name}. {result.stdout.strip()}"
+            )
+        except Exception as error:
+            self.labview_running_var.set(False)
+            messagebox.showerror("LabVIEW start error", str(error))
+
+    def stop_labview_logger(self):
+        try:
+            result = self._run_labview_script("Stop")
+            if result.returncode != 0:
+                raise RuntimeError(result.stderr.strip() or result.stdout.strip())
+            self.labview_proc = None
+            self.labview_running_var.set(False)
+            self.status_var.set(f"LabVIEW VI stopped. {result.stdout.strip()}")
+        except Exception as error:
+            messagebox.showerror("LabVIEW stop error", str(error))
+
     def stop_scenario_request_processes(self):
         for process in self.scenario_request_procs:
             if process.poll() is None:
@@ -1057,6 +1135,7 @@ class PVControlApp(tk.Tk):
             self.after_cancel(self.viewer_refresh_id)
         self.stop_loggers()
         self.stop_loggers(turn_off=False)
+        self.stop_labview_logger()
         self.destroy()
 
 

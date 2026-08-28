@@ -60,8 +60,8 @@ if ($Action -eq 'Start') {
         New-Item -ItemType Directory -Path $dataDirectory -Force | Out-Null
     }
 
-    $args = @($VIPath, '--', ([IO.Path]::GetFullPath($DataFile)))
-    $p = Start-Process -FilePath $LabVIEWPath -ArgumentList $args -WorkingDirectory (Split-Path -Parent $VIPath) -PassThru
+    $labviewArgs = @($VIPath, '--', ([IO.Path]::GetFullPath($DataFile)))
+    $p = Start-Process -FilePath $LabVIEWPath -ArgumentList $labviewArgs -WorkingDirectory (Split-Path -Parent $VIPath) -PassThru
     Save-Pid $p.Id
     Write-Output "Started PID=$($p.Id)"
     exit 0

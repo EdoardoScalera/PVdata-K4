@@ -1,11 +1,15 @@
 {
+  "data_dir": "C:/Users/5CG7471GSJ/Documents/DATA",
   "paths": {
     "scripts_dir": "C:/Users/5CG7471GSJ/Documents/DATA/Scripts/GUI/scripts",
     "shelly_logger": "shelly_logger_v2.ps1",
     "tarom_logger": "tarom_logger_v1.ps1",
     "shelly_scenario": "shelly_load_control_scenarios.ps1",
     "shelly_scenario_config": "shelly_load_control_scenarios.json",
-    "upload_github": "upload_to_repo.ps1"
+    "upload_github": "upload_to_repo.ps1",
+    "labview_logger": "labview_logger.ps1",
+    "scenario_request": "scenario_request.json",
+    "scenario_status": "scenario_status.json"
   },
   "dashboard_url": "http://localhost:8000/index.html",
   "log_dirs": {
@@ -22,5 +26,9 @@
     "start_datetime": null,
     "stop_enabled": false,
     "stop_datetime": null
+  },
+  "labview": {
+    "labview_path": "C:/Program Files/National Instruments/LabVIEW 2021/LabVIEW.exe",
+    "vi_path": "C:/Users/5CG7471GSJ/Documents/DATA/Scripts/GUI/scripts/ghi_tc_poa_logger.vi"
   }
 }
