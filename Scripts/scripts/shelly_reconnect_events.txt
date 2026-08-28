@@ -618,3 +618,4 @@
 2026-08-27 16:27:19	INFO	online	ps1	206ef102c9d8		device reachable again
 2026-08-27 16:27:22	INFO	online	ps2	98a3167b6a8c		device reachable again
 2026-08-27 16:27:25	INFO	online	ps3	98a3166b6128		device reachable again
+2026-08-28 14:26:28	INFO	startup				Loaded config from C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\shelly_load_control_scenarios.json; startup_scenario=all_on; scenario_request_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_request.json; scenario_status_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_status.json; constant_target_w=1200
