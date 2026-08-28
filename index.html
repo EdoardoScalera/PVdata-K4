@@ -1,3 +1,8 @@
+<!-- # in powershell
+# cd "C:\Users\scalere1\OneDrive - Aalto University\PhD materials\K4_Scripts"
+# py -3 -m http.server 8000       or      python -m http.server 8000
+# http://localhost:8000/index.html -->
+
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -38,6 +43,8 @@
     .skip-link:focus { left: var(--space-2); }
     .shell { max-width: 1200px; margin: 0 auto; padding: var(--space-6); }
     .topbar { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); padding: var(--space-6) 0 var(--space-8); }
+    .topbar-meta { display: flex; align-items: flex-start; gap: var(--space-3); }
+    .topbar-meta .panel { padding: var(--space-4); min-width: 220px; }
     .brand { display: flex; align-items: center; gap: var(--space-3); }
     .logo { width: 40px; height: 40px; color: var(--color-primary); }
     .eyebrow { font-size: var(--text-xs); letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-muted); }
@@ -46,7 +53,71 @@
     .hero { display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-6); margin-bottom: var(--space-8); }
     .panel, .metric, .sensor-card { background: color-mix(in oklab, var(--color-surface) 88%, transparent); border: 1px solid color-mix(in oklab, var(--color-text) 10%, transparent); border-radius: var(--radius-xl); box-shadow: var(--shadow-sm); backdrop-filter: blur(12px); }
     .panel { padding: var(--space-6); }
-    .status-row { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+    .panel-block { background: var(--color-surface-2); border: 1px solid var(--color-divider); border-radius: var(--radius-lg); padding: var(--space-4); }
+    .panel-block + .panel-block { margin-top: var(--space-4); }
+    .download-panel { display: grid; gap: var(--space-4); }
+    .toggle-list { display: flex; flex-direction: column; gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
+    .file-group { border: 1px solid var(--color-divider); border-radius: var(--radius-lg); background: var(--color-surface); overflow: hidden; }
+    .file-group summary { display: flex; align-items: center; justify-content: space-between; padding: var(--space-3) var(--space-4); cursor: pointer; font-weight: 700; color: var(--color-text); background: color-mix(in oklab, var(--color-surface) 92%, transparent); }
+    .file-group summary::-webkit-details-marker { display: none; }
+    .file-group-content { display: grid; gap: var(--space-2); padding: var(--space-3) var(--space-4) var(--space-4); }
+    .file-option { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3); background: var(--color-surface-2); border: 1px solid var(--color-divider); border-radius: var(--radius-full); cursor: pointer; transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease; }
+    .file-option.is-selected { background: var(--color-primary); border-color: var(--color-primary); color: white; box-shadow: var(--shadow-sm); }
+    .file-option.is-selected span { color: white; }
+    .file-option input { appearance: none; width: 1rem; height: 1rem; min-width: 1rem; border: 1px solid var(--color-divider); border-radius: 0.25rem; background: var(--color-surface); cursor: pointer; }
+    .file-option input:checked { background: var(--color-primary); border-color: var(--color-primary); }
+    .file-option span { display: inline-flex; align-items: center; color: inherit; }
+    .download-all-option { background: linear-gradient(135deg, color-mix(in oklab, var(--color-primary) 16%, transparent), color-mix(in oklab, var(--color-orange) 20%, transparent)); border-color: color-mix(in oklab, var(--color-primary) 45%, transparent); color: var(--color-primary); font-weight: 700; }
+    .download-all-option.is-selected { background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover)); color: white; }
+    .download-controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); align-items: end; }
+    .download-controls label { display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--text-sm); color: var(--color-text-muted); }
+    .download-controls input { width: 100%; padding: var(--space-2); border: 1px solid var(--color-divider); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-text); }
+    .manifest-filters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+    .manifest-filters label { display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--text-sm); color: var(--color-text-muted); }
+    .manifest-filters select { width: 100%; padding: var(--space-2); border: 1px solid var(--color-divider); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-text); }
+    .download-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+    .download-button { padding: var(--space-3) var(--space-4); border: none; border-radius: var(--radius-md); background: var(--color-primary); color: white; font-weight: 700; cursor: pointer; }
+    .download-button.secondary { background: var(--color-surface); color: var(--color-primary); border: 1px solid var(--color-divider); }
+    .download-button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .page-nav {
+      position: sticky;
+      top: 0.75rem;
+      z-index: 50;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+      padding: var(--space-3);
+      border: 1px solid color-mix(in oklab, var(--color-text) 10%, transparent);
+      border-radius: var(--radius-full);
+      background: color-mix(in oklab, var(--color-surface) 90%, transparent);
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(16px);
+    }
+    .nav-button {
+      padding: var(--space-2) var(--space-4);
+      border: 1px solid transparent;
+      border-radius: var(--radius-full);
+      background: transparent;
+      color: var(--color-text);
+      transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+    .nav-button:hover, .nav-button:focus-visible {
+      background: var(--color-primary);
+      color: white;
+      border-color: var(--color-primary);
+      transform: translateY(-1px);
+    }
+    .collapsible-section { border: 1px solid var(--color-divider); border-radius: var(--radius-xl); background: color-mix(in oklab, var(--color-surface) 88%, transparent); box-shadow: var(--shadow-sm); margin-bottom: var(--space-6); overflow: hidden; scroll-margin-top: 5.5rem; }
+    .collapsible-section > summary { display: flex; align-items: center; justify-content: space-between; padding: var(--space-4) var(--space-5); cursor: pointer; list-style: none; }
+    .collapsible-section > summary::-webkit-details-marker { display: none; }
+    .collapsible-section > summary::after { content: '▾'; color: var(--color-text-muted); font-size: 1rem; }
+    .collapsible-section[open] > summary::after { content: '▸'; }
+    .section-content { padding: 0 var(--space-5) var(--space-5); }
+    .intro-copy { display: grid; gap: var(--space-3); color: var(--color-text-muted); }
+    .main-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); margin-bottom: var(--space-8); }
+    .status-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin-top: var(--space-4); }
+    .status-row p { margin: 0; }
     .pill { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3); border-radius: var(--radius-full); background: var(--color-primary-highlight); color: var(--color-text); font-size: var(--text-sm); }
     .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); margin-bottom: var(--space-8); }
     .metric { padding: var(--space-5); }
@@ -59,15 +130,38 @@
     .kv:last-child { border-bottom: 0; }
     .k { color: var(--color-text-muted); }
     .v { font-variant-numeric: tabular-nums; }
-    .sensor-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+    .sensor-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-3); }
     .sensor-card { padding: var(--space-4); }
     .sensor-name { font-size: var(--text-sm); color: var(--color-text-muted); }
     .sensor-value { margin-top: var(--space-2); font-size: var(--text-lg); font-family: var(--font-display); }
+    .sensor-group-title { font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-muted); margin-bottom: var(--space-4); }
     .footer-note { color: var(--color-text-muted); font-size: var(--text-sm); }
+    .back-to-top {
+      position: fixed;
+      right: var(--space-4);
+      bottom: var(--space-4);
+      z-index: 60;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      border: 1px solid color-mix(in oklab, var(--color-primary) 18%, transparent);
+      border-radius: var(--radius-full);
+      background: var(--color-primary);
+      color: white;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+    .back-to-top.is-visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .back-to-top:hover, .back-to-top:focus-visible { background: var(--color-primary-hover); transform: translateY(-2px); }
     .accent-success { color: var(--color-success); }
     .accent-warn { color: var(--color-orange); }
     @media (max-width: 900px) {
-      .hero, .detail-grid, .grid, .sensor-grid { grid-template-columns: 1fr; }
+      .hero, .detail-grid, .main-grid, .grid, .sensor-grid { grid-template-columns: 1fr; }
       .shell { padding: var(--space-4); }
       .topbar { align-items: flex-start; }
     }
@@ -85,69 +179,163 @@
         </svg>
         <div>
           <div class="eyebrow">PV data collection</div>
-          <h1>Live power dashboard</h1>
+          <h1>Energy Monitoring System</h1>
+          <div class="footer-note" id="dataTimestamp">Data timestamp: —</div>
         </div>
       </div>
-      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
+      <div class="topbar-meta">
+        <article class="panel">
+          <div class="eyebrow">Connection</div>
+          <div class="kv"><span class="k">Status</span><strong class="v accent-success" id="statusText">Starting</strong></div>
+          <div class="kv"><span class="k">Auto refresh</span><span class="v">Enabled</span></div>
+        </article>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
       </button>
     </header>
 
     <main id="main">
-      <section class="hero">
-        <article class="panel">
-          <div class="eyebrow">System snapshot</div>
-          <h2 class="section-title">Current scenario and refresh status</h2>
-          <p id="scenarioText">Waiting for data…</p>
-          <div class="status-row">
-            <span class="pill">Refresh every 60 seconds</span>
-            <span class="pill" id="lastUpdated">No data loaded yet</span>
+      <nav class="page-nav" aria-label="Section navigation">
+        <button class="nav-button" type="button" data-scroll-target="info-section">Info</button>
+        <button class="nav-button" type="button" data-scroll-target="live-section">Live</button>
+        <button class="nav-button" type="button" data-scroll-target="download-section">Download</button>
+      </nav>
+
+      <details class="collapsible-section" id="info-section" open>
+        <summary>
+          <div>
+            <div class="eyebrow">Overview</div>
+            <h2 class="section-title">About the dashboard</h2>
           </div>
-        </article>
-        <aside class="panel">
-          <div class="eyebrow">Health</div>
-          <h2 class="section-title">Data source</h2>
-          <div class="kv"><span class="k">Status</span><strong class="v accent-success" id="statusText">Starting</strong></div>
-          <div class="kv"><span class="k">Source path</span><span class="v">./Dashboard/dashboard_values.json</span></div>
-          <div class="kv"><span class="k">Auto refresh</span><span class="v">Enabled</span></div>
-        </aside>
-      </section>
-
-      <section class="grid" aria-label="Key values">
-        <article class="metric"><div class="metric-label">Target power</div><div class="metric-value" id="targetPower">—</div><div class="metric-note">Scenario target in watts</div></article>
-        <article class="metric"><div class="metric-label">Load total</div><div class="metric-value" id="loadTotal">—</div><div class="metric-note">Active load demand</div></article>
-        <article class="metric"><div class="metric-label">PV total</div><div class="metric-value" id="pvTotal">—</div><div class="metric-note">Combined PV output</div></article>
-        <article class="metric"><div class="metric-label">PV balance</div><div class="metric-value" id="pvBalance">—</div><div class="metric-note">PV total minus load total</div></article>
-      </section>
-
-      <section class="detail-grid">
-        <article class="panel">
-          <h2 class="section-title">Power details</h2>
-          <div class="kv"><span class="k">Active scenario</span><span class="v" id="activeScenario">—</span></div>
-          <div class="kv"><span class="k">PV1 power</span><span class="v" id="pv1Power">—</span></div>
-          <div class="kv"><span class="k">PV2 power</span><span class="v" id="pv2Power">—</span></div>
-          <div class="kv"><span class="k">Scenario timestamp</span><span class="v" id="scenarioTs">—</span></div>
-          <div class="kv"><span class="k">Load timestamp</span><span class="v" id="loadTs">—</span></div>
-          <div class="kv"><span class="k">PV timestamp</span><span class="v" id="pvTs">—</span></div>
-        </article>
-        <article class="panel">
-          <h2 class="section-title">Collection notes</h2>
-          <p class="footer-note">This page reads a JSON file from the same GitHub Pages repository, then redraws the values every minute. Replace the JSON file content in GitHub and the dashboard will show the latest values after the next refresh cycle.</p>
-          <div class="status-row" style="margin-top: var(--space-5);">
-            <span class="pill">Static HTML</span>
-            <span class="pill">GitHub Pages ready</span>
-            <span class="pill">No backend required</span>
+        </summary>
+        <div class="section-content">
+          <div class="intro-copy">
+            <p>This dashboard gives a compact view of the photovoltaic system performance and the current operating scenario.</p>
+            <p>Data is collected from the PV, load, irradiance, and weather sources by a local logging pipeline and stored in the repository as structured text files. The live view reads the latest dashboard snapshot, while the download section lets you export selected datasets for a chosen date range as CSV files or a ZIP archive.</p>
           </div>
-        </article>
-      </section>
+        </div>
+      </details>
 
-      <section class="panel">
-        <h2 class="section-title">Sensors</h2>
-        <div class="sensor-grid" id="sensorGrid"></div>
-      </section>
+      <details class="collapsible-section" id="live-section" open>
+        <summary>
+          <div>
+            <div class="eyebrow">Live data</div>
+            <h2 class="section-title">Live dashboard</h2>
+          </div>
+        </summary>
+        <div class="section-content">
+          <section class="main-grid">
+            <article class="panel">
+              <div class="eyebrow">Load + scenario</div>
+              <h2 class="section-title">Load Scenario</h2>
+              <div class="panel-block">
+                <div class="status-row">
+                  <p id="scenarioText">Waiting for data…</p>
+                  <span class="pill" id="activeScenarioPill">No active scenario</span>
+                </div>
+              </div>
+              <div class="panel-block">
+                <div class="kv"><span class="k">Target power</span><span class="v" id="targetPower">—</span></div>
+                <div class="kv"><span class="k">Load total</span><span class="v" id="loadTotal">—</span></div>
+                <div class="kv"><span class="k">PV balance</span><span class="v" id="pvBalance">—</span></div>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="eyebrow">PV</div>
+              <h2 class="section-title">PV summary</h2>
+              <div class="panel-block">
+                <div class="kv"><span class="k">PV1 power</span><span class="v" id="pv1Power">—</span></div>
+                <div class="kv"><span class="k">PV2 power</span><span class="v" id="pv2Power">—</span></div>
+                <div class="kv"><span class="k">PV total</span><span class="v" id="pvTotal">—</span></div>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="eyebrow">POA sensors</div>
+              <h2 class="section-title">Sensors</h2>
+              <div class="panel-block">
+                <div class="sensor-group-title">Irradiance sensors</div>
+                <div class="sensor-grid" id="geSensorGrid"></div>
+              </div>
+              <div class="panel-block">
+                <div class="sensor-group-title">Temperature sensors</div>
+                <div class="sensor-grid" id="tcSensorGrid"></div>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="eyebrow">Weather</div>
+              <h2 class="section-title">Meteorological data</h2>
+              <div class="panel-block">
+                <div class="kv"><span class="k">Global irradiance</span><span class="v" id="weatherGtot">—</span></div>
+                <div class="kv"><span class="k">Air temperature</span><span class="v" id="weatherAirTemp">—</span></div>
+                <div class="kv"><span class="k">Wind speed</span><span class="v" id="weatherWindSpeed">—</span></div>
+                <div class="kv"><span class="k">Wind direction</span><span class="v" id="weatherWindDirection">—</span></div>
+              </div>
+            </article>
+          </section>
+        </div>
+      </details>
+
+      <details class="collapsible-section" id="download-section" open>
+        <summary>
+          <div>
+            <div class="eyebrow">Data export</div>
+            <h2 class="section-title">Download dataset</h2>
+          </div>
+        </summary>
+        <div class="section-content">
+          <section class="panel download-panel">
+            <p class="footer-note" style="margin-bottom: var(--space-3);">Select a dataset and date range, then click download. If no range is selected, the full file will be downloaded.</p>
+            <div class="panel-block">
+              <div class="sensor-group-title">Filter by configuration</div>
+              <div class="manifest-filters">
+                <label>
+                  Tilt
+                  <select id="downloadTilt">
+                    <option value="">All tilts</option>
+                  </select>
+                </label>
+                <label>
+                  Distance
+                  <select id="downloadDistance">
+                    <option value="">All distances</option>
+                  </select>
+                </label>
+                <label>
+                  Load scenario
+                  <select id="downloadScenario">
+                    <option value="">All scenarios</option>
+                  </select>
+                </label>
+              </div>
+              <div class="download-actions">
+                <button class="download-button secondary" id="clearDownloadFilters" type="button">
+                  Clear selection
+                </button>
+              </div>
+            </div>
+            <div class="panel-block">
+              <div class="sensor-group-title">Choose files</div>
+              <div class="toggle-list" id="downloadFileSelector"></div>
+            </div>
+            <div class="panel-block download-controls">
+              <label>From date<input type="datetime-local" id="downloadFrom"></label>
+              <label>To date<input type="datetime-local" id="downloadTo"></label>
+              <div class="download-actions">
+                <button class="download-button" id="downloadButton" type="button">Download</button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </details>
     </main>
   </div>
 
+  <button class="back-to-top" id="backToTopButton" type="button" aria-label="Back to top">↑</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script>
     const state = { theme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light' };
     const root = document.documentElement;
@@ -160,8 +348,376 @@
     toggle.addEventListener('click', () => { state.theme = state.theme === 'dark' ? 'light' : 'dark'; root.setAttribute('data-theme', state.theme); syncTheme(); });
     syncTheme();
 
+    const backToTopButton = document.getElementById('backToTopButton');
+    const toggleBackToTop = () => {
+      if (!backToTopButton) return;
+      backToTopButton.classList.toggle('is-visible', window.scrollY > 320);
+    };
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+    backToTopButton?.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    toggleBackToTop();
+
+    document.querySelectorAll('[data-scroll-target]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = document.getElementById(button.dataset.scrollTarget);
+        if (target) {
+          target.open = true;
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
     const formatWatts = (value) => Number.isFinite(value) ? `${value.toFixed(1)} W` : '—';
     const setText = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
+
+    const dataFiles = {};
+
+    const loadDataFileManifest = async () => {
+      try {
+        const response = await fetch('./Dashboard/data-file-manifest.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const manifest = await response.json();
+        manifest?.files?.forEach((entry) => {
+          dataFiles[entry.key] = {
+            path: entry.path,
+            name: entry.name,
+            label: entry.label,
+            type: entry.type,
+            tilt: entry.tilt,
+            distance: entry.distance,
+            scenario: entry.scenario,
+            constantTargetW: entry.constant_target_w
+          };
+        });
+      } catch (error) {
+        console.warn('Unable to load data-file manifest:', error);
+      }
+    };
+
+    const getSelectedFilterValues = () => ({
+      tilt: document.getElementById('downloadTilt')?.value || '',
+      distance: document.getElementById('downloadDistance')?.value || '',
+      scenario: document.getElementById('downloadScenario')?.value || ''
+    });
+
+    const fileMatchesFilters = (fileInfo, filters, ignoredField = null) => {
+      return Object.entries(filters).every(([field, value]) => {
+        if (field === ignoredField || !value) return true;
+        return String(fileInfo[field] ?? '') === String(value);
+      });
+    };
+
+    const getFilteredEntries = (filters = getSelectedFilterValues()) => {
+      return Object.entries(dataFiles).filter(([, fileInfo]) =>
+        fileMatchesFilters(fileInfo, filters)
+      );
+    };
+
+    const renderDownloadFileOptions = () => {
+      const container = document.getElementById('downloadFileSelector');
+      if (!container) return;
+
+      const filteredEntries = getFilteredEntries();
+      const groupedEntries = filteredEntries.reduce((groups, [key, fileInfo]) => {
+        const groupName = key.split('/')[0] || 'Repository';
+        if (!groups[groupName]) groups[groupName] = [];
+        groups[groupName].push([key, fileInfo]);
+        return groups;
+      }, {});
+
+      container.innerHTML = '';
+      const fragment = document.createDocumentFragment();
+
+      Object.entries(groupedEntries)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .forEach(([groupName, items]) => {
+          const group = document.createElement('details');
+          group.className = 'file-group';
+
+          const summary = document.createElement('summary');
+          summary.textContent = groupName;
+
+          const content = document.createElement('div');
+          content.className = 'file-group-content';
+
+          items.forEach(([key, fileInfo]) => {
+            const label = document.createElement('label');
+            label.className = 'file-option';
+            const displayName = fileInfo.label || key.replace(/^.*[\\/]/, '');
+            label.innerHTML = `
+              <input type="checkbox" name="dataFile" value="${key}">
+              <span>${displayName}</span>
+            `;
+            content.appendChild(label);
+          });
+
+          group.appendChild(summary);
+          group.appendChild(content);
+          fragment.appendChild(group);
+        });
+
+      const allLabel = document.createElement('label');
+      allLabel.className = 'file-option download-all-option';
+      allLabel.innerHTML = `
+        <input type="checkbox" name="dataFile" value="ALL">
+        <span>Download all as ZIP</span>
+      `;
+      fragment.appendChild(allLabel);
+      container.appendChild(fragment);
+
+      container.querySelectorAll('.file-option input[name="dataFile"]').forEach(input => {
+        input.addEventListener('change', handleDownloadSelection);
+      });
+    };
+
+    const populateManifestFilters = () => {
+      const selectors = {
+        downloadTilt: 'tilt',
+        downloadDistance: 'distance',
+        downloadScenario: 'scenario'
+      };
+      const filters = getSelectedFilterValues();
+      const entries = Object.values(dataFiles).filter(file =>
+        file.tilt != null || file.distance != null || file.scenario != null
+      );
+
+      Object.entries(selectors).forEach(([id, field]) => {
+        const select = document.getElementById(id);
+        if (!select) return;
+
+        const compatibleValues = [...new Set(
+          entries
+            .filter(file => fileMatchesFilters(file, filters, field))
+            .map(file => file[field])
+            .filter(value => value != null && value !== '')
+        )].sort((a, b) => {
+          const aNumber = Number(a);
+          const bNumber = Number(b);
+          return Number.isFinite(aNumber) && Number.isFinite(bNumber)
+            ? aNumber - bNumber
+            : String(a).localeCompare(String(b));
+        });
+
+        const currentValue = filters[field];
+        select.innerHTML = '<option value="">All</option>';
+
+        compatibleValues.forEach(value => {
+          const option = document.createElement('option');
+          option.value = value;
+          option.textContent = value;
+          select.appendChild(option);
+        });
+
+        select.value = compatibleValues.some(value => String(value) === String(currentValue))
+          ? currentValue
+          : '';
+      });
+    };
+
+    const updateManifestFiltersAndFiles = () => {
+      // Rebuild every selector from the current selections. This makes each
+      // dropdown show only values that remain compatible with the other filters.
+      populateManifestFilters();
+      renderDownloadFileOptions();
+    };
+
+    const parseFileDate = (type, row) => {
+      if (type === 'irradiance') {
+        const [date, time] = row[0].split('_');
+        return new Date(`${date.replace(/-/g, '/')} ${time.replace(/-/g, ':')}`);
+      }
+      if (type === 'pv') {
+        return new Date(`${row[1].replace(/-/g, '/')} ${row[2]}`);
+      }
+      if (type === 'load') {
+        return new Date(row[0].replace(/-/g, '/'));
+      }
+      if (type === 'weather') {
+        if (row[0]?.includes('_')) {
+          const [date, time] = row[0].split('_');
+          return new Date(`${date.replace(/-/g, '/')} ${time.replace(/-/g, ':')}`);
+        }
+        return new Date(row[0].replace(/-/g, '/'));
+      }
+      return new Date(row[0]);
+    };
+
+    const formatDownloadName = (fileKey, from, to) => {
+      const baseName = fileKey.split('/').pop()?.replace(/\.txt$/i, '') || fileKey;
+      const fromPart = from ? from.toISOString().slice(0,16).replace(/[:T]/g, '-') : 'begin';
+      const toPart = to ? to.toISOString().slice(0,16).replace(/[:T]/g, '-') : 'end';
+      return `${baseName}_${fromPart}_${toPart}.csv`;
+    };
+
+    const splitRow = (type, line) => {
+      const trimmed = line?.trim();
+      if (!trimmed) return [];
+      if (type === 'weather') return trimmed.split(',').map(value => value.trim());
+      return trimmed.split(/[\t,]+/).map(value => value.trim());
+    };
+
+    const getDateRange = () => {
+      const fromValue = document.getElementById('downloadFrom').value;
+      const toValue = document.getElementById('downloadTo').value;
+      return {
+        fromDate: fromValue ? new Date(fromValue) : null,
+        toDate: toValue ? new Date(toValue) : null
+      };
+    };
+
+    const buildCsvPayload = async (fileKey, fromDate, toDate) => {
+      const fileInfo = dataFiles[fileKey];
+      if (!fileInfo) throw new Error(`Unsupported dataset: ${fileKey}`);
+      const response = await fetch(fileInfo.path, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`HTTP ${response.status} for ${fileInfo.name}`);
+      const text = await response.text();
+      const lines = text.split(/\r?\n/).filter(Boolean);
+      const header = splitRow(fileInfo.type, lines[0]).join(',');
+      const rows = lines.slice(1).map(line => splitRow(fileInfo.type, line));
+      const filtered = rows.filter(row => {
+        const rowDate = parseFileDate(fileInfo.type, row);
+        if (Number.isNaN(rowDate.getTime())) return false;
+        if (fromDate && rowDate < fromDate) return false;
+        if (toDate && rowDate > toDate) return false;
+        return true;
+      });
+      return [header, ...filtered.map(row => row.join(','))].join('\n');
+    };
+
+    const downloadBlob = (blob, fileName) => {
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = fileName;
+      anchor.click();
+      URL.revokeObjectURL(url);
+    };
+
+    const downloadFile = async (fileKey, fromDate, toDate) => {
+      const payload = await buildCsvPayload(fileKey, fromDate, toDate);
+      const blob = new Blob([payload], { type: 'text/csv;charset=utf-8' });
+      downloadBlob(blob, formatDownloadName(fileKey, fromDate, toDate));
+    };
+
+    const downloadAllAsZip = async () => {
+      if (!window.JSZip) throw new Error('ZIP export is unavailable in this browser.');
+      const { fromDate, toDate } = getDateRange();
+      const zip = new JSZip();
+      const selectedTilt = document.getElementById('downloadTilt')?.value || '';
+      const selectedDistance = document.getElementById('downloadDistance')?.value || '';
+      const selectedScenario = document.getElementById('downloadScenario')?.value || '';
+      const fileKeys = getFilteredEntries({
+        tilt: selectedTilt,
+        distance: selectedDistance,
+        scenario: selectedScenario
+      }).map(([fileKey]) => fileKey);
+      for (const fileKey of fileKeys) {
+        const payload = await buildCsvPayload(fileKey, fromDate, toDate);
+        zip.file(formatDownloadName(fileKey, fromDate, toDate), payload);
+      }
+      const blob = await zip.generateAsync({ type: 'blob' });
+      const stamp = new Date().toISOString().slice(0, 10);
+      downloadBlob(blob, `pv-data-export-${stamp}.zip`);
+    };
+
+    const updateSelectionStates = () => {
+      const fileInputs = document.querySelectorAll('.file-option input[name="dataFile"]');
+      const zipInput = document.querySelector('.file-option input[name="dataFile"][value="__ALL__"]');
+      const isZipSelected = zipInput?.checked;
+
+      fileInputs.forEach((input) => {
+        const label = input.closest('label');
+        if (!label) return;
+        const isZipOption = input.value === '__ALL__';
+        const shouldSelect = input.checked && !(isZipSelected && !isZipOption);
+        if (label) {
+          label.classList.toggle('is-selected', shouldSelect);
+        }
+      });
+
+      if (isZipSelected) {
+        fileInputs.forEach((input) => {
+          if (input.value !== '__ALL__' && input.checked) {
+            input.checked = false;
+          }
+        });
+      }
+
+      document.querySelectorAll('.file-option input[name="dataFile"]').forEach((input) => {
+        const label = input.closest('label');
+        if (label) {
+          label.classList.toggle('is-selected', input.checked);
+        }
+      });
+    };
+
+    const handleDownloadSelection = (event) => {
+      const input = event.target;
+      if (!input.matches('input[name="dataFile"]')) return;
+      const zipInput = document.querySelector('.file-option input[name="dataFile"][value="__ALL__"]');
+      if (!zipInput) return;
+
+      if (input.value === '__ALL__') {
+        if (input.checked) {
+          document.querySelectorAll('.file-option input[name="dataFile"]').forEach((otherInput) => {
+            if (otherInput !== input && otherInput.value !== '__ALL__') {
+              otherInput.checked = false;
+            }
+          });
+        }
+      } else if (zipInput.checked) {
+        zipInput.checked = false;
+      }
+
+      updateSelectionStates();
+    };
+
+    const downloadDataset = async () => {
+      const selectedInputs = document.querySelectorAll('input[name="dataFile"]:checked');
+      const exportAll = document.querySelector('input[name="dataFile"][value="__ALL__"]:checked');
+      if (exportAll) {
+        await downloadAllAsZip();
+        return;
+      }
+      if (!selectedInputs.length) throw new Error('Select at least one dataset file.');
+      const { fromDate, toDate } = getDateRange();
+      for (const input of selectedInputs) {
+        await downloadFile(input.value, fromDate, toDate);
+      }
+    };
+
+    document.getElementById('downloadButton').addEventListener('click', async () => {
+      try {
+        document.getElementById('downloadButton').disabled = true;
+        await downloadDataset();
+      } catch (error) {
+        alert(`Download failed: ${error.message}`);
+      } finally {
+        document.getElementById('downloadButton').disabled = false;
+      }
+    });
+
+    async function initializeDownloadSection() {
+      await loadDataFileManifest();
+      populateManifestFilters();
+      renderDownloadFileOptions();
+      ['downloadTilt', 'downloadDistance', 'downloadScenario'].forEach(id => {
+        document.getElementById(id)?.addEventListener('change', updateManifestFiltersAndFiles);
+      });
+
+      document.getElementById('clearDownloadFilters')?.addEventListener('click', () => {
+        ['downloadTilt', 'downloadDistance', 'downloadScenario'].forEach(id => {
+          const select = document.getElementById(id);
+          if (select) select.value = '';
+        });
+
+        updateManifestFiltersAndFiles();
+      });
+    }
+
+    initializeDownloadSection();
 
     async function loadDashboardData() {
       try {
@@ -176,32 +732,85 @@
         const pv2 = Number(data?.pv?.pv2_power_w);
         const balance = Number.isFinite(pv) && Number.isFinite(load) ? pv - load : NaN;
 
-        setText('targetPower', formatWatts(target));
-        setText('loadTotal', formatWatts(load));
-        setText('pvTotal', formatWatts(pv));
-        setText('pvBalance', Number.isFinite(balance) ? `${balance >= 0 ? '+' : ''}${balance.toFixed(1)} W` : '—');
-        setText('activeScenario', data?.scenario?.active_scenario ?? '—');
-        setText('pv1Power', formatWatts(pv1));
-        setText('pv2Power', formatWatts(pv2));
+        const seenPlotKeys = new Set();
+        const renderMetric = (id, label, file, key, valueHtml) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          const parent = el.closest('.kv') || el.parentElement;
+          if (!parent) return;
+          if (file && key && !seenPlotKeys.has(`${file}|${key}`)) {
+            parent.innerHTML = `<span class="k">${label}</span><span class="v" id="${id}">${valueHtml}</span>`;
+            seenPlotKeys.add(`${file}|${key}`);
+          } else {
+            parent.innerHTML = `<span class="k">${label}</span><span class="v" id="${id}">${valueHtml}</span>`;
+          }
+        };
+
+        renderMetric('targetPower', 'Target power', null, null, formatWatts(target));
+        renderMetric('loadTotal', 'Load total', 'Load', 'power_w', formatWatts(load));
+        renderMetric('pvTotal', 'PV total', 'PV', 'pv_power_total_W', formatWatts(pv));
+        renderMetric('pvBalance', 'PV balance', null, null, Number.isFinite(balance) ? `${balance >= 0 ? '+' : ''}${balance.toFixed(1)} W` : '—');
+        const activeScenarioName = data?.scenario?.active_scenario ?? '—';
+        setText('activeScenarioPill', activeScenarioName);
+        setText('scenarioText', `Active scenario:`);
+        renderMetric('pv1Power', 'PV1 power', 'PV', 'pv_power_1_W', formatWatts(pv1));
+        renderMetric('pv2Power', 'PV2 power', 'PV', 'pv_power_2_W', formatWatts(pv2));
         setText('scenarioTs', data?.scenario?.source_ts_local ?? '—');
         setText('loadTs', data?.load?.source_ts_local ?? '—');
         setText('pvTs', data?.pv?.source_ts_local ?? '—');
-        setText('lastUpdated', `JSON timestamp: ${data?.ts_local ?? '—'}`);
+        setText('dataTimestamp', `Data timestamp: ${data?.ts_local ?? '—'}`);
         setText('statusText', 'Connected');
-        document.getElementById('statusText').className = 'v accent-success';
-        document.getElementById('scenarioText').textContent = `Scenario ${data?.scenario?.active_scenario ?? '—'} is targeting ${Number.isFinite(target) ? target.toFixed(0) : '—'} W while the active load reads ${Number.isFinite(load) ? load.toFixed(1) : '—'} W.`;
 
         const sensors = data?.sensors ?? {};
-        const sensorGrid = document.getElementById('sensorGrid');
-        sensorGrid.innerHTML = Object.entries(sensors).map(([name, value]) => `
-          <article class="sensor-card">
-            <div class="sensor-name">${name}</div>
-            <div class="sensor-value">${value}</div>
-          </article>
-        `).join('');
+        const weather = data?.weather ?? {};
+
+        const mapSensorToPlot = (name) => {
+          if (name && name.startsWith('Ge_')) {
+            const suffix = name.split('_')[1] || '';
+            return { file: 'Irradiance', key: `Eg_${suffix}` };
+          }
+          if (/^TC\d+$/.test(name)) {
+            return { file: 'Irradiance', key: name.replace('TC', 'T') };
+          }
+          return null;
+        };
+
+        const makeSensorRows = (items) => Object.entries(items).map(([name, value]) => {
+          const mapping = mapSensorToPlot(name);
+          if (mapping) {
+            if (seenPlotKeys.has(`${mapping.file}|${mapping.key}`)) {
+              return `<div class="kv"><span class="k">${name}</span><span class="v">${value}</span></div>`;
+            }
+            seenPlotKeys.add(`${mapping.file}|${mapping.key}`);
+            return `<div class="kv"><span class="k">${name}</span><span class="v">${value}</span></div>`;
+          }
+          return `<div class="kv"><span class="k">${name}</span><span class="v">${value}</span></div>`;
+        }).join('');
+
+        const geSensors = {
+          Ge_front: sensors.Ge_front ?? '—',
+          Ge_back: sensors.Ge_back ?? '—'
+        };
+
+        const tcSensors = {
+          TC1: sensors.TC1 ?? '—',
+          TC2: sensors.TC2 ?? '—',
+          TC3: sensors.TC3 ?? '—',
+          TC4: sensors.TC4 ?? '—'
+        };
+
+        setText('weatherGtot', weather.Gtot ?? '—');
+        setText('weatherAirTemp', weather.AirTemp ?? '—');
+        setText('weatherWindSpeed', weather.WindSpeed ?? '—');
+        setText('weatherWindDirection', weather.WindDirection ?? '—');
+
+        document.getElementById('geSensorGrid').innerHTML = makeSensorRows(geSensors);
+        document.getElementById('tcSensorGrid').innerHTML = makeSensorRows(tcSensors);
       } catch (error) {
         setText('statusText', 'Fetch error');
         document.getElementById('statusText').className = 'v accent-warn';
+        setText('activeScenarioPill', 'No active scenario');
+        setText('dataTimestamp', 'Data timestamp: —');
         document.getElementById('scenarioText').textContent = `Unable to read dashboard_values.json. Check that the JSON file is in the same folder as this HTML page.`;
       }
     }
