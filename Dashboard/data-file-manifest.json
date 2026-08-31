@@ -1,5 +1,5 @@
 ﻿{
-    "generated_at":  "2026-08-31 09:10:56",
+    "generated_at":  "2026-08-31 09:18:30",
     "files":  [
                   {
                       "key":  "Irradiance/irradiance.txt",
@@ -145,6 +145,17 @@
                       "constant_target_w":  100
                   },
                   {
+                      "key":  "Load/load_tilt30_distance50_constant_50W.txt",
+                      "path":  "../Load/load_tilt30_distance50_constant_50W.txt",
+                      "name":  "load_tilt30_distance50_constant_50W.txt",
+                      "label":  "load_tilt30_distance50_constant_50W.txt",
+                      "type":  "load",
+                      "tilt":  30,
+                      "distance":  50,
+                      "scenario":  "constant",
+                      "constant_target_w":  50
+                  },
+                  {
                       "key":  "Load/load_tilt32_distance50_all_off.txt",
                       "path":  "../Load/load_tilt32_distance50_all_off.txt",
                       "name":  "load_tilt32_distance50_all_off.txt",
@@ -286,6 +297,17 @@
                       "distance":  50,
                       "scenario":  "constant",
                       "constant_target_w":  100
+                  },
+                  {
+                      "key":  "PV/pv_tilt30_distance50_constant_50W.txt",
+                      "path":  "../PV/pv_tilt30_distance50_constant_50W.txt",
+                      "name":  "pv_tilt30_distance50_constant_50W.txt",
+                      "label":  "pv_tilt30_distance50_constant_50W.txt",
+                      "type":  "pv",
+                      "tilt":  30,
+                      "distance":  50,
+                      "scenario":  "constant",
+                      "constant_target_w":  50
                   },
                   {
                       "key":  "PV/pv_tilt32_distance50_all_off.txt",
