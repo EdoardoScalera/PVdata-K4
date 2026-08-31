@@ -16,7 +16,7 @@
   "log_dirs": {
     "shelly": "C:/Users/5CG7471GSJ/Documents/DATA/Load",
     "tarom":  "C:/Users/5CG7471GSJ/Documents/DATA/PV",
-    "irradiance": "C:/Users/5CG7471GSJ/Documents/DATA/Data/irradiance"
+    "irradiance": "C:/Users/5CG7471GSJ/Documents/DATA/Irradiance"
   },
   "defaults": {
     "tilt_deg": 30,

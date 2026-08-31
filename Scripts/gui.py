@@ -32,10 +32,21 @@ LABVIEW_VI_PATH = pathlib.Path(CONFIG["labview"]["vi_path"])
 SCENARIO_REQUEST_PATH = SCRIPTS_DIR / CONFIG["paths"]["scenario_request"]
 SCENARIO_STATUS_PATH = SCRIPTS_DIR / CONFIG["paths"]["scenario_status"]
 DASHBOARD_URL = CONFIG["dashboard_url"]
+GITHUB_REPO_URL = "https://github.com/EdoardoScalera/PVdata-K4"
 DASHBOARD_VALUES_FILE = pathlib.Path(CONFIG["dashboard_values_file"])
 
 # Single load selector (used for file naming + scenario script)
 SCENARIOS = ["all_on", "whole_house", "constant", "adaptive"]
+
+# Display names for the scenario dropdowns. Internal values keep the file
+# naming / script flags unchanged (e.g. "constant" -> "Constant load").
+SCENARIO_LABELS = {
+    "all_on": "All on",
+    "whole_house": "Whole house",
+    "constant": "Constant load",
+    "adaptive": "Adaptive",
+    "all_off": "All off",
+}
 
 SHELLY_LOG_DIR = pathlib.Path(CONFIG["log_dirs"]["shelly"])
 TAROM_LOG_DIR = pathlib.Path(CONFIG["log_dirs"]["tarom"])
@@ -68,6 +79,7 @@ class PVControlApp(tk.Tk):
         self.tarom_running_var = tk.BooleanVar(value=False)
         self.github_running_var = tk.BooleanVar(value=False)
         self.scenario_running_var = tk.BooleanVar(value=False)
+        self.load_running_var = tk.BooleanVar(value=False)
 
         # Scheduling vars
         self.use_start_var = tk.BooleanVar(value=False)
@@ -82,11 +94,11 @@ class PVControlApp(tk.Tk):
             "controller": tk.StringVar(value="Unavailable"),
             "active": tk.StringVar(value="Unavailable"),
             "pending": tk.StringVar(value="None"),
-            "requested": tk.StringVar(value="Unavailable"),
             "requested_for": tk.StringVar(value="Unavailable"),
             "slot": tk.StringVar(value="Unavailable"),
             "target": tk.StringVar(value="Unavailable"),
             "updated": tk.StringVar(value="Unavailable"),
+            "last_push": tk.StringVar(value="Unavailable"),
             "load_w": tk.StringVar(value="Unavailable"),
             "pv1_w": tk.StringVar(value="Unavailable"),
             "pv2_w": tk.StringVar(value="Unavailable"),
@@ -146,11 +158,11 @@ class PVControlApp(tk.Tk):
         tk.Label(measurement_frame, text="Load scenario / profile:").grid(
             row=2, column=0, sticky="w", padx=10, pady=5
         )
-        self.scenario_var = tk.StringVar(value=SCENARIOS[0])
+        self.scenario_var = tk.StringVar(value=SCENARIO_LABELS[SCENARIOS[0]])
         scenario_combo = ttk.Combobox(
             measurement_frame,
             textvariable=self.scenario_var,
-            values=SCENARIOS,
+            values=[SCENARIO_LABELS[s] for s in SCENARIOS],
             state="readonly",
         )
         scenario_combo.configure(width=20)
@@ -199,6 +211,11 @@ class PVControlApp(tk.Tk):
             text="Open live dashboard",
             command=self.open_live_dashboard,
         ).grid(row=1, column=0, padx=8, pady=(0, 8), sticky="we")
+        tk.Button(
+            utilities_frame,
+            text="Open GitHub repo",
+            command=self.open_github_repo,
+        ).grid(row=2, column=0, padx=8, pady=(0, 8), sticky="we")
 
         # --- Scheduling controls with calendar-style date selection (aligned) ---
 
@@ -329,32 +346,31 @@ class PVControlApp(tk.Tk):
         logging_frame.grid(row=0, column=0, sticky="nsew")
         logging_frame.grid_columnconfigure(0, weight=2)
         logging_frame.grid_columnconfigure(1, weight=0)
-        logging_frame.grid_columnconfigure(2, weight=0)
-        logging_frame.grid_columnconfigure(3, weight=1)
+        logging_frame.grid_columnconfigure(2, weight=1)
 
-        # Combined Shelly + controller row: the controller boots up (applying
-        # the desired load) and the Shelly logger records it in one action.
-        self.start_shelly_ctrl_btn = tk.Button(logging_frame, text="Start Shelly + controller", command=self.start_shelly_controller)
+        # Combined Load + controller row: the controller boots up (applying the
+        # desired load) and the Load logger records it in one action. A single
+        # checkbox reflects the state of both.
+        self.start_shelly_ctrl_btn = tk.Button(logging_frame, text="Start Load + controller", command=self.start_shelly_controller)
         self.start_shelly_ctrl_btn.grid(row=0, column=0, padx=3, pady=3, sticky="we")
-        tk.Checkbutton(logging_frame, text="Shelly", variable=self.shelly_running_var, state="disabled").grid(row=0, column=1, sticky="w", padx=3)
-        tk.Checkbutton(logging_frame, text="Controller", variable=self.scenario_running_var, state="disabled").grid(row=0, column=2, sticky="w", padx=3)
-        tk.Button(logging_frame, text="Stop Shelly + controller", command=self.stop_shelly_controller).grid(row=0, column=3, padx=3, pady=3, sticky="we")
+        tk.Checkbutton(logging_frame, text="Load + controller", variable=self.load_running_var, state="disabled").grid(row=0, column=1, sticky="w", padx=3)
+        tk.Button(logging_frame, text="Stop Load + controller", command=self.stop_shelly_controller).grid(row=0, column=2, padx=3, pady=3, sticky="we")
 
-        self.start_tarom_btn = tk.Button(logging_frame, text="Start Tarom", command=self.start_tarom_logger)
+        self.start_tarom_btn = tk.Button(logging_frame, text="Start MPPT", command=self.start_tarom_logger)
         self.start_tarom_btn.grid(row=1, column=0, padx=3, pady=3, sticky="we")
-        tk.Checkbutton(logging_frame, text="Tarom", variable=self.tarom_running_var, state="disabled").grid(row=1, column=1, sticky="w", padx=3)
-        tk.Button(logging_frame, text="Stop Tarom", command=self.stop_tarom_logger).grid(row=1, column=3, padx=3, pady=3, sticky="we")
+        tk.Checkbutton(logging_frame, text="MPPT", variable=self.tarom_running_var, state="disabled").grid(row=1, column=1, sticky="w", padx=3)
+        tk.Button(logging_frame, text="Stop MPPT", command=self.stop_tarom_logger).grid(row=1, column=2, padx=3, pady=3, sticky="we")
 
         self.start_labview_btn = tk.Button(logging_frame, text="Start LabVIEW VI", command=self.start_labview_logger)
         self.start_labview_btn.grid(row=2, column=0, padx=3, pady=3, sticky="we")
         tk.Checkbutton(logging_frame, text="LabVIEW", variable=self.labview_running_var, state="disabled").grid(row=2, column=1, sticky="w", padx=3)
-        tk.Button(logging_frame, text="Stop LabVIEW VI", command=self.stop_labview_logger).grid(row=2, column=3, padx=3, pady=3, sticky="we")
+        tk.Button(logging_frame, text="Stop LabVIEW VI", command=self.stop_labview_logger).grid(row=2, column=2, padx=3, pady=3, sticky="we")
 
         # GitHub is kept as the last entry in the logging section
         self.start_github_btn = tk.Button(logging_frame, text="Upload GitHub", command=self.upload_github)
         self.start_github_btn.grid(row=3, column=0, padx=3, pady=3, sticky="we")
         tk.Checkbutton(logging_frame, text="GitHub", variable=self.github_running_var, state="disabled").grid(row=3, column=1, sticky="w", padx=3)
-        tk.Button(logging_frame, text="Stop GitHub", command=self.stop_github_upload).grid(row=3, column=3, padx=3, pady=3, sticky="we")
+        tk.Button(logging_frame, text="Stop GitHub", command=self.stop_github_upload).grid(row=3, column=2, padx=3, pady=3, sticky="we")
 
         # Scenario control: full width, placed below the logging section.
         # A profile dropdown + request button (mimics the measurement section),
@@ -364,11 +380,11 @@ class PVControlApp(tk.Tk):
         scenario_frame.grid_columnconfigure(1, weight=1)
 
         tk.Label(scenario_frame, text="Scenario profile:").grid(row=0, column=0, sticky="w", padx=(8, 3), pady=3)
-        self.scenario_control_var = tk.StringVar(value=SCENARIOS[0])
+        self.scenario_control_var = tk.StringVar(value=SCENARIO_LABELS[SCENARIOS[0]])
         scenario_control_combo = ttk.Combobox(
             scenario_frame,
             textvariable=self.scenario_control_var,
-            values=SCENARIOS + ["all_off"],
+            values=[SCENARIO_LABELS[s] for s in SCENARIOS + ["all_off"]],
             state="readonly",
             width=12,
         )
@@ -400,21 +416,21 @@ class PVControlApp(tk.Tk):
 
         self.update_start_button_states()
 
-        viewer_frame = tk.LabelFrame(self, text="Scenario state", padx=8, pady=4)
+        viewer_frame = tk.LabelFrame(self, text="Logger state", padx=8, pady=4)
         viewer_frame.grid(row=4, column=0, columnspan=2, padx=10, pady=4, sticky="we")
         viewer_frame.grid_columnconfigure(1, weight=1)
         viewer_rows = [
             ("Controller", "controller"),
             ("Current scenario", "active"),
             ("Pending scenario", "pending"),
-            ("Requested scenario", "requested"),
             ("Requested for", "requested_for"),
             ("Current slot", "slot"),
             ("Current target", "target"),
             ("Last update", "updated"),
-            ("Load (Shelly)", "load_w"),
-            ("PV1 (Tarom)", "pv1_w"),
-            ("PV2 (Tarom)", "pv2_w"),
+            ("Last GitHub push", "last_push"),
+            ("Load", "load_w"),
+            ("PV1 (MPPT)", "pv1_w"),
+            ("PV2 (MPPT)", "pv2_w"),
             ("PV total", "pv_total_w"),
         ]
         for row, (label, key) in enumerate(viewer_rows):
@@ -442,6 +458,17 @@ class PVControlApp(tk.Tk):
 
     # --- Naming logic ------------------------------------------------
 
+    def _scenario_label(self, value):
+        """Display label for an internal scenario value."""
+        return SCENARIO_LABELS.get(value, value)
+
+    def _scenario_value(self, label):
+        """Internal scenario value for a display label."""
+        for key, text in SCENARIO_LABELS.items():
+            if text == label:
+                return key
+        return label
+
     def _build_base_name(self):
         """
         Returns the common file-name base, e.g. "tilt30_distance50_all_on".
@@ -459,8 +486,8 @@ class PVControlApp(tk.Tk):
         Returns (shelly_path, tarom_path) based on tilt, distance and scenario.
 
         Pattern:
-          Shelly (load): load_tiltNN_distanceMM_<scenario>.txt
-          Tarom  (pv)  :  pv_tiltNN_distanceMM_<scenario>.txt
+          Load (shelly): load_tiltNN_distanceMM_<scenario>.txt
+          MPPT (tarom) :  pv_tiltNN_distanceMM_<scenario>.txt
         """
         base = self._build_base_name()
         shelly_name = f"load_{base}.txt"
@@ -484,7 +511,7 @@ class PVControlApp(tk.Tk):
         try:
             shelly_path, tarom_path = self.build_measurement_names()
             self.preview_var.set(
-                f"Shelly: {shelly_path.name}   |   Tarom: {tarom_path.name}"
+                f"Load: {shelly_path.name}   |   MPPT: {tarom_path.name}"
             )
         except Exception:
             self.preview_var.set("")
@@ -494,12 +521,12 @@ class PVControlApp(tk.Tk):
         self.update_constant_target_state()
 
     def update_constant_target_state(self):
-        state = "normal" if self.scenario_var.get() == "constant" else "disabled"
+        state = "normal" if self._scenario_value(self.scenario_var.get()) == "constant" else "disabled"
         self.constant_target_entry.configure(state=state)
 
     def update_scenario_constant_target_state(self, *_args):
         if hasattr(self, "scenario_constant_entry"):
-            state = "normal" if self.scenario_control_var.get() == "constant" else "disabled"
+            state = "normal" if self._scenario_value(self.scenario_control_var.get()) == "constant" else "disabled"
             self.scenario_constant_entry.configure(state=state)
 
     def set_measurement_parameters(self):
@@ -521,12 +548,12 @@ class PVControlApp(tk.Tk):
 
         self.applied_tilt = tilt
         self.applied_distance = distance
-        self.applied_scenario = self.scenario_var.get().strip()
+        self.applied_scenario = self._scenario_value(self.scenario_var.get().strip())
         self.applied_constant_target = constant_target
         self.update_name_preview()
         self.status_var.set(
             f"Measurement parameters saved for file naming: tilt={tilt} deg, "
-            f"distance={distance} mm, scenario={self.applied_scenario}."
+            f"distance={distance} mm, scenario={self._scenario_label(self.applied_scenario)}."
             " Start a logger to begin recording."
         )
 
@@ -545,8 +572,8 @@ class PVControlApp(tk.Tk):
         return target
 
     def on_constant_target_changed(self, *_args):
-        if self.scenario_var.get() == "constant":
-            self.status_var.set("Constant load updated. Start or select Constant to apply it.")
+        if self._scenario_value(self.scenario_var.get()) == "constant":
+            self.status_var.set("Constant load updated. Start or select Constant load to apply it.")
 
     # --- Scheduling helpers -----------------------------------------
 
@@ -647,7 +674,7 @@ class PVControlApp(tk.Tk):
             self.start_scenario_controller()
             self.start_labview_logger()
             self.update_start_button_states()
-            self.status_var.set("All scripts started (Shelly, Tarom, GitHub, controller, LabVIEW).")
+            self.status_var.set("All scripts started (Load, MPPT, GitHub, controller, LabVIEW).")
         except Exception as e:
             messagebox.showerror("Start ALL error", str(e))
 
@@ -665,8 +692,8 @@ class PVControlApp(tk.Tk):
             self.after_cancel(self.logger_restart_timer_id)
             self.logger_restart_timer_id = None
 
-        self._stop_process("Shelly logger", "shelly_proc", self.shelly_running_var)
-        self._stop_process("Tarom logger", "tarom_proc", self.tarom_running_var)
+        self._stop_process("Load logger", "shelly_proc", self.shelly_running_var)
+        self._stop_process("MPPT logger", "tarom_proc", self.tarom_running_var)
         self._stop_process("Scenario controller", "scenario_proc", self.scenario_running_var)
         self._stop_process("GitHub upload", "github_proc", self.github_running_var)
         self._stop_process("All OFF command", "all_off_proc", tk.BooleanVar(value=False))
@@ -679,7 +706,8 @@ class PVControlApp(tk.Tk):
     def update_start_button_states(self):
         """
         Disable each logging 'Start' button while its process is running so the
-        user cannot start a duplicate/overlapping instance.
+        user cannot start a duplicate/overlapping instance. Also keep the
+        combined Load + controller checkbox in sync with both processes.
         """
         running = {
             "start_shelly_ctrl_btn": (self.shelly_proc is not None and self.shelly_proc.poll() is None)
@@ -693,13 +721,15 @@ class PVControlApp(tk.Tk):
             if btn is not None:
                 btn.configure(state="disabled" if is_running else "normal")
 
+        self.load_running_var.set(running["start_shelly_ctrl_btn"])
+
     # --- Individual PS1 actions -------------------------------------
 
     def start_shelly_logger(self):
-        self._stop_process("Shelly logger", "shelly_proc", self.shelly_running_var)
+        self._stop_process("Load logger", "shelly_proc", self.shelly_running_var)
         shelly_path, _ = self.build_measurement_names()
 
-        self.status_var.set(f"Starting Shelly logger -> {shelly_path} ...")
+        self.status_var.set(f"Starting Load logger -> {shelly_path} ...")
 
         self.shelly_proc = subprocess.Popen(
             [
@@ -716,10 +746,10 @@ class PVControlApp(tk.Tk):
         self.update_start_button_states()
 
     def start_tarom_logger(self):
-        self._stop_process("Tarom logger", "tarom_proc", self.tarom_running_var)
+        self._stop_process("MPPT logger", "tarom_proc", self.tarom_running_var)
         _, tarom_path = self.build_measurement_names()
 
-        self.status_var.set(f"Starting Tarom logger -> {tarom_path} ...")
+        self.status_var.set(f"Starting MPPT logger -> {tarom_path} ...")
 
         self.tarom_proc = subprocess.Popen(
             [
@@ -823,6 +853,8 @@ class PVControlApp(tk.Tk):
     def stop_shelly_controller(self):
         self.stop_scenario_controller()
         self.stop_shelly_logger()
+        # "Stop Load + controller" must also shut all the sockets off.
+        self._run_all_off_now()
 
     def is_measurement_running(self):
         """True if any measurement logger process is currently running."""
@@ -849,7 +881,7 @@ class PVControlApp(tk.Tk):
             self.applied_constant_target = constant_target
 
         self.applied_scenario = scenario_label
-        self.scenario_var.set(scenario_label)
+        self.scenario_var.set(self._scenario_label(scenario_label))
         self.update_name_preview_and_target_state()
 
         controller_running = (
@@ -857,7 +889,7 @@ class PVControlApp(tk.Tk):
         )
         if controller_running:
             self.status_var.set(
-                f"Requesting scenario '{scenario_label}' ({flag_name})..."
+                f"Requesting scenario '{self._scenario_label(scenario_label)}' ({flag_name})..."
             )
             cmd = [
                 "powershell",
@@ -877,7 +909,7 @@ class PVControlApp(tk.Tk):
             self.scenario_request_procs.append(request_proc)
         else:
             self.status_var.set(
-                f"Scenario set to {scenario_label}. Start the controller to apply it."
+                f"Scenario set to {self._scenario_label(scenario_label)}. Start the controller to apply it."
             )
 
         if self.is_measurement_running():
@@ -887,7 +919,7 @@ class PVControlApp(tk.Tk):
                 self.schedule_logger_restart()
 
     def on_scenario_selected(self, _event):
-        scenario = self.scenario_var.get()
+        scenario = self._scenario_value(self.scenario_var.get())
         scenario_flags = {
             "all_on": "-SetScenarioAllOn",
             "whole_house": "-SetScenarioWholeHouse",
@@ -903,7 +935,7 @@ class PVControlApp(tk.Tk):
         """
         Apply the scenario profile selected in the Scenario control dropdown.
         """
-        scenario = self.scenario_control_var.get()
+        scenario = self._scenario_value(self.scenario_control_var.get())
         scenario_flags = {
             "all_on": "-SetScenarioAllOn",
             "whole_house": "-SetScenarioWholeHouse",
@@ -1035,10 +1067,10 @@ class PVControlApp(tk.Tk):
         Legacy: Call shelly_load_control_scenarios.ps1 -SetScenario -Scenario <value>.
         Uses current scenario selection, matching the file naming.
         """
-        scenario = self.scenario_var.get()
+        scenario = self._scenario_value(self.scenario_var.get())
 
         self.status_var.set(
-            f"Requesting scenario '{scenario}' via Shelly control script..."
+            f"Requesting scenario '{self._scenario_label(scenario)}' via load control script..."
         )
 
         self.scenario_proc = subprocess.Popen(
@@ -1104,10 +1136,10 @@ class PVControlApp(tk.Tk):
         self.update_start_button_states()
 
     def stop_shelly_logger(self):
-        self._stop_process("Shelly logger", "shelly_proc", self.shelly_running_var)
+        self._stop_process("Load logger", "shelly_proc", self.shelly_running_var)
 
     def stop_tarom_logger(self):
-        self._stop_process("Tarom logger", "tarom_proc", self.tarom_running_var)
+        self._stop_process("MPPT logger", "tarom_proc", self.tarom_running_var)
 
     def stop_scenario_controller(self):
         self._stop_process(
@@ -1213,6 +1245,37 @@ class PVControlApp(tk.Tk):
         webbrowser.open(DASHBOARD_URL)
         self.status_var.set(f"Opened live dashboard: {DASHBOARD_URL}")
 
+    def open_github_repo(self):
+        webbrowser.open(GITHUB_REPO_URL)
+        self.status_var.set(f"Opened GitHub repo: {GITHUB_REPO_URL}")
+
+    def get_last_github_push(self):
+        """
+        Last successful GitHub push time, read from the upload log configured
+        in Scripts/scripts/folder-mappings.json.
+        """
+        log_path = None
+        try:
+            with (SCRIPTS_DIR / "folder-mappings.json").open("r", encoding="utf-8") as file:
+                mappings = json.load(file)
+            if mappings.get("LogFile"):
+                log_path = pathlib.Path(mappings["LogFile"])
+        except (OSError, json.JSONDecodeError):
+            log_path = None
+        if log_path is None or not log_path.exists():
+            return "Unavailable"
+        last_ts = None
+        try:
+            with log_path.open("r", encoding="utf-8-sig", errors="replace") as file:
+                for line in file:
+                    if "Sync complete" in line or "First push completed successfully" in line:
+                        last_ts = datetime.strptime(line[1:20], "%Y-%m-%d %H:%M:%S")
+            if last_ts is None:
+                return "Never"
+            return last_ts.strftime("%Y-%m-%d %H:%M:%S")
+        except (OSError, ValueError):
+            return "Unavailable"
+
     def refresh_scenario_viewer(self):
         status = self.read_json_file(SCENARIO_STATUS_PATH)
         request = self.read_json_file(SCENARIO_REQUEST_PATH)
@@ -1226,18 +1289,17 @@ class PVControlApp(tk.Tk):
         )
         active = status.get("active_scenario") if status else None
         pending = status.get("pending_scenario") if status else None
-        requested = request.get("scenario") if request else None
         self.viewer_vars["active"].set(str(active) if active else "Unavailable")
         self.viewer_vars["pending"].set(str(pending) if pending else "None")
-        self.viewer_vars["requested"].set(str(requested) if requested else "Unavailable")
         self.viewer_vars["requested_for"].set(str(request.get("requested_for_slot", "Unavailable")) if request else "Unavailable")
         self.viewer_vars["slot"].set(str(status.get("current_slot", "Unavailable")) if status else "Unavailable")
         target = status.get("current_target_w") if status else None
         self.viewer_vars["target"].set(f"{target} W" if target is not None else "Unavailable")
         updated = status.get("ts_local") if status else None
         self.viewer_vars["updated"].set(str(updated) if updated else "Unavailable")
+        self.viewer_vars["last_push"].set(self.get_last_github_push())
 
-        # Values sent to the live dashboard (Shelly load + Tarom PV)
+        # Values sent to the live dashboard (Load + MPPT PV)
         load = dashboard.get("load") if dashboard else None
         pv = dashboard.get("pv") if dashboard else None
         load_w = load.get("load_active_total_w") if load else None

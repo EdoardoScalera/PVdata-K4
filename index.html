@@ -562,25 +562,27 @@
       renderDownloadFileOptions();
     };
 
-    const parseFileDate = (type, row) => {
-      if (type === 'irradiance') {
-        const [date, time] = row[0].split('_');
-        return new Date(`${date.replace(/-/g, '/')} ${time.replace(/-/g, ':')}`);
+    const parseDateParts = (value) => {
+      const text = String(value ?? '').trim();
+      if (!text) return new Date(NaN);
+      if (text.includes('_')) {
+        const [date, time] = text.split('_');
+        if (date && time) {
+          return new Date(`${date.replace(/-/g, '/')} ${time.replace(/-/g, ':')}`);
+        }
       }
+      const parsed = new Date(text.replace(/-/g, '/'));
+      return isNaN(parsed.getTime()) ? new Date(text) : parsed;
+    };
+
+    const parseFileDate = (type, row) => {
       if (type === 'pv') {
         return new Date(`${row[1].replace(/-/g, '/')} ${row[2]}`);
       }
       if (type === 'load') {
         return new Date(row[0].replace(/-/g, '/'));
       }
-      if (type === 'weather') {
-        if (row[0]?.includes('_')) {
-          const [date, time] = row[0].split('_');
-          return new Date(`${date.replace(/-/g, '/')} ${time.replace(/-/g, ':')}`);
-        }
-        return new Date(row[0].replace(/-/g, '/'));
-      }
-      return new Date(row[0]);
+      return parseDateParts(row[0]);
     };
 
     const formatDownloadName = (fileKey, from, to) => {

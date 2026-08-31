@@ -1,12 +1,27 @@
-in gui.py, and all relative sub files:
-check if github support every 1 minute upload or if it create problems 
-add open github repo button link: https://github.com/EdoardoScalera/PVdata-K4
+in gui.py and all relative sub files:
+add "Open GitHub repo" button. link: https://github.com/EdoardoScalera/PVdata-K4
 rename scenario "constant" to "constant load"
 in the status section: add last github push to repo, remove requested scenario (same info as in pending scenario)
 rename "scenario state" box into "logger state"
 shelly and controller share the same check box, remove controller checkbox
 make sure that "stop shelly+controller" shut all the sockets off 
+Rename "shelly" into "Load", Rename "tarom" into "MPPT"
+labview data are not uploaded to the dashboard_value.json and its not pushed to github, therefore my index.html cannot refresh the dashboard with the latest values
 
 in index.html:
-labview data are not uploaded to the dashboard on github. 
 fix "Download failed: can't access property "replace", time is undefined" this happen when try to download all file as zip
+
+
+
+Scripts/gui.py
+1. Open GitHub repo button added to Utilities (opens https://github.com/EdoardoScalera/PVdata-K4).
+2. "constant" → "Constant load" in both scenario dropdowns/status messages; internal value (constant) unchanged so file naming (constant_1200W) and script flags keep working.
+3. Status section: removed "Requested scenario" row; added Last GitHub push row — parsed from the upload log (folder-mappings.json → LogFile), shows latest Sync complete/First push completed successfully timestamp.
+4. "Scenario state" box renamed to Logger state.
+5. Faithful combined checkbox: Shelly + controller rows merged into one Login row with a single "Load + controller" checkbox (driven by a new load_running_var, synced in update_start_button_states); controller checkbox removed.
+6. Stop Load + controller now also runs _run_all_off_now() so all sockets shut off.
+7. Renames: Shelly→Load, Tarom→MPPT across all button/label/status text (function/variable names kept internal for stability).
+Line 9 fix (LabVIEW data not reaching dashboard/GitHub)
+- scripts/labview_logger.ps1: on Start it now spawns a hidden background Poll process that reads the last row of the poa_*.txt file and merges a sensors section (Ge_front, Ge_back, TC1–TC4, per-header mapping) into dashboard_values.json via the same lock-protected writer the other loggers use. It self-terminates when LabVIEW stops, with a single-poller guard.
+- config.json: log_dirs.irradiance changed from .../DATA/Data/irradiance to .../DATA/Irradiance, the folder the upload script already syncs to GitHub — so poa_*.txt is now pushed, and index.html's existing Sensors panel (which reads data.sensors) will display the live values.
+index.html — root cause of the ZIP error: irradiance_v0.txt uses space-separated datetimes (2026-04-21 15:27), so row[0].split('_') returned no time and time.replace threw. New parseDateParts handles underscore and space formats with safe fallbacks (invalid rows are filtered out as before).
