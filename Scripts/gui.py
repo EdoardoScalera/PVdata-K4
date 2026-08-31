@@ -111,7 +111,7 @@ class PVControlApp(tk.Tk):
             "tc4": tk.StringVar(value="Unavailable"),
         }
         self.applied_tilt = int(CONFIG.get("defaults", {}).get("tilt_deg", 30))
-        self.applied_distance = int(CONFIG.get("defaults", {}).get("distance_mm", 50))
+        self.applied_distance = int(CONFIG.get("defaults", {}).get("distance_cm", 50))
         self.applied_scenario = CONFIG.get("defaults", {}).get("scenario", "all_on")
         self.applied_constant_target = 1200
 
@@ -144,7 +144,7 @@ class PVControlApp(tk.Tk):
         tilt_spin.grid(row=0, column=1, padx=10, pady=5, sticky="w")
         self.tilt_var.trace_add("write", self.on_measurement_parameter_changed)
 
-        tk.Label(measurement_frame, text="Distance (mm):").grid(
+        tk.Label(measurement_frame, text="Distance (cm):").grid(
             row=1, column=0, sticky="w", padx=10, pady=5
         )
         self.distance_var = tk.IntVar(value=50)
@@ -560,7 +560,7 @@ class PVControlApp(tk.Tk):
             messagebox.showerror("Measurement error", "Tilt must be between 0 and 90 degrees.")
             return
         if not 0 <= distance <= 1000:
-            messagebox.showerror("Measurement error", "Distance must be between 0 and 1000 mm.")
+            messagebox.showerror("Measurement error", "Distance must be between 0 and 1000 cm.")
             return
 
         self.applied_tilt = tilt
@@ -570,7 +570,7 @@ class PVControlApp(tk.Tk):
         self.update_name_preview()
         self.status_var.set(
             f"Measurement parameters saved for file naming: tilt={tilt} deg, "
-            f"distance={distance} mm, scenario={self._scenario_label(self.applied_scenario)}."
+            f"distance={distance} cm, scenario={self._scenario_label(self.applied_scenario)}."
             " Start a logger to begin recording."
         )
 
