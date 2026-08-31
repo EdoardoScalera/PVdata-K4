@@ -1,10 +1,10 @@
 ﻿{
-    "ts_local":  "2026-08-31 12:42:39",
-    "active_scenario":  "constant",
+    "ts_local":  "2026-08-31 12:48:40",
+    "active_scenario":  "all_off",
     "pending_scenario":  null,
-    "current_slot":  "2026-08-31 12:30",
-    "current_target_w":  100,
-    "constant_target_w":  100,
+    "current_slot":  "2026-08-31 12:45",
+    "current_target_w":  0,
+    "constant_target_w":  1200,
     "scenario_request_path":  "C:\\Users\\5CG7471GSJ\\Documents\\DATA\\Scripts\\GUI\\scripts\\scenario_request.json",
     "scenario_request_file_present":  false,
     "scenario_request_file":  null
