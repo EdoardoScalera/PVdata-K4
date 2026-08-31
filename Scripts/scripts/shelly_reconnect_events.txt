@@ -1061,3 +1061,15 @@
 2026-08-28 17:20:30	INFO	send	ps3	98a3166b6128	3	turn=off
 2026-08-28 17:20:30	WARN	send_failed	ps3	98a3166b6128	3	turn=off; error=The remote server returned an error: (401) Unauthorized.
 2026-08-28 17:20:33	INFO	shutdown_complete				RunOnce all_off completed; all loads off.
+2026-08-31 08:55:30	INFO	startup				Loaded config from C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\shelly_load_control_scenarios.json; startup_scenario=constant; scenario_request_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_request.json; scenario_status_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_status.json; constant_target_w=100
+2026-08-31 08:55:30	INFO	strip_plan	ps1	206ef102c9d8		slot=2026-08-31 08:45; scenario=constant; target_strip_w=0; states=[0,0,0,0]
+2026-08-31 08:55:30	INFO	strip_plan	ps2	98a3167b6a8c		slot=2026-08-31 08:45; scenario=constant; target_strip_w=0; states=[0,0,0,0]
+2026-08-31 08:55:30	INFO	strip_plan	ps3	98a3166b6128		slot=2026-08-31 08:45; scenario=constant; target_strip_w=48; states=[0,0,0,1]
+2026-08-31 08:55:30	INFO	load_change				SCENARIO=constant slot=2026-08-31 08:45 target=100W nominal=48W overshoot=0W states: ps1=[0,0,0,0]; ps2=[0,0,0,0]; ps3=[0,0,0,1]
+2026-08-31 08:55:31	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-08-31 08:55:33	INFO	online	ps1	206ef102c9d8		device reachable again
+2026-08-31 08:55:36	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-08-31 08:55:38	INFO	online	ps2	98a3167b6a8c		device reachable again
+2026-08-31 08:55:41	INFO	online	ps3	98a3166b6128		device reachable again
+2026-08-31 08:55:41	INFO	reconcile	ps3	98a3166b6128	3	actual=off; desired=on
+2026-08-31 08:55:43	INFO	send	ps3	98a3166b6128	3	turn=on
