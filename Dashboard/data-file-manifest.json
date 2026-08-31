@@ -1,5 +1,5 @@
 ﻿{
-    "generated_at":  "2026-08-31 09:43:56",
+    "generated_at":  "2026-08-31 09:44:34",
     "files":  [
                   {
                       "key":  "Irradiance/irradiance.txt",
@@ -55,6 +55,17 @@
                       "distance":  50,
                       "scenario":  "all_on",
                       "constant_target_w":  null
+                  },
+                  {
+                      "key":  "Irradiance/poa_tilt30_distance50_constant_100W.txt",
+                      "path":  "../Irradiance/poa_tilt30_distance50_constant_100W.txt",
+                      "name":  "poa_tilt30_distance50_constant_100W.txt",
+                      "label":  "poa_tilt30_distance50_constant_100W.txt",
+                      "type":  "irradiance",
+                      "tilt":  30,
+                      "distance":  50,
+                      "scenario":  "constant",
+                      "constant_target_w":  100
                   },
                   {
                       "key":  "Irradiance/poa_tilt30_distance50_constant_150W.txt",
@@ -407,6 +418,17 @@
                       "distance":  50,
                       "scenario":  "constant",
                       "constant_target_w":  150
+                  },
+                  {
+                      "key":  "PV/pv_tilt36_distance382_constant_100W.txt",
+                      "path":  "../PV/pv_tilt36_distance382_constant_100W.txt",
+                      "name":  "pv_tilt36_distance382_constant_100W.txt",
+                      "label":  "pv_tilt36_distance382_constant_100W.txt",
+                      "type":  "pv",
+                      "tilt":  36,
+                      "distance":  382,
+                      "scenario":  "constant",
+                      "constant_target_w":  100
                   },
                   {
                       "key":  "PV/tarom_data_v1.txt",
