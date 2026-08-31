@@ -752,11 +752,20 @@
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
 
-        const target = Number(data?.scenario?.current_target_w);
-        const load = Number(data?.load?.load_active_total_w);
-        const pv = Number(data?.pv?.pv_power_total_w);
-        const pv1 = Number(data?.pv?.pv1_power_w);
-        const pv2 = Number(data?.pv?.pv2_power_w);
+        const toNum = (value) => {
+          if (value === null || value === undefined || value === '') return NaN;
+          const n = Number(value);
+          return Number.isFinite(n) ? n : NaN;
+        };
+
+        const target = toNum(data?.scenario?.current_target_w);
+        const load = toNum(data?.load?.load_active_total_w);
+        const pv = toNum(data?.pv?.pv_power_total_w);
+        const pv1 = toNum(data?.pv?.pv1_power_w);
+        const pv2 = toNum(data?.pv?.pv2_power_w);
+        // PV balance = PV total - Load total. When PV total is 0 (e.g. at
+        // night, or while the inverter is off) the balance equals the full
+        // negative load draw, i.e. power taken from the grid.
         const balance = Number.isFinite(pv) && Number.isFinite(load) ? pv - load : NaN;
 
         const seenPlotKeys = new Set();

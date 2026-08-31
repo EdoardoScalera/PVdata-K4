@@ -1,12 +1,7 @@
 in gui.py, and all relative sub files:
-check if github support every 1 minute upload or if it create problems 
-add open github repo button link: https://github.com/EdoardoScalera/PVdata-K4
-rename scenario "constant" to "constant load"
-in the status section: add last github push to repo, remove requested scenario (same info as in pending scenario)
-rename "scenario state" box into "logger state"
-shelly and controller share the same check box, remove controller checkbox
-make sure that "stop shelly+controller" shut all the sockets off 
+check logger state entries. "Last Github push" always show "Never" even tho the upload to Github was successful
+logger state window: divide information in 2 columns. Include information about data collected via the labview_logger.ps1. Remove "last update" entry. 
+Check naming for the labview controller, pattern is: poa_tiltXX_distanceYY_loadScenarioName.txt. At the moment it looks like the scenario name is not correct. 
 
 in index.html:
-labview data are not uploaded to the dashboard on github. 
-fix "Download failed: can't access property "replace", time is undefined" this happen when try to download all file as zip
+Check "PV balance": this value is the result of (PV Total - Load total). What happens when PV Total is zero?

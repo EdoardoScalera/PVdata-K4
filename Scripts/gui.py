@@ -12,6 +12,7 @@ from tkcalendar import DateEntry  # pip install tkcalendar
 import json
 
 CONFIG_PATH = pathlib.Path(__file__).resolve().parent / "config.json"
+REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 with CONFIG_PATH.open("r", encoding="utf-8") as f:
     CONFIG = json.load(f)
@@ -97,12 +98,17 @@ class PVControlApp(tk.Tk):
             "requested_for": tk.StringVar(value="Unavailable"),
             "slot": tk.StringVar(value="Unavailable"),
             "target": tk.StringVar(value="Unavailable"),
-            "updated": tk.StringVar(value="Unavailable"),
             "last_push": tk.StringVar(value="Unavailable"),
             "load_w": tk.StringVar(value="Unavailable"),
             "pv1_w": tk.StringVar(value="Unavailable"),
             "pv2_w": tk.StringVar(value="Unavailable"),
             "pv_total_w": tk.StringVar(value="Unavailable"),
+            "poa_front": tk.StringVar(value="Unavailable"),
+            "poa_rear": tk.StringVar(value="Unavailable"),
+            "tc1": tk.StringVar(value="Unavailable"),
+            "tc2": tk.StringVar(value="Unavailable"),
+            "tc3": tk.StringVar(value="Unavailable"),
+            "tc4": tk.StringVar(value="Unavailable"),
         }
         self.applied_tilt = int(CONFIG.get("defaults", {}).get("tilt_deg", 30))
         self.applied_distance = int(CONFIG.get("defaults", {}).get("distance_mm", 50))
@@ -419,6 +425,7 @@ class PVControlApp(tk.Tk):
         viewer_frame = tk.LabelFrame(self, text="Logger state", padx=8, pady=4)
         viewer_frame.grid(row=4, column=0, columnspan=2, padx=10, pady=4, sticky="we")
         viewer_frame.grid_columnconfigure(1, weight=1)
+        viewer_frame.grid_columnconfigure(3, weight=1)
         viewer_rows = [
             ("Controller", "controller"),
             ("Current scenario", "active"),
@@ -426,19 +433,29 @@ class PVControlApp(tk.Tk):
             ("Requested for", "requested_for"),
             ("Current slot", "slot"),
             ("Current target", "target"),
-            ("Last update", "updated"),
             ("Last GitHub push", "last_push"),
             ("Load", "load_w"),
             ("PV1 (MPPT)", "pv1_w"),
             ("PV2 (MPPT)", "pv2_w"),
             ("PV total", "pv_total_w"),
+            ("POA front", "poa_front"),
+            ("POA rear", "poa_rear"),
+            ("TC1", "tc1"),
+            ("TC2", "tc2"),
+            ("TC3", "tc3"),
+            ("TC4", "tc4"),
         ]
-        for row, (label, key) in enumerate(viewer_rows):
+        # Split the entries into two columns: labels in column 0 and 2, values
+        # in column 1 and 3. Both halves share the same number of rows.
+        half = (len(viewer_rows) + 1) // 2
+        for idx, (label, key) in enumerate(viewer_rows):
+            col = 0 if idx < half else 2
+            r = idx if idx < half else idx - half
             tk.Label(viewer_frame, text=f"{label}:", anchor="w").grid(
-                row=row, column=0, sticky="w", padx=(0, 10)
+                row=r, column=col, sticky="w", padx=(0, 10)
             )
             tk.Label(viewer_frame, textvariable=self.viewer_vars[key], anchor="w").grid(
-                row=row, column=1, sticky="we"
+                row=r, column=col + 1, sticky="we"
             )
 
         # Status label
@@ -1217,15 +1234,21 @@ class PVControlApp(tk.Tk):
         self.logger_restart_timer_id = None
         shelly_running = self.shelly_proc is not None and self.shelly_proc.poll() is None
         tarom_running = self.tarom_proc is not None and self.tarom_proc.poll() is None
+        labview_running = self.labview_running_var.get()
 
         if shelly_running:
             self.stop_shelly_logger()
         if tarom_running:
             self.stop_tarom_logger()
+        if labview_running:
+            self.stop_labview_logger()
         if shelly_running:
             self.start_shelly_logger()
         if tarom_running:
             self.start_tarom_logger()
+        if labview_running:
+            # Restart LabVIEW so its poa_*.txt file adopts the new scenario name.
+            self.start_labview_logger()
 
     def read_json_file(self, path: pathlib.Path):
         try:
@@ -1251,19 +1274,43 @@ class PVControlApp(tk.Tk):
 
     def get_last_github_push(self):
         """
-        Last successful GitHub push time, read from the upload log configured
-        in Scripts/scripts/folder-mappings.json.
+        Last successful GitHub push time.
+
+        Primary source: the git history of the synced local repo (the upload
+        script commits and pushes right after syncing, so the latest commit
+        time is effectively the last push time). Falls back to parsing the
+        upload log configured in Scripts/scripts/folder-mappings.json.
         """
+        repo_dir = None
         log_path = None
         try:
             with (SCRIPTS_DIR / "folder-mappings.json").open("r", encoding="utf-8") as file:
                 mappings = json.load(file)
+            if mappings.get("RepoDir"):
+                repo_dir = pathlib.Path(mappings["RepoDir"])
             if mappings.get("LogFile"):
                 log_path = pathlib.Path(mappings["LogFile"])
         except (OSError, json.JSONDecodeError):
-            log_path = None
+            pass
+
+        for candidate in list(dict.fromkeys([repo_dir, REPO_ROOT])):
+            if candidate is None:
+                continue
+            try:
+                result = subprocess.run(
+                    ["git", "-C", str(candidate), "log", "-1", "--format=%ci"],
+                    capture_output=True,
+                    text=True,
+                    timeout=5,
+                )
+                if result.returncode == 0 and result.stdout.strip():
+                    return result.stdout.strip()
+            except (subprocess.SubprocessError, OSError):
+                continue
+
         if log_path is None or not log_path.exists():
             return "Unavailable"
+
         last_ts = None
         try:
             with log_path.open("r", encoding="utf-8-sig", errors="replace") as file:
@@ -1295,8 +1342,6 @@ class PVControlApp(tk.Tk):
         self.viewer_vars["slot"].set(str(status.get("current_slot", "Unavailable")) if status else "Unavailable")
         target = status.get("current_target_w") if status else None
         self.viewer_vars["target"].set(f"{target} W" if target is not None else "Unavailable")
-        updated = status.get("ts_local") if status else None
-        self.viewer_vars["updated"].set(str(updated) if updated else "Unavailable")
         self.viewer_vars["last_push"].set(self.get_last_github_push())
 
         # Values sent to the live dashboard (Load + MPPT PV)
@@ -1310,6 +1355,23 @@ class PVControlApp(tk.Tk):
         self.viewer_vars["pv1_w"].set(f"{pv1_w} W" if pv1_w is not None else "Unavailable")
         self.viewer_vars["pv2_w"].set(f"{pv2_w} W" if pv2_w is not None else "Unavailable")
         self.viewer_vars["pv_total_w"].set(f"{pv_total_w} W" if pv_total_w is not None else "Unavailable")
+
+        # LabVIEW POA data (written to dashboard_values.json by the labview
+        # logger's background poller) - renamed to match the irradiance log.
+        sensors = dashboard.get("sensors") if dashboard else None
+        sensors_pairs = (
+            ("poa_front", "Ge_front"),
+            ("poa_rear", "Ge_back"),
+            ("tc1", "TC1"),
+            ("tc2", "TC2"),
+            ("tc3", "TC3"),
+            ("tc4", "TC4"),
+        )
+        for var_key, key in sensors_pairs:
+            value = sensors.get(key) if sensors else None
+            self.viewer_vars[var_key].set(
+                f"{value}" if value is not None else "Unavailable"
+            )
 
         self.viewer_refresh_id = self.after(1500, self.refresh_scenario_viewer)
 
