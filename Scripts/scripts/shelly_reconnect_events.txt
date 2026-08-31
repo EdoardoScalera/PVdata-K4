@@ -1330,3 +1330,54 @@
 2026-08-31 10:10:55	INFO	strip_plan	ps2	98a3167b6a8c		slot=2026-08-31 10:00; scenario=constant; target_strip_w=450; states=[0,1,1,1]
 2026-08-31 10:10:55	INFO	strip_plan	ps3	98a3166b6128		slot=2026-08-31 10:00; scenario=constant; target_strip_w=300; states=[1,1,0,0]
 2026-08-31 10:10:55	INFO	load_change				SCENARIO=constant slot=2026-08-31 10:00 target=1200W nominal=1200W overshoot=0W states: ps1=[0,1,1,1]; ps2=[0,1,1,1]; ps3=[1,1,0,0]
+2026-08-31 10:10:55	INFO	online	ps1	206ef102c9d8		device reachable again
+2026-08-31 10:10:55	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-08-31 10:10:57	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-08-31 10:10:57	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-08-31 10:10:59	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-08-31 10:10:59	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-08-31 10:11:02	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-08-31 10:11:05	INFO	online	ps2	98a3167b6a8c		device reachable again
+2026-08-31 10:11:05	INFO	reconcile	ps2	98a3167b6a8c	1	actual=off; desired=on
+2026-08-31 10:11:07	INFO	send	ps2	98a3167b6a8c	1	turn=on
+2026-08-31 10:11:07	INFO	reconcile	ps2	98a3167b6a8c	2	actual=off; desired=on
+2026-08-31 10:11:09	INFO	send	ps2	98a3167b6a8c	2	turn=on
+2026-08-31 10:11:09	INFO	reconcile	ps2	98a3167b6a8c	3	actual=off; desired=on
+2026-08-31 10:11:11	INFO	send	ps2	98a3167b6a8c	3	turn=on
+2026-08-31 10:11:15	INFO	online	ps3	98a3166b6128		device reachable again
+2026-08-31 10:11:15	INFO	reconcile	ps3	98a3166b6128	0	actual=off; desired=on
+2026-08-31 10:11:17	INFO	send	ps3	98a3166b6128	0	turn=on
+2026-08-31 10:11:17	INFO	reconcile	ps3	98a3166b6128	1	actual=off; desired=on
+2026-08-31 10:11:19	INFO	send	ps3	98a3166b6128	1	turn=on
+2026-08-31 10:11:19	INFO	reconcile	ps3	98a3166b6128	3	actual=on; desired=off
+2026-08-31 10:11:21	INFO	send	ps3	98a3166b6128	3	turn=off
+2026-08-31 10:11:45	INFO	startup				Loaded config from C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\shelly_load_control_scenarios.json; startup_scenario=all_off; scenario_request_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_request.json; scenario_status_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_status.json; constant_target_w=1200
+2026-08-31 10:11:45	INFO	strip_plan	ps1	206ef102c9d8		slot=2026-08-31 10:00; scenario=all_off; target_strip_w=0; states=[0,0,0,0]
+2026-08-31 10:11:45	INFO	strip_plan	ps2	98a3167b6a8c		slot=2026-08-31 10:00; scenario=all_off; target_strip_w=0; states=[0,0,0,0]
+2026-08-31 10:11:45	INFO	strip_plan	ps3	98a3166b6128		slot=2026-08-31 10:00; scenario=all_off; target_strip_w=0; states=[0,0,0,0]
+2026-08-31 10:11:45	INFO	load_change				SCENARIO=all_off slot=2026-08-31 10:00 target=0W nominal=0W overshoot=0W states: ps1=[0,0,0,0]; ps2=[0,0,0,0]; ps3=[0,0,0,0]
+2026-08-31 10:11:45	INFO	online	ps1	206ef102c9d8		device reachable again
+2026-08-31 10:11:45	INFO	reconcile	ps1	206ef102c9d8	1	actual=on; desired=off
+2026-08-31 10:11:47	INFO	send	ps1	206ef102c9d8	1	turn=off
+2026-08-31 10:11:47	INFO	reconcile	ps1	206ef102c9d8	2	actual=on; desired=off
+2026-08-31 10:11:50	INFO	send	ps1	206ef102c9d8	2	turn=off
+2026-08-31 10:11:50	INFO	reconcile	ps1	206ef102c9d8	3	actual=on; desired=off
+2026-08-31 10:11:52	INFO	send	ps1	206ef102c9d8	3	turn=off
+2026-08-31 10:11:55	INFO	online	ps2	98a3167b6a8c		device reachable again
+2026-08-31 10:11:55	INFO	reconcile	ps2	98a3167b6a8c	1	actual=on; desired=off
+2026-08-31 10:11:57	INFO	send	ps2	98a3167b6a8c	1	turn=off
+2026-08-31 10:11:57	INFO	reconcile	ps2	98a3167b6a8c	2	actual=on; desired=off
+2026-08-31 10:11:59	INFO	send	ps2	98a3167b6a8c	2	turn=off
+2026-08-31 10:11:59	INFO	reconcile	ps2	98a3167b6a8c	3	actual=on; desired=off
+2026-08-31 10:12:02	INFO	send	ps2	98a3167b6a8c	3	turn=off
+2026-08-31 10:12:05	INFO	online	ps3	98a3166b6128		device reachable again
+2026-08-31 10:12:05	INFO	reconcile	ps3	98a3166b6128	0	actual=on; desired=off
+2026-08-31 10:12:07	INFO	send	ps3	98a3166b6128	0	turn=off
+2026-08-31 10:12:07	INFO	reconcile	ps3	98a3166b6128	1	actual=on; desired=off
+2026-08-31 10:12:09	INFO	send	ps3	98a3166b6128	1	turn=off
+2026-08-31 10:12:12	INFO	shutdown_complete				RunOnce all_off completed; all loads off.
+2026-08-31 10:12:16	INFO	startup				Loaded config from C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\shelly_load_control_scenarios.json; startup_scenario=constant; scenario_request_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_request.json; scenario_status_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_status.json; constant_target_w=100
+2026-08-31 10:12:17	INFO	strip_plan	ps1	206ef102c9d8		slot=2026-08-31 10:00; scenario=constant; target_strip_w=0; states=[0,0,0,0]
+2026-08-31 10:12:17	INFO	strip_plan	ps2	98a3167b6a8c		slot=2026-08-31 10:00; scenario=constant; target_strip_w=0; states=[0,0,0,0]
+2026-08-31 10:12:17	INFO	strip_plan	ps3	98a3166b6128		slot=2026-08-31 10:00; scenario=constant; target_strip_w=48; states=[0,0,0,1]
+2026-08-31 10:12:17	INFO	load_change				SCENARIO=constant slot=2026-08-31 10:00 target=100W nominal=48W overshoot=0W states: ps1=[0,0,0,0]; ps2=[0,0,0,0]; ps3=[0,0,0,1]
