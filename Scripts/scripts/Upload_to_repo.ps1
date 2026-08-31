@@ -162,6 +162,47 @@ function New-DataFileManifest {
     }
 }
 
+# Records the timestamp of the push that is about to commit the dashboard, so
+# index.html can show "date of the last push commit". Written into the repo
+# copy of dashboard_values.json before git add / commit, so it is carried by
+# and consistent with the very push that publishes it.
+function Set-DashboardLastPush {
+    $dashboardPath = Join-Path $RepoDir "Dashboard/dashboard_values.json"
+    if (-not (Test-Path -LiteralPath $dashboardPath)) {
+        Write-Log "Dashboard values file not found, skipping last-push stamp: $dashboardPath"
+        return
+    }
+
+    # Read existing sections so they are preserved when rewritten. In this
+    # repo the file is primed with the current structure already.
+    $existing = @{}
+    try {
+        $raw = Get-Content -LiteralPath $dashboardPath -Raw -ErrorAction Stop
+        if (-not [string]::IsNullOrWhiteSpace($raw)) {
+            $parsed = $raw | ConvertFrom-Json -ErrorAction Stop
+            if ($null -ne $parsed) {
+                foreach ($prop in $parsed.PSObject.Properties) {
+                    $existing[$prop.Name] = $prop.Value
+                }
+            }
+        }
+    }
+    catch {
+        Write-Log "Could not parse existing dashboard_values.json: $($_.Exception.Message)"
+    }
+
+    $existing['last_push_ts'] = (Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
+
+    $json = [PSCustomObject]$existing | ConvertTo-Json -Depth 20
+    try {
+        [System.IO.File]::WriteAllText($dashboardPath, $json, [System.Text.UTF8Encoding]::new($false))
+        Write-Log "Stamped last_push_ts into dashboard_values.json"
+    }
+    catch {
+        Write-Log "Failed to stamp last_push_ts: $($_.Exception.Message)"
+    }
+}
+
 function Invoke-SyncCycle {
     Write-Log "Starting sync cycle"
 
@@ -205,6 +246,8 @@ function Invoke-SyncCycle {
             return
         }
     }
+
+    Set-DashboardLastPush
 
     New-DataFileManifest
 
