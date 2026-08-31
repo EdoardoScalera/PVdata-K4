@@ -1,5 +1,5 @@
 ﻿{
-    "generated_at":  "2026-08-31 13:07:49",
+    "generated_at":  "2026-08-31 13:22:52",
     "files":  [
                   {
                       "key":  "Irradiance/irradiance.txt",
@@ -68,6 +68,17 @@
                       "constant_target_w":  100
                   },
                   {
+                      "key":  "Irradiance/poa_tilt36_distance382_constant_300W.txt",
+                      "path":  "../Irradiance/poa_tilt36_distance382_constant_300W.txt",
+                      "name":  "poa_tilt36_distance382_constant_300W.txt",
+                      "label":  "poa_tilt36_distance382_constant_300W.txt",
+                      "type":  "irradiance",
+                      "tilt":  36,
+                      "distance":  382,
+                      "scenario":  "constant",
+                      "constant_target_w":  300
+                  },
+                  {
                       "key":  "Load/load_consumption.txt",
                       "path":  "../Load/load_consumption.txt",
                       "name":  "load_consumption.txt",
@@ -99,6 +110,17 @@
                       "distance":  382,
                       "scenario":  "constant",
                       "constant_target_w":  100
+                  },
+                  {
+                      "key":  "Load/load_tilt36_distance382_constant_300W.txt",
+                      "path":  "../Load/load_tilt36_distance382_constant_300W.txt",
+                      "name":  "load_tilt36_distance382_constant_300W.txt",
+                      "label":  "load_tilt36_distance382_constant_300W.txt",
+                      "type":  "load",
+                      "tilt":  36,
+                      "distance":  382,
+                      "scenario":  "constant",
+                      "constant_target_w":  300
                   },
                   {
                       "key":  "Load/load_v0.txt",
@@ -165,6 +187,17 @@
                       "distance":  382,
                       "scenario":  "constant",
                       "constant_target_w":  100
+                  },
+                  {
+                      "key":  "PV/pv_tilt36_distance382_constant_300W.txt",
+                      "path":  "../PV/pv_tilt36_distance382_constant_300W.txt",
+                      "name":  "pv_tilt36_distance382_constant_300W.txt",
+                      "label":  "pv_tilt36_distance382_constant_300W.txt",
+                      "type":  "pv",
+                      "tilt":  36,
+                      "distance":  382,
+                      "scenario":  "constant",
+                      "constant_target_w":  300
                   },
                   {
                       "key":  "PV/tarom_data_v1.txt",
