@@ -1,5 +1,5 @@
 ﻿{
-    "generated_at":  "2026-09-01 11:08:13",
+    "generated_at":  "2026-09-01 11:10:07",
     "files":  [
                   {
                       "key":  "Irradiance/irradiance.txt",
@@ -198,6 +198,17 @@
                       "distance":  382,
                       "scenario":  "constant",
                       "constant_target_w":  300
+                  },
+                  {
+                      "key":  "PV/pv_tilt36_distance382_constant_500W.txt",
+                      "path":  "../PV/pv_tilt36_distance382_constant_500W.txt",
+                      "name":  "pv_tilt36_distance382_constant_500W.txt",
+                      "label":  "pv_tilt36_distance382_constant_500W.txt",
+                      "type":  "pv",
+                      "tilt":  36,
+                      "distance":  382,
+                      "scenario":  "constant",
+                      "constant_target_w":  500
                   },
                   {
                       "key":  "PV/tarom_data_v1.txt",

@@ -4186,3 +4186,8 @@
 2026-09-01 11:07:55	INFO	online	ps2	98a3167b6a8c		device reachable again
 2026-09-01 11:07:59	INFO	online	ps3	98a3166b6128		device reachable again
 2026-09-01 11:08:02	INFO	shutdown_complete				RunOnce all_off completed; all loads off.
+2026-09-01 11:10:06	INFO	startup				Loaded config from C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\shelly_load_control_scenarios.json; startup_scenario=constant; scenario_request_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_request.json; scenario_status_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_status.json; constant_target_w=500
+2026-09-01 11:10:07	INFO	strip_plan	ps1	206ef102c9d8		slot=2026-09-01 11:00; scenario=constant; target_strip_w=500; states=[1,1,1,0]
+2026-09-01 11:10:07	INFO	strip_plan	ps2	98a3167b6a8c		slot=2026-09-01 11:00; scenario=constant; target_strip_w=0; states=[0,0,0,0]
+2026-09-01 11:10:07	INFO	strip_plan	ps3	98a3166b6128		slot=2026-09-01 11:00; scenario=constant; target_strip_w=0; states=[0,0,0,0]
+2026-09-01 11:10:07	INFO	load_change				SCENARIO=constant slot=2026-09-01 11:00 target=500W nominal=500W overshoot=0W states: ps1=[1,1,1,0]; ps2=[0,0,0,0]; ps3=[0,0,0,0]
