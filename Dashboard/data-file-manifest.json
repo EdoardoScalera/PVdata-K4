@@ -1,5 +1,5 @@
 ﻿{
-    "generated_at":  "2026-09-01 11:10:07",
+    "generated_at":  "2026-09-01 11:25:11",
     "files":  [
                   {
                       "key":  "Irradiance/irradiance.txt",
@@ -79,6 +79,17 @@
                       "constant_target_w":  300
                   },
                   {
+                      "key":  "Irradiance/poa_tilt36_distance382_constant_500W.txt",
+                      "path":  "../Irradiance/poa_tilt36_distance382_constant_500W.txt",
+                      "name":  "poa_tilt36_distance382_constant_500W.txt",
+                      "label":  "poa_tilt36_distance382_constant_500W.txt",
+                      "type":  "irradiance",
+                      "tilt":  36,
+                      "distance":  382,
+                      "scenario":  "constant",
+                      "constant_target_w":  500
+                  },
+                  {
                       "key":  "Load/load_consumption.txt",
                       "path":  "../Load/load_consumption.txt",
                       "name":  "load_consumption.txt",
@@ -121,6 +132,17 @@
                       "distance":  382,
                       "scenario":  "constant",
                       "constant_target_w":  300
+                  },
+                  {
+                      "key":  "Load/load_tilt36_distance382_constant_500W.txt",
+                      "path":  "../Load/load_tilt36_distance382_constant_500W.txt",
+                      "name":  "load_tilt36_distance382_constant_500W.txt",
+                      "label":  "load_tilt36_distance382_constant_500W.txt",
+                      "type":  "load",
+                      "tilt":  36,
+                      "distance":  382,
+                      "scenario":  "constant",
+                      "constant_target_w":  500
                   },
                   {
                       "key":  "Load/load_v0.txt",
