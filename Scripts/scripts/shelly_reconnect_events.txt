@@ -5713,3 +5713,173 @@
 2026-09-02 16:31:00	INFO	reconcile	ps3	98a3166b6128	1	actual=off; desired=on
 2026-09-02 16:31:05	INFO	send	ps3	98a3166b6128	1	turn=on
 2026-09-02 16:31:05	INFO	reconcile	ps3	98a3166b6128	2	actual=off; desired=on
+2026-09-02 16:31:11	INFO	send	ps3	98a3166b6128	2	turn=on
+2026-09-02 16:31:11	INFO	reconcile	ps3	98a3166b6128	3	actual=off; desired=on
+2026-09-02 16:31:16	INFO	send	ps3	98a3166b6128	3	turn=on
+2026-09-02 16:31:22	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-02 16:31:24	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-02 16:31:31	INFO	reconcile	ps3	98a3166b6128	0	actual=off; desired=on
+2026-09-02 16:31:33	INFO	send	ps3	98a3166b6128	0	turn=on
+2026-09-02 16:31:33	INFO	reconcile	ps3	98a3166b6128	1	actual=off; desired=on
+2026-09-02 16:31:36	INFO	send	ps3	98a3166b6128	1	turn=on
+2026-09-02 16:31:36	INFO	reconcile	ps3	98a3166b6128	2	actual=off; desired=on
+2026-09-02 16:31:38	INFO	send	ps3	98a3166b6128	2	turn=on
+2026-09-02 16:31:38	INFO	reconcile	ps3	98a3166b6128	3	actual=off; desired=on
+2026-09-02 16:31:40	INFO	send	ps3	98a3166b6128	3	turn=on
+2026-09-02 16:31:44	INFO	reconcile	ps1	206ef102c9d8	0	actual=off; desired=on
+2026-09-02 16:31:46	INFO	send	ps1	206ef102c9d8	0	turn=on
+2026-09-02 16:31:46	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-02 16:31:48	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-02 16:31:48	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-02 16:31:50	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-02 16:31:50	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-02 16:31:53	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-02 16:31:56	INFO	reconcile	ps2	98a3167b6a8c	0	actual=off; desired=on
+2026-09-02 16:31:58	INFO	send	ps2	98a3167b6a8c	0	turn=on
+2026-09-02 16:31:58	INFO	reconcile	ps2	98a3167b6a8c	1	actual=off; desired=on
+2026-09-02 16:32:01	INFO	send	ps2	98a3167b6a8c	1	turn=on
+2026-09-02 16:32:01	INFO	reconcile	ps2	98a3167b6a8c	2	actual=off; desired=on
+2026-09-02 16:32:03	INFO	send	ps2	98a3167b6a8c	2	turn=on
+2026-09-02 16:32:03	INFO	reconcile	ps2	98a3167b6a8c	3	actual=off; desired=on
+2026-09-02 16:32:05	INFO	send	ps2	98a3167b6a8c	3	turn=on
+2026-09-02 16:32:27	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-02 16:33:13	INFO	reconcile	ps2	98a3167b6a8c	0	actual=off; desired=on
+2026-09-02 16:33:15	INFO	send	ps2	98a3167b6a8c	0	turn=on
+2026-09-02 16:33:15	INFO	reconcile	ps2	98a3167b6a8c	1	actual=off; desired=on
+2026-09-02 16:33:17	INFO	send	ps2	98a3167b6a8c	1	turn=on
+2026-09-02 16:33:17	INFO	reconcile	ps2	98a3167b6a8c	2	actual=off; desired=on
+2026-09-02 16:33:22	INFO	send	ps2	98a3167b6a8c	2	turn=on
+2026-09-02 16:33:22	INFO	reconcile	ps2	98a3167b6a8c	3	actual=off; desired=on
+2026-09-02 16:33:27	INFO	send	ps2	98a3167b6a8c	3	turn=on
+2026-09-02 16:33:31	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-02 16:33:33	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-02 16:33:37	INFO	reconcile	ps3	98a3166b6128	0	actual=off; desired=on
+2026-09-02 16:33:39	INFO	send	ps3	98a3166b6128	0	turn=on
+2026-09-02 16:33:39	INFO	reconcile	ps3	98a3166b6128	1	actual=off; desired=on
+2026-09-02 16:33:41	INFO	send	ps3	98a3166b6128	1	turn=on
+2026-09-02 16:33:41	INFO	reconcile	ps3	98a3166b6128	2	actual=off; desired=on
+2026-09-02 16:33:44	INFO	send	ps3	98a3166b6128	2	turn=on
+2026-09-02 16:33:44	INFO	reconcile	ps3	98a3166b6128	3	actual=off; desired=on
+2026-09-02 16:33:46	INFO	send	ps3	98a3166b6128	3	turn=on
+2026-09-02 16:33:49	INFO	reconcile	ps1	206ef102c9d8	0	actual=off; desired=on
+2026-09-02 16:33:51	INFO	send	ps1	206ef102c9d8	0	turn=on
+2026-09-02 16:33:51	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-02 16:33:54	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-02 16:33:54	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-02 16:33:56	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-02 16:33:56	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-02 16:33:58	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-02 16:34:01	INFO	reconcile	ps2	98a3167b6a8c	3	actual=off; desired=on
+2026-09-02 16:34:04	INFO	send	ps2	98a3167b6a8c	3	turn=on
+2026-09-02 16:34:35	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-02 16:35:08	INFO	reconcile	ps1	206ef102c9d8	0	actual=off; desired=on
+2026-09-02 16:35:10	INFO	send	ps1	206ef102c9d8	0	turn=on
+2026-09-02 16:35:10	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-02 16:35:12	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-02 16:35:12	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-02 16:35:15	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-02 16:35:15	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-02 16:35:17	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-02 16:35:20	INFO	reconcile	ps2	98a3167b6a8c	0	actual=off; desired=on
+2026-09-02 16:35:22	INFO	send	ps2	98a3167b6a8c	0	turn=on
+2026-09-02 16:35:22	INFO	reconcile	ps2	98a3167b6a8c	1	actual=off; desired=on
+2026-09-02 16:35:24	INFO	send	ps2	98a3167b6a8c	1	turn=on
+2026-09-02 16:35:24	INFO	reconcile	ps2	98a3167b6a8c	2	actual=off; desired=on
+2026-09-02 16:35:27	INFO	send	ps2	98a3167b6a8c	2	turn=on
+2026-09-02 16:35:27	INFO	reconcile	ps2	98a3167b6a8c	3	actual=off; desired=on
+2026-09-02 16:35:32	INFO	send	ps2	98a3167b6a8c	3	turn=on
+2026-09-02 16:35:35	INFO	reconcile	ps3	98a3166b6128	0	actual=off; desired=on
+2026-09-02 16:35:38	INFO	send	ps3	98a3166b6128	0	turn=on
+2026-09-02 16:35:38	INFO	reconcile	ps3	98a3166b6128	1	actual=off; desired=on
+2026-09-02 16:35:40	INFO	send	ps3	98a3166b6128	1	turn=on
+2026-09-02 16:35:40	INFO	reconcile	ps3	98a3166b6128	2	actual=off; desired=on
+2026-09-02 16:35:42	INFO	send	ps3	98a3166b6128	2	turn=on
+2026-09-02 16:35:42	INFO	reconcile	ps3	98a3166b6128	3	actual=off; desired=on
+2026-09-02 16:35:44	INFO	send	ps3	98a3166b6128	3	turn=on
+2026-09-02 16:35:50	INFO	reconcile	ps2	98a3167b6a8c	3	actual=off; desired=on
+2026-09-02 16:35:53	INFO	send	ps2	98a3167b6a8c	3	turn=on
+2026-09-02 16:36:42	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-02 16:37:47	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-02 16:37:49	INFO	reconcile	ps2	98a3167b6a8c	0	actual=off; desired=on
+2026-09-02 16:37:51	INFO	send	ps2	98a3167b6a8c	0	turn=on
+2026-09-02 16:37:51	INFO	reconcile	ps2	98a3167b6a8c	1	actual=off; desired=on
+2026-09-02 16:37:53	INFO	send	ps2	98a3167b6a8c	1	turn=on
+2026-09-02 16:37:53	INFO	reconcile	ps2	98a3167b6a8c	2	actual=off; desired=on
+2026-09-02 16:37:56	INFO	send	ps2	98a3167b6a8c	2	turn=on
+2026-09-02 16:37:56	INFO	reconcile	ps2	98a3167b6a8c	3	actual=off; desired=on
+2026-09-02 16:37:58	INFO	send	ps2	98a3167b6a8c	3	turn=on
+2026-09-02 16:38:01	INFO	reconcile	ps3	98a3166b6128	0	actual=off; desired=on
+2026-09-02 16:38:03	INFO	send	ps3	98a3166b6128	0	turn=on
+2026-09-02 16:38:03	INFO	reconcile	ps3	98a3166b6128	1	actual=off; desired=on
+2026-09-02 16:38:05	INFO	send	ps3	98a3166b6128	1	turn=on
+2026-09-02 16:38:05	INFO	reconcile	ps3	98a3166b6128	2	actual=off; desired=on
+2026-09-02 16:38:08	INFO	send	ps3	98a3166b6128	2	turn=on
+2026-09-02 16:38:08	INFO	reconcile	ps3	98a3166b6128	3	actual=off; desired=on
+2026-09-02 16:38:10	INFO	send	ps3	98a3166b6128	3	turn=on
+2026-09-02 16:38:13	INFO	reconcile	ps1	206ef102c9d8	0	actual=off; desired=on
+2026-09-02 16:38:15	INFO	send	ps1	206ef102c9d8	0	turn=on
+2026-09-02 16:38:15	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-02 16:38:17	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-02 16:38:17	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-02 16:38:20	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-02 16:38:20	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-02 16:38:22	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-02 16:38:50	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-02 16:38:52	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-02 16:39:55	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-02 16:40:00	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-02 16:40:21	INFO	reconcile	ps3	98a3166b6128	0	actual=off; desired=on
+2026-09-02 16:40:23	INFO	send	ps3	98a3166b6128	0	turn=on
+2026-09-02 16:40:23	INFO	reconcile	ps3	98a3166b6128	1	actual=off; desired=on
+2026-09-02 16:40:25	INFO	send	ps3	98a3166b6128	1	turn=on
+2026-09-02 16:40:25	INFO	reconcile	ps3	98a3166b6128	2	actual=off; desired=on
+2026-09-02 16:40:28	INFO	send	ps3	98a3166b6128	2	turn=on
+2026-09-02 16:40:28	INFO	reconcile	ps3	98a3166b6128	3	actual=off; desired=on
+2026-09-02 16:40:30	INFO	send	ps3	98a3166b6128	3	turn=on
+2026-09-02 16:40:36	INFO	reconcile	ps2	98a3167b6a8c	0	actual=off; desired=on
+2026-09-02 16:40:39	INFO	send	ps2	98a3167b6a8c	0	turn=on
+2026-09-02 16:40:39	INFO	reconcile	ps2	98a3167b6a8c	1	actual=off; desired=on
+2026-09-02 16:40:41	INFO	send	ps2	98a3167b6a8c	1	turn=on
+2026-09-02 16:40:41	INFO	reconcile	ps2	98a3167b6a8c	2	actual=off; desired=on
+2026-09-02 16:40:43	INFO	send	ps2	98a3167b6a8c	2	turn=on
+2026-09-02 16:40:43	INFO	reconcile	ps2	98a3167b6a8c	3	actual=off; desired=on
+2026-09-02 16:40:45	INFO	send	ps2	98a3167b6a8c	3	turn=on
+2026-09-02 16:41:01	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-02 16:41:06	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-02 16:42:07	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-02 16:42:09	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-02 16:43:12	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-02 16:43:33	INFO	reconcile	ps1	206ef102c9d8	0	actual=off; desired=on
+2026-09-02 16:43:35	INFO	send	ps1	206ef102c9d8	0	turn=on
+2026-09-02 16:43:36	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-02 16:43:38	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-02 16:43:38	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-02 16:43:40	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-02 16:43:40	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-02 16:43:42	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-02 16:44:17	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-02 16:44:19	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-02 16:45:03	INFO	strip_plan	ps1	206ef102c9d8		slot=2026-09-02 16:45; scenario=all_on; target_strip_w=650; states=[1,1,1,1]
+2026-09-02 16:45:03	INFO	strip_plan	ps2	98a3167b6a8c		slot=2026-09-02 16:45; scenario=all_on; target_strip_w=650; states=[1,1,1,1]
+2026-09-02 16:45:03	INFO	strip_plan	ps3	98a3166b6128		slot=2026-09-02 16:45; scenario=all_on; target_strip_w=498; states=[1,1,1,1]
+2026-09-02 16:45:03	INFO	load_change				SCENARIO=all_on slot=2026-09-02 16:45 target=1798W nominal=1798W overshoot=0W states: ps1=[1,1,1,1]; ps2=[1,1,1,1]; ps3=[1,1,1,1]
+2026-09-02 16:45:22	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-02 16:45:46	INFO	reconcile	ps2	98a3167b6a8c	0	actual=off; desired=on
+2026-09-02 16:45:48	INFO	send	ps2	98a3167b6a8c	0	turn=on
+2026-09-02 16:45:48	INFO	reconcile	ps2	98a3167b6a8c	1	actual=off; desired=on
+2026-09-02 16:45:50	INFO	send	ps2	98a3167b6a8c	1	turn=on
+2026-09-02 16:45:50	INFO	reconcile	ps2	98a3167b6a8c	2	actual=off; desired=on
+2026-09-02 16:45:52	INFO	send	ps2	98a3167b6a8c	2	turn=on
+2026-09-02 16:45:52	INFO	reconcile	ps2	98a3167b6a8c	3	actual=off; desired=on
+2026-09-02 16:45:55	INFO	send	ps2	98a3167b6a8c	3	turn=on
+2026-09-02 16:45:58	INFO	reconcile	ps3	98a3166b6128	0	actual=off; desired=on
+2026-09-02 16:46:00	INFO	send	ps3	98a3166b6128	0	turn=on
+2026-09-02 16:46:00	INFO	reconcile	ps3	98a3166b6128	1	actual=off; desired=on
+2026-09-02 16:46:02	INFO	send	ps3	98a3166b6128	1	turn=on
+2026-09-02 16:46:02	INFO	reconcile	ps3	98a3166b6128	2	actual=off; desired=on
+2026-09-02 16:46:05	INFO	send	ps3	98a3166b6128	2	turn=on
+2026-09-02 16:46:05	INFO	reconcile	ps3	98a3166b6128	3	actual=off; desired=on
+2026-09-02 16:46:07	INFO	send	ps3	98a3166b6128	3	turn=on
+2026-09-02 16:46:10	INFO	reconcile	ps1	206ef102c9d8	0	actual=off; desired=on
+2026-09-02 16:46:12	INFO	send	ps1	206ef102c9d8	0	turn=on
+2026-09-02 16:46:12	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
