@@ -241,9 +241,13 @@ function Invoke-SyncCycle {
         $rc = $LASTEXITCODE
         Write-Log "robocopy exit code for $SourceDir : $rc"
 
+        # robocopy exit codes >= 8 indicate copy failures (e.g. a data file is
+        # held open/locked by an active logger while the load is disconnected).
+        # Do NOT abort the whole sync cycle - log it as a warning and keep
+        # going, so the GitHub commit/push still runs every cycle regardless of
+        # a single folder failing to copy.
         if ($rc -ge 8) {
-            Write-Log "robocopy reported failure for: $SourceDir"
-            return
+            Write-Log "robocopy reported failure for: $SourceDir (continuing so the push still runs)"
         }
     }
 

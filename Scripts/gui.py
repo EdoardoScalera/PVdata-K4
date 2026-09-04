@@ -125,7 +125,8 @@ class PVControlApp(tk.Tk):
         self.grid_columnconfigure(0, weight=1, uniform="col")
         self.grid_columnconfigure(1, weight=1, uniform="col")
 
-        measurement_frame = tk.LabelFrame(self, text="Measurement")
+        self.measurement_frame = tk.LabelFrame(self, text="Measurement")
+        measurement_frame = self.measurement_frame
         measurement_frame.grid(row=0, column=0, padx=(10, 5), pady=(6, 2), sticky="nsew")
         measurement_frame.grid_columnconfigure(1, weight=1)
 
@@ -320,7 +321,7 @@ class PVControlApp(tk.Tk):
 
         # --- Start / Stop row ---
 
-        start_all_btn = tk.Button(
+        self.start_all_btn = tk.Button(
             self,
             text="Start ALL",
             command=self.start_all,
@@ -329,7 +330,7 @@ class PVControlApp(tk.Tk):
             activebackground="darkgreen",
             activeforeground="white",
         )
-        start_all_btn.grid(row=2, column=0, padx=10, pady=8, sticky="we")
+        self.start_all_btn.grid(row=2, column=0, padx=10, pady=8, sticky="we")
 
         stop_btn = tk.Button(
             self,
@@ -691,6 +692,7 @@ class PVControlApp(tk.Tk):
             self.start_scenario_controller()
             self.start_labview_logger()
             self.update_start_button_states()
+            self.set_measurement_panel_enabled(False)
             self.status_var.set("All scripts started (Load, MPPT, GitHub, controller, LabVIEW).")
         except Exception as e:
             messagebox.showerror("Start ALL error", str(e))
@@ -719,6 +721,7 @@ class PVControlApp(tk.Tk):
         self.clear_scenario_request_file()
         if turn_off:
             self.start_immediate_all_off()
+        self.set_measurement_panel_enabled(True)
 
     def update_start_button_states(self):
         """
@@ -739,6 +742,25 @@ class PVControlApp(tk.Tk):
                 btn.configure(state="disabled" if is_running else "normal")
 
         self.load_running_var.set(running["start_shelly_ctrl_btn"])
+
+    def set_measurement_panel_enabled(self, enabled):
+        """
+        Enable/disable the whole Measurement panel and the Start ALL button.
+        When a measurement session is running the user should not be able to
+        change the measurement parameters nor start a second session.
+        """
+        state = "normal" if enabled else "disabled"
+        if hasattr(self, "start_all_btn") and self.start_all_btn is not None:
+            self.start_all_btn.configure(state=state)
+        if hasattr(self, "measurement_frame") and self.measurement_frame is not None:
+            for child in self.measurement_frame.winfo_children():
+                # Plain tk.Label widgets don't support the "state" option.
+                if child.winfo_class() == "Label":
+                    continue
+                try:
+                    child.configure(state=state)
+                except tk.TclError:
+                    pass
 
     # --- Individual PS1 actions -------------------------------------
 
@@ -784,6 +806,14 @@ class PVControlApp(tk.Tk):
 
     def upload_github(self):
         self._stop_process("GitHub upload", "github_proc", self.github_running_var)
+
+        # Remove any leftover/upload lock so the fresh upload process can always
+        # acquire the lock and push immediately, even if a previous run crashed.
+        try:
+            (SCRIPTS_DIR / "Upload-PVData.lock").unlink(missing_ok=True)
+        except OSError:
+            pass
+
         self.status_var.set("Uploading to GitHub (background)...")
 
         self.github_proc = subprocess.Popen(
@@ -1335,7 +1365,18 @@ class PVControlApp(tk.Tk):
             "Running" if controller_running else "Stopped / unavailable"
         )
         active = status.get("active_scenario") if status else None
-        pending = status.get("pending_scenario") if status else None
+        # Pending scenario is read directly from the scenario request file
+        # (written immediately when a request is made) instead of relying on the
+        # controller's asynchronously-written status field, which often stays
+        # "None". It is only reported as pending while the requested scenario
+        # differs from the active one.
+        pending = None
+        requested_scenario = request.get("scenario") if request else None
+        if requested_scenario and requested_scenario != active:
+            pending = self._scenario_label(requested_scenario)
+        else:
+            status_pending = status.get("pending_scenario") if status else None
+            pending = self._scenario_label(status_pending) if status_pending else None
         self.viewer_vars["active"].set(str(active) if active else "Unavailable")
         self.viewer_vars["pending"].set(str(pending) if pending else "None")
         self.viewer_vars["requested_for"].set(str(request.get("requested_for_slot", "Unavailable")) if request else "Unavailable")

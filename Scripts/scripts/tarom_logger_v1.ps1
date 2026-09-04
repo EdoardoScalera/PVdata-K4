@@ -142,6 +142,7 @@ try {
             if ($line.Length -gt 0) {
                 $fields = $line -split ';'
 
+                $batteryVoltage = [double]($fields[3] -replace ',', '.')
                 $pv1Voltage = [double]($fields[4] -replace ',', '.')
                 $pv2Voltage = [double]($fields[5] -replace ',', '.')
                 $pv1Current = [double]($fields[9] -replace ',', '.')
@@ -167,6 +168,7 @@ try {
 
         Update-DashboardValues -Path $DashboardFile -SectionName 'pv' -SectionValues @{
                         source_ts_local = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+                        battery_voltage_V = $batteryVoltage
                         pv1_power_w = $pv1Power
                         pv2_power_w = $pv2Power
                         pv_power_total_w = $pvTotalPower

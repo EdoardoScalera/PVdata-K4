@@ -241,6 +241,14 @@ while ($true) {
             -Path $OutFile
 
         Write-Host "error: $($_.Exception.Message)"
+
+        # The load is not reachable via the API (e.g. disconnected). Do NOT keep
+        # reporting the last recorded consumption - report the total load as 0
+        # so the logs/dashboard reflect that no load is being measured.
+        Update-DashboardValues -Path $DashboardFile -SectionName 'load' -SectionValues @{
+                        ts_local = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+                        load_active_total_w = 0.0
+        }
     }
 
     Start-Sleep -Seconds $PollIntervalSeconds

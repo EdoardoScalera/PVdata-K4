@@ -16,10 +16,10 @@
                     "Ge_back":  46.32
                 },
     "pv":  {
-               "pv2_power_w":  432.82,
-               "pv1_power_w":  435.88,
-               "pv_power_total_w":  868.7,
-               "source_ts_local":  "2026-09-04 11:13:45"
+               "pv2_power_w":  97.95,
+               "pv1_power_w":  98.85,
+               "pv_power_total_w":  196.8,
+               "source_ts_local":  "2026-08-31 16:22:34"
            },
     "load":  {
                  "load_active_total_w":  1552.9,
