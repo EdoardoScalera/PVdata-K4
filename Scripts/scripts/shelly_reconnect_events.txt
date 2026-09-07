@@ -21088,3 +21088,47 @@
 2026-09-04 13:55:26	INFO	reconcile	ps3	98a3166b6128	3	actual=off; desired=on
 2026-09-04 13:55:28	INFO	send	ps3	98a3166b6128	3	turn=on
 2026-09-04 13:55:31	ERROR	cycle_error				Stream was not readable.
+2026-09-07 10:04:58	INFO	startup				Loaded config from C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\shelly_load_control_scenarios.json; startup_scenario=all_off; scenario_request_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_request.json; scenario_status_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_status.json; constant_target_w=1200
+2026-09-07 10:04:58	INFO	strip_plan	ps1	206ef102c9d8		slot=2026-09-07 10:00; scenario=all_off; target_strip_w=0; states=[0,0,0,0]
+2026-09-07 10:04:58	INFO	strip_plan	ps2	98a3167b6a8c		slot=2026-09-07 10:00; scenario=all_off; target_strip_w=0; states=[0,0,0,0]
+2026-09-07 10:04:58	INFO	strip_plan	ps3	98a3166b6128		slot=2026-09-07 10:00; scenario=all_off; target_strip_w=0; states=[0,0,0,0]
+2026-09-07 10:04:58	INFO	load_change				SCENARIO=all_off slot=2026-09-07 10:00 target=0W nominal=0W overshoot=0W states: ps1=[0,0,0,0]; ps2=[0,0,0,0]; ps3=[0,0,0,0]
+2026-09-07 10:04:59	INFO	online	ps1	206ef102c9d8		device reachable again
+2026-09-07 10:05:00	INFO	startup				Loaded config from C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\shelly_load_control_scenarios.json; startup_scenario=all_on; scenario_request_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_request.json; scenario_status_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_status.json; constant_target_w=1200
+2026-09-07 10:05:01	INFO	strip_plan	ps1	206ef102c9d8		slot=2026-09-07 10:00; scenario=all_on; target_strip_w=650; states=[1,1,1,1]
+2026-09-07 10:05:01	INFO	strip_plan	ps2	98a3167b6a8c		slot=2026-09-07 10:00; scenario=all_on; target_strip_w=650; states=[1,1,1,1]
+2026-09-07 10:05:01	INFO	strip_plan	ps3	98a3166b6128		slot=2026-09-07 10:00; scenario=all_on; target_strip_w=498; states=[1,1,1,1]
+2026-09-07 10:05:01	INFO	load_change				SCENARIO=all_on slot=2026-09-07 10:00 target=1798W nominal=1798W overshoot=0W states: ps1=[1,1,1,1]; ps2=[1,1,1,1]; ps3=[1,1,1,1]
+2026-09-07 10:05:01	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-07 10:05:02	INFO	online	ps2	98a3167b6a8c		device reachable again
+2026-09-07 10:05:03	INFO	online	ps1	206ef102c9d8		device reachable again
+2026-09-07 10:05:03	INFO	reconcile	ps1	206ef102c9d8	0	actual=off; desired=on
+2026-09-07 10:05:05	INFO	online	ps3	98a3166b6128		device reachable again
+2026-09-07 10:05:05	INFO	send	ps1	206ef102c9d8	0	turn=on
+2026-09-07 10:05:05	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-07 10:05:08	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-07 10:05:08	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-07 10:05:08	INFO	shutdown_complete				RunOnce all_off completed; all loads off.
+2026-09-07 10:05:10	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-07 10:05:10	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-07 10:05:12	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-07 10:05:15	INFO	online	ps2	98a3167b6a8c		device reachable again
+2026-09-07 10:05:15	INFO	reconcile	ps2	98a3167b6a8c	0	actual=off; desired=on
+2026-09-07 10:05:18	INFO	send	ps2	98a3167b6a8c	0	turn=on
+2026-09-07 10:05:18	INFO	reconcile	ps2	98a3167b6a8c	1	actual=off; desired=on
+2026-09-07 10:05:20	INFO	send	ps2	98a3167b6a8c	1	turn=on
+2026-09-07 10:05:20	INFO	reconcile	ps2	98a3167b6a8c	2	actual=off; desired=on
+2026-09-07 10:05:22	INFO	send	ps2	98a3167b6a8c	2	turn=on
+2026-09-07 10:05:22	INFO	reconcile	ps2	98a3167b6a8c	3	actual=off; desired=on
+2026-09-07 10:05:24	INFO	send	ps2	98a3167b6a8c	3	turn=on
+2026-09-07 10:05:28	INFO	online	ps3	98a3166b6128		device reachable again
+2026-09-07 10:05:28	INFO	reconcile	ps3	98a3166b6128	0	actual=off; desired=on
+2026-09-07 10:05:30	INFO	send	ps3	98a3166b6128	0	turn=on
+2026-09-07 10:05:30	INFO	reconcile	ps3	98a3166b6128	1	actual=off; desired=on
+2026-09-07 10:05:32	INFO	send	ps3	98a3166b6128	1	turn=on
+2026-09-07 10:05:32	INFO	reconcile	ps3	98a3166b6128	2	actual=off; desired=on
+2026-09-07 10:05:34	INFO	send	ps3	98a3166b6128	2	turn=on
+2026-09-07 10:05:34	INFO	reconcile	ps3	98a3166b6128	3	actual=off; desired=on
+2026-09-07 10:05:36	INFO	send	ps3	98a3166b6128	3	turn=on
+2026-09-07 10:06:14	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-07 10:06:16	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
