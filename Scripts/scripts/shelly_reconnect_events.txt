@@ -25804,3 +25804,51 @@
 2026-09-08 11:57:19	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
 2026-09-08 11:57:59	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
 2026-09-08 11:58:04	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 11:58:21	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 11:59:23	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 11:59:28	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 11:59:30	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 12:00:02	INFO	strip_plan	ps1	206ef102c9d8		slot=2026-09-08 12:00; scenario=all_on; target_strip_w=650; states=[1,1,1,1]
+2026-09-08 12:00:02	INFO	strip_plan	ps2	98a3167b6a8c		slot=2026-09-08 12:00; scenario=all_on; target_strip_w=650; states=[1,1,1,1]
+2026-09-08 12:00:02	INFO	strip_plan	ps3	98a3166b6128		slot=2026-09-08 12:00; scenario=all_on; target_strip_w=498; states=[1,1,1,1]
+2026-09-08 12:00:02	INFO	load_change				SCENARIO=all_on slot=2026-09-08 12:00 target=1798W nominal=1798W overshoot=0W states: ps1=[1,1,1,1]; ps2=[1,1,1,1]; ps3=[1,1,1,1]
+2026-09-08 12:00:24	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 12:00:26	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 12:00:30	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 8 s
+2026-09-08 12:00:38	WARN	offline	ps2	98a3167b6a8c		Request failed repeatedly for path /device/status
+2026-09-08 12:00:47	INFO	online	ps2	98a3167b6a8c		device reachable again
+2026-09-08 12:01:12	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 12:01:17	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 12:01:35	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 12:01:37	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 12:02:40	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 12:02:42	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 12:03:48	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 12:03:50	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 12:03:55	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 8 s
+2026-09-08 12:04:03	WARN	offline	ps1	206ef102c9d8		Request failed repeatedly for path /device/status
+2026-09-08 12:04:12	INFO	online	ps1	206ef102c9d8		device reachable again
+2026-09-08 12:04:52	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 12:04:54	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 12:04:58	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 8 s
+2026-09-08 12:05:06	WARN	offline	ps2	98a3167b6a8c		Request failed repeatedly for path /device/status
+2026-09-08 12:05:16	INFO	online	ps2	98a3167b6a8c		device reachable again
+2026-09-08 12:05:56	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 12:05:58	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 12:06:02	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 8 s
+2026-09-08 12:06:10	WARN	offline	ps3	98a3166b6128		Request failed repeatedly for path /device/status
+2026-09-08 12:06:20	INFO	online	ps3	98a3166b6128		device reachable again
+2026-09-08 12:07:00	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 12:07:02	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 12:07:06	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 8 s
+2026-09-08 12:07:14	WARN	offline	ps1	206ef102c9d8		Request failed repeatedly for path /device/status
+2026-09-08 12:07:24	INFO	online	ps1	206ef102c9d8		device reachable again
+2026-09-08 12:08:04	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 12:08:06	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 12:09:10	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 12:09:12	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 12:10:15	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 12:11:19	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 12:11:21	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 12:12:24	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 12:12:26	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
