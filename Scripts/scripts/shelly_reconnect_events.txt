@@ -27303,3 +27303,30 @@
 2026-09-08 22:00:06	INFO	load_change				SCENARIO=all_on slot=2026-09-08 22:00 target=1798W nominal=1798W overshoot=0W states: ps1=[1,1,1,1]; ps2=[1,1,1,1]; ps3=[1,1,1,1]
 2026-09-08 22:00:10	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
 2026-09-08 22:00:15	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 22:01:16	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 22:02:23	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 22:03:27	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 22:03:30	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 22:04:33	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 22:04:35	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 22:05:38	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 22:05:40	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 22:06:43	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 22:07:48	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 22:07:53	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 22:08:54	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 22:08:56	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 22:09:59	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 22:11:03	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 22:11:05	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 22:12:09	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 22:12:11	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 22:13:14	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 22:13:16	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-08 22:14:19	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 22:15:08	INFO	strip_plan	ps1	206ef102c9d8		slot=2026-09-08 22:15; scenario=all_on; target_strip_w=650; states=[1,1,1,1]
+2026-09-08 22:15:08	INFO	strip_plan	ps2	98a3167b6a8c		slot=2026-09-08 22:15; scenario=all_on; target_strip_w=650; states=[1,1,1,1]
+2026-09-08 22:15:08	INFO	strip_plan	ps3	98a3166b6128		slot=2026-09-08 22:15; scenario=all_on; target_strip_w=498; states=[1,1,1,1]
+2026-09-08 22:15:08	INFO	load_change				SCENARIO=all_on slot=2026-09-08 22:15 target=1798W nominal=1798W overshoot=0W states: ps1=[1,1,1,1]; ps2=[1,1,1,1]; ps3=[1,1,1,1]
+2026-09-08 22:15:23	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-08 22:15:25	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
