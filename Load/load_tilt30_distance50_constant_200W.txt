@@ -1,0 +1,2 @@
+﻿ts	total_power_w	status	error
+2026-09-09 11:44:40	1547.3	OK	

@@ -28270,3 +28270,20 @@
 2026-09-09 11:44:37	INFO	strip_plan	ps2	98a3167b6a8c		slot=2026-09-09 11:30; scenario=constant; target_strip_w=0; states=[0,0,0,0]
 2026-09-09 11:44:37	INFO	strip_plan	ps3	98a3166b6128		slot=2026-09-09 11:30; scenario=constant; target_strip_w=200; states=[1,0,0,0]
 2026-09-09 11:44:37	INFO	load_change				SCENARIO=constant slot=2026-09-09 11:30 target=200W nominal=200W overshoot=0W states: ps1=[0,0,0,0]; ps2=[0,0,0,0]; ps3=[1,0,0,0]
+2026-09-09 11:44:37	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-09 11:44:39	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-09 11:44:43	INFO	online	ps1	206ef102c9d8		device reachable again
+2026-09-09 11:44:43	INFO	reconcile	ps1	206ef102c9d8	0	actual=on; desired=off
+2026-09-09 11:44:45	INFO	send	ps1	206ef102c9d8	0	turn=off
+2026-09-09 11:44:45	INFO	reconcile	ps1	206ef102c9d8	1	actual=on; desired=off
+2026-09-09 11:44:47	INFO	send	ps1	206ef102c9d8	1	turn=off
+2026-09-09 11:44:47	INFO	reconcile	ps1	206ef102c9d8	2	actual=on; desired=off
+2026-09-09 11:44:50	INFO	send	ps1	206ef102c9d8	2	turn=off
+2026-09-09 11:44:50	INFO	reconcile	ps1	206ef102c9d8	3	actual=on; desired=off
+2026-09-09 11:44:52	INFO	send	ps1	206ef102c9d8	3	turn=off
+2026-09-09 11:44:55	INFO	online	ps2	98a3167b6a8c		device reachable again
+2026-09-09 11:44:55	INFO	reconcile	ps2	98a3167b6a8c	0	actual=on; desired=off
+2026-09-09 11:44:57	INFO	send	ps2	98a3167b6a8c	0	turn=off
+2026-09-09 11:44:57	INFO	reconcile	ps2	98a3167b6a8c	1	actual=on; desired=off
+2026-09-09 11:44:59	INFO	send	ps2	98a3167b6a8c	1	turn=off
+2026-09-09 11:44:59	INFO	reconcile	ps2	98a3167b6a8c	2	actual=on; desired=off
