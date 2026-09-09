@@ -579,16 +579,34 @@
       return isNaN(parsed.getTime()) ? new Date(text) : parsed;
     };
 
-    const parseFileDate = (type, row) => {
+    // Determine which column(s) hold the timestamp and how to parse them,
+    // based on the file's actual header. pv files exist in two layouts:
+    //   old - separate 'date' and 'time' columns
+    //   new - single merged 'datetime' column (YYYY/MM/DD hh:mm)
+    // Returns { indexes, parse } where indexes are the timestamp columns to
+    // strip and parse converts a data row into a Date.
+    const getTimestampInfo = (type, headerCells) => {
       if (type === 'pv') {
-        // The pv files now carry a single merged datetime column (YYYY/MM/DD hh:mm)
-        // instead of separate date and time columns.
-        return new Date(row[1].replace(/-/g, '/'));
+        const datetimeIdx = headerCells.indexOf('datetime');
+        if (datetimeIdx !== -1) {
+          return {
+            indexes: [datetimeIdx],
+            parse: (row) => new Date(row[datetimeIdx].replace(/-/g, '/'))
+          };
+        }
+        const dateIdx = headerCells.indexOf('date');
+        const timeIdx = headerCells.indexOf('time');
+        if (dateIdx !== -1 && timeIdx !== -1) {
+          return {
+            indexes: [dateIdx, timeIdx],
+            parse: (row) => new Date(`${row[dateIdx].replace(/-/g, '/')} ${row[timeIdx]}`)
+          };
+        }
       }
-      if (type === 'load') {
-        return new Date(row[0].replace(/-/g, '/'));
-      }
-      return parseDateParts(row[0]);
+      return {
+        indexes: [0],
+        parse: (row) => parseDateParts(row[0])
+      };
     };
 
     const formatDownloadName = (fileKey, from, to) => {
@@ -632,10 +650,12 @@
       if (!response.ok) throw new Error(`HTTP ${response.status} for ${fileInfo.name}`);
       const text = await response.text();
       const lines = text.split(/\r?\n/).filter(Boolean);
-      const header = csvLine(splitRow(fileInfo.type, lines[0]));
+      const headerCells = splitRow(fileInfo.type, lines[0]);
+      const header = csvLine(headerCells);
+      const { parse } = getTimestampInfo(fileInfo.type, headerCells);
       const rows = lines.slice(1).map(line => splitRow(fileInfo.type, line));
       const filtered = rows.filter(row => {
-        const rowDate = parseFileDate(fileInfo.type, row);
+        const rowDate = parse(row);
         if (Number.isNaN(rowDate.getTime())) return false;
         if (fromDate && rowDate < fromDate) return false;
         if (toDate && rowDate > toDate) return false;
@@ -653,13 +673,6 @@
              `${pad(date.getHours())}:${pad(date.getMinutes())}`;
     };
 
-    // Row indices that hold the timestamp (to be excluded from data columns),
-    // per dataset type. Mirrors parseFileDate.
-    const getTimestampIndexes = (type) => {
-      if (type === 'pv') return [1]; // single merged datetime column
-      return [0]; // load/irradiance/weather timestamp column
-    };
-
     const buildCombinedCsvPayload = async (fileKeys, fromDate, toDate) => {
       const files = await Promise.all(fileKeys.map(async (fileKey) => {
         const fileInfo = dataFiles[fileKey];
@@ -669,14 +682,14 @@
         const text = await response.text();
         const lines = text.split(/\r?\n/).filter(Boolean);
         const headerCells = splitRow(fileInfo.type, lines[0]);
-        const timestampIndexes = getTimestampIndexes(fileInfo.type);
+        const { indexes: timestampIndexes, parse } = getTimestampInfo(fileInfo.type, headerCells);
         const dataHeader = headerCells.filter((_, i) => !timestampIndexes.includes(i));
 
         // Map minute-bucket -> data cells (timestamp columns removed).
         const minuteRows = new Map();
         for (const line of lines.slice(1)) {
           const row = splitRow(fileInfo.type, line);
-          const rowDate = parseFileDate(fileInfo.type, row);
+          const rowDate = parse(row);
           if (Number.isNaN(rowDate.getTime())) continue;
           if (fromDate && rowDate < fromDate) continue;
           if (toDate && rowDate > toDate) continue;
