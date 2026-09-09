@@ -1,30 +1,30 @@
 {
     "scenario":  {
                      "current_target_w":  1798,
-                     "ts_local":  "2026-09-09 16:29:49",
+                     "ts_local":  "2026-09-09 16:44:48",
                      "active_scenario":  "all_on",
-                     "source_ts_local":  "2026-09-09 16:29:49"
+                     "source_ts_local":  "2026-09-09 16:44:48"
                  },
-    "ts_local":  "2026-09-09 16:29:54",
+    "ts_local":  "2026-09-09 16:44:57",
     "sensors":  {
-                    "ts_local":  "2026-09-09 16:29:54",
-                    "TC4":  16.79,
-                    "TC1":  16.5,
-                    "Ge_front":  28.54,
-                    "TC3":  16.54,
-                    "TC2":  16.5,
-                    "Ge_back":  4.04
+                    "ts_local":  "2026-09-09 16:44:57",
+                    "TC4":  16.88,
+                    "TC1":  16.62,
+                    "Ge_front":  33.14,
+                    "TC3":  16.62,
+                    "TC2":  16.59,
+                    "Ge_back":  4.78
                 },
     "pv":  {
-               "pv1_power_w":  38.76,
-               "battery_voltage_V":  49.5,
-               "pv_power_total_w":  77.46,
-               "pv2_power_w":  38.7,
-               "source_ts_local":  "2026/09/09 16:27"
+               "pv1_power_w":  45.36,
+               "battery_voltage_V":  49.6,
+               "pv_power_total_w":  91,
+               "pv2_power_w":  45.64,
+               "source_ts_local":  "2026/09/09 16:42"
            },
     "load":  {
                  "load_active_total_w":  1079.1999999999998,
-                 "ts_local":  "2026-09-09 16:29:10"
+                 "ts_local":  "2026-09-09 16:44:10"
              },
-    "last_push_ts":  "2026-09-09 16:30:00"
+    "last_push_ts":  "2026-09-09 16:45:00"
 }
