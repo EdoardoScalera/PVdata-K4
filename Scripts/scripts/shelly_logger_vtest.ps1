@@ -1,5 +1,5 @@
 param(
-    [string]$OutFile = "C:\Users\5CG7471GSJ\Documents\DATA\Load\load_consumption.txt"
+    [string]$OutFile = "C:\Users\scalere1\OneDrive - Aalto University\Desktop\shelly_data.txt"
 )
 
 $ServerUri = "https://shelly-269-eu.shelly.cloud"
@@ -12,7 +12,6 @@ $Devices = @{
 
 $AuthKey = "NDNjNTY2dWlk1D1F1B180829FDCE99E643ADD908CB1444A568CF4735F062A4213FE319E3EDAB909C61CC9E7055EE"
 
-$DashboardFile = "C:\Users\5CG7471GSJ\Documents\DATA\Dashboard\dashboard_values.json"
 
 $PollIntervalSeconds = 60
 
@@ -22,80 +21,6 @@ $Headers = @(
     "status",
     "error"
 )
-
-function Update-DashboardValues {
-    param(
-        [string]$Path,
-        [string]$SectionName,
-        [hashtable]$SectionValues,
-        [int]$TimeoutSeconds = 15
-    )
-
-    $lockPath = "$Path.lock"
-    $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
-    $lockStream = $null
-
-    try {
-        while ($true) {
-            try {
-                $lockStream = [System.IO.File]::Open($lockPath, 'OpenOrCreate', 'ReadWrite', 'None')
-                break
-            }
-            catch {
-                if ($stopwatch.Elapsed.TotalSeconds -ge $TimeoutSeconds) {
-                    throw "Timeout waiting for dashboard file lock: $lockPath"
-                }
-                Start-Sleep -Milliseconds 200
-            }
-        }
-
-        $dashboard = $null
-
-        if (Test-Path $Path) {
-            $raw = Get-Content -Path $Path -Raw -ErrorAction Stop
-            if (-not [string]::IsNullOrWhiteSpace($raw)) {
-                $dashboard = $raw | ConvertFrom-Json -ErrorAction Stop
-            }
-        }
-
-        if ($null -eq $dashboard) {
-            $dashboard = [PSCustomObject]@{}
-        }
-
-        $section = $dashboard.PSObject.Properties[$SectionName].Value
-        if ($null -eq $section) {
-            $section = [PSCustomObject]@{}
-            $dashboard | Add-Member -MemberType NoteProperty -Name $SectionName -Value $section -Force
-        }
-
-        foreach ($key in $SectionValues.Keys) {
-            $section | Add-Member -MemberType NoteProperty -Name $key -Value $SectionValues[$key] -Force
-        }
-
-        $dashboard | Add-Member -MemberType NoteProperty -Name 'ts_local' -Value (Get-Date -Format 'yyyy-MM-dd HH:mm:ss') -Force
-
-        $json = $dashboard | ConvertTo-Json -Depth 20
-        $tempPath = "$Path.$PID.tmp"
-
-        [System.IO.File]::WriteAllText($tempPath, $json, [System.Text.UTF8Encoding]::new($false))
-
-        if (Test-Path $Path) {
-            Remove-Item -Path $Path -Force
-        }
-
-        Move-Item -Path $tempPath -Destination $Path -Force
-    }
-    finally {
-        if ($lockStream) {
-            $lockStream.Close()
-            $lockStream.Dispose()
-        }
-
-        if (Test-Path $lockPath) {
-            Remove-Item -Path $lockPath -Force -ErrorAction SilentlyContinue
-        }
-    }
-}
 
 
 function Ensure-Header {
@@ -343,10 +268,6 @@ while ($true) {
             $overallStatus
         )
 
-        Update-DashboardValues -Path $DashboardFile -SectionName 'load' -SectionValues @{
-                        ts_local = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
-                        load_active_total_w = $grandTotalPower
-        }
     }
     catch {
 
@@ -364,13 +285,6 @@ while ($true) {
 
         Write-Host "error: $($_.Exception.Message)"
 
-        # The load is not reachable via the API (e.g. disconnected). Do NOT keep
-        # reporting the last recorded consumption - report the total load as 0
-        # so the logs/dashboard reflect that no load is being measured.
-        Update-DashboardValues -Path $DashboardFile -SectionName 'load' -SectionValues @{
-                        ts_local = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
-                        load_active_total_w = 0.0
-        }
     }
 
     # Fixed 60s cadence: sleep until the next cycle deadline (previous start + interval).

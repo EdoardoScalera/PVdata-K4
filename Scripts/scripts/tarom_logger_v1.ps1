@@ -93,8 +93,7 @@ if (-not (Test-Path $logDir)) {
 # Write header once if file does not exist
 if (-not (Test-Path $OutFile)) {
     $header = "device_status" + `
-          "`tdate" + `
-          "`ttime" + `
+          "`tdatetime" + `
           "`tbattery_voltage_V" + `
           "`tpv1_voltage_V" + `
           "`tpv2_voltage_V" + `
@@ -152,8 +151,14 @@ try {
                 $pv2Power = [math]::Round($pv2Voltage * $pv2Current, 2)
                 $pvTotalPower = [math]::Round($pv1Power + $pv2Power, 2)
 
-                # Convert the original Tarom fields to tab-separated output
-		$outputFields = $fields | ForEach-Object { $_ }
+                # Merge the device date (YYYY/MM/DD) and time (hh:mm) into a
+                # single datetime column that replaces the two originals.
+                $datetime = "$($fields[1]) $($fields[2])"
+
+                # Convert the Tarom fields to tab-separated output: device
+                # status, merged datetime, then the remaining original fields
+                # (battery_voltage_V .. checksum).
+                $outputFields = @($fields[0], $datetime) + $fields[3..($fields.Count - 1)]
 
 		# Append calculated PV powers
 		$outputFields += $pv1Power.ToString([System.Globalization.CultureInfo]::InvariantCulture)
@@ -167,7 +172,7 @@ try {
             }
 
         Update-DashboardValues -Path $DashboardFile -SectionName 'pv' -SectionValues @{
-                        source_ts_local = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+                        source_ts_local = $datetime
                         battery_voltage_V = $batteryVoltage
                         pv1_power_w = $pv1Power
                         pv2_power_w = $pv2Power

@@ -321,6 +321,10 @@ try {
     Write-Log "Branch: $Branch"
     Write-Log "Loop interval: $IntervalMinutes minutes"
 
+    # The first sync runs immediately, then subsequent cycles align to the
+    # wall-clock 15-minute boundary (:00/:15/:30/:45) with no cumulative drift.
+    $firstCycle = $true
+
     while ($true) {
         try {
             Invoke-SyncCycle
@@ -329,8 +333,23 @@ try {
             Write-Log "Unhandled cycle error: $($_.Exception.Message)"
         }
 
-        Write-Log "Sleeping for $IntervalMinutes minutes"
-        Start-Sleep -Seconds ($IntervalMinutes * 60)
+        if ($firstCycle) {
+            # Align the next run to the next quarter-hour boundary.
+            $firstCycle = $false
+            $minutes = (Get-Date).Minute
+            $nextRun = (Get-Date).AddMinutes($IntervalMinutes - ($minutes % $IntervalMinutes))
+            $nextRun = $nextRun.AddSeconds(-$nextRun.Second).AddMilliseconds(-$nextRun.Millisecond)
+        }
+        else {
+            $nextRun = $nextRun.AddMinutes($IntervalMinutes)
+            while ($nextRun -le (Get-Date)) { $nextRun = $nextRun.AddMinutes($IntervalMinutes) }
+        }
+
+        $sleepMilliseconds = ($nextRun - (Get-Date)).TotalMilliseconds
+        if ($sleepMilliseconds -gt 0) {
+            Write-Log "Sleeping until next boundary: $($nextRun.ToString('yyyy-MM-dd HH:mm:ss'))"
+            Start-Sleep -Milliseconds ([int]$sleepMilliseconds)
+        }
     }
 }
 finally {

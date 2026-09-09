@@ -581,9 +581,7 @@
 
     const parseFileDate = (type, row) => {
       if (type === 'pv') {
-        // The pv files now carry a single merged datetime column (YYYY/MM/DD hh:mm)
-        // instead of separate date and time columns.
-        return new Date(row[1].replace(/-/g, '/'));
+        return new Date(`${row[1].replace(/-/g, '/')} ${row[2]}`);
       }
       if (type === 'load') {
         return new Date(row[0].replace(/-/g, '/'));
@@ -642,119 +640,6 @@
         return true;
       });
       return [header, ...filtered.map(row => csvLine(row))].join('\n');
-    };
-
-    // Format a Date as a local minute-bucket key (e.g. "YYYY-MM-DD HH:MM").
-    // Uses local get* accessors so the bucket matches the raw local log lines
-    // with no timezone shifting.
-    const toMinuteKey = (date) => {
-      const pad = (n) => String(n).padStart(2, '0');
-      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ` +
-             `${pad(date.getHours())}:${pad(date.getMinutes())}`;
-    };
-
-    // Row indices that hold the timestamp (to be excluded from data columns),
-    // per dataset type. Mirrors parseFileDate.
-    const getTimestampIndexes = (type) => {
-      if (type === 'pv') return [1]; // single merged datetime column
-      return [0]; // load/irradiance/weather timestamp column
-    };
-
-    const buildCombinedCsvPayload = async (fileKeys, fromDate, toDate) => {
-      const files = await Promise.all(fileKeys.map(async (fileKey) => {
-        const fileInfo = dataFiles[fileKey];
-        if (!fileInfo) throw new Error(`Unsupported dataset: ${fileKey}`);
-        const response = await fetch(fileInfo.path, { cache: 'no-store' });
-        if (!response.ok) throw new Error(`HTTP ${response.status} for ${fileInfo.name}`);
-        const text = await response.text();
-        const lines = text.split(/\r?\n/).filter(Boolean);
-        const headerCells = splitRow(fileInfo.type, lines[0]);
-        const timestampIndexes = getTimestampIndexes(fileInfo.type);
-        const dataHeader = headerCells.filter((_, i) => !timestampIndexes.includes(i));
-
-        // Map minute-bucket -> data cells (timestamp columns removed).
-        const minuteRows = new Map();
-        for (const line of lines.slice(1)) {
-          const row = splitRow(fileInfo.type, line);
-          const rowDate = parseFileDate(fileInfo.type, row);
-          if (Number.isNaN(rowDate.getTime())) continue;
-          if (fromDate && rowDate < fromDate) continue;
-          if (toDate && rowDate > toDate) continue;
-          const key = toMinuteKey(rowDate);
-          const dataCells = row.filter((_, i) => !timestampIndexes.includes(i));
-          // Keep the last reading within the same minute.
-          minuteRows.set(key, dataCells);
-        }
-        return { fileInfo, dataHeader, minuteRows };
-      }));
-
-      // Header: shared datetime column + each file's data columns. Per the
-      // file-naming convention (variable_tilt_distance_scenario) filter-scoped
-      // variables are unique, so collisions are not expected; still guard by
-      // appending a numeric suffix if one occurs.
-      const usedNames = new Set();
-      const columnOwners = [];
-      for (const file of files) {
-        for (const name of file.dataHeader) {
-          let unique = name;
-          let n = 1;
-          while (usedNames.has(unique)) { n += 1; unique = `${name}_${n}`; }
-          usedNames.add(unique);
-          columnOwners.push({ file, originalName: name, uniqueName: unique });
-        }
-      }
-
-      // Union of all minute keys (outer join), sorted ascending.
-      const allMinutes = new Set();
-      for (const file of files) file.minuteRows.forEach((_, key) => allMinutes.add(key));
-      const sortedMinutes = [...allMinutes].sort();
-
-      // Pre-compute per-file column slices so cells map directly to output columns.
-      const fileSlices = [];
-      let offset = 0;
-      for (const file of files) {
-        const count = file.dataHeader.length;
-        fileSlices.push({ file, start: offset, count });
-        offset += count;
-      }
-
-      const header = csvLine(['datetime', ...columnOwners.map((c) => c.uniqueName)]);
-      const rows = sortedMinutes.map((minute) => {
-        const cells = new Array(columnOwners.length).fill('');
-        for (const slice of fileSlices) {
-          const fileCells = slice.file.minuteRows.get(minute);
-          if (fileCells) {
-            for (let i = 0; i < slice.count; i++) {
-              cells[slice.start + i] = fileCells[i] ?? '';
-            }
-          }
-        }
-        return csvLine([minute, ...cells]);
-      });
-
-      return [header, ...rows].join('\n');
-    };
-
-    const formatCombinedName = (fileKeys, fromDate, toDate) => {
-      const fromPart = fromDate ? fromDate.toISOString().slice(0, 16).replace(/[:T]/g, '-') : 'begin';
-      const toPart = toDate ? toDate.toISOString().slice(0, 16).replace(/[:T]/g, '-') : 'end';
-      const tilt = document.getElementById('downloadTilt')?.value || '';
-      const distance = document.getElementById('downloadDistance')?.value || '';
-      const scenario = document.getElementById('downloadScenario')?.value || '';
-      const suffixParts = [];
-      if (tilt) suffixParts.push(`tilt${tilt}`);
-      if (distance) suffixParts.push(`distance${distance}`);
-      if (scenario) suffixParts.push(scenario);
-      const suffix = suffixParts.length
-        ? suffixParts.join('_')
-        : `${fileKeys.length}files`;
-      return `combined_${suffix}_${fromPart}_${toPart}.csv`;
-    };
-
-    const downloadCombined = async (fileKeys, fromDate, toDate) => {
-      const payload = await buildCombinedCsvPayload(fileKeys, fromDate, toDate);
-      const blob = new Blob([payload], { type: 'text/csv;charset=utf-8' });
-      downloadBlob(blob, formatCombinedName(fileKeys, fromDate, toDate));
     };
 
     const downloadBlob = (blob, fileName) => {
@@ -832,14 +717,9 @@
       }
       if (!selectedInputs.length) throw new Error('Select at least one dataset file.');
       const { fromDate, toDate } = getDateRange();
-      const fileKeys = [...selectedInputs].map((input) => input.value);
-      // Multiple files are combined into a single time-aligned CSV instead of
-      // being downloaded separately; a single file is downloaded as-is.
-      if (fileKeys.length > 1) {
-        await downloadCombined(fileKeys, fromDate, toDate);
-        return;
+      for (const input of selectedInputs) {
+        await downloadFile(input.value, fromDate, toDate);
       }
-      await downloadFile(fileKeys[0], fromDate, toDate);
     };
 
     document.getElementById('downloadButton').addEventListener('click', async () => {
