@@ -1,6 +1,17 @@
 ﻿{
-    "generated_at":  "2026-09-09 11:45:00",
+    "generated_at":  "2026-09-09 11:49:21",
     "files":  [
+                  {
+                      "key":  "Irradiance/poa_tilt30_distance50_constant_200W.txt",
+                      "path":  "../Irradiance/poa_tilt30_distance50_constant_200W.txt",
+                      "name":  "poa_tilt30_distance50_constant_200W.txt",
+                      "label":  "poa_tilt30_distance50_constant_200W.txt",
+                      "type":  "irradiance",
+                      "tilt":  30,
+                      "distance":  50,
+                      "scenario":  "constant",
+                      "constant_target_w":  200
+                  },
                   {
                       "key":  "Irradiance/poa_tilt36_distance382_all_on.txt",
                       "path":  "../Irradiance/poa_tilt36_distance382_all_on.txt",
