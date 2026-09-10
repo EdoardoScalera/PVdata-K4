@@ -53160,3 +53160,347 @@
 2026-09-10 08:59:51	INFO	send	ps1	206ef102c9d8	2	turn=on
 2026-09-10 08:59:51	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
 2026-09-10 08:59:53	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:00:02	INFO	strip_plan	ps1	206ef102c9d8		slot=2026-09-10 09:00; scenario=all_on; target_strip_w=600; states=[1,1,1,1]
+2026-09-10 09:00:02	INFO	strip_plan	ps2	98a3167b6a8c		slot=2026-09-10 09:00; scenario=all_on; target_strip_w=750; states=[1,1,1,1]
+2026-09-10 09:00:02	INFO	strip_plan	ps3	98a3166b6128		slot=2026-09-10 09:00; scenario=all_on; target_strip_w=448; states=[1,1,1,1]
+2026-09-10 09:00:02	INFO	load_change				SCENARIO=all_on slot=2026-09-10 09:00 target=1798W nominal=1798W overshoot=0W states: ps1=[1,1,1,1]; ps2=[1,1,1,1]; ps3=[1,1,1,1]
+2026-09-10 09:00:02	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:00:05	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:00:05	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:00:07	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:00:07	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:00:09	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:00:18	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:00:20	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:00:20	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:00:23	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:00:23	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:00:25	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:00:34	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:00:36	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:00:36	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:00:39	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:00:39	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:00:41	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:00:50	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:00:52	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:00:52	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:00:54	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:00:54	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:00:57	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:01:06	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:01:08	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:01:08	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:01:10	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:01:10	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:01:12	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:01:19	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-10 09:01:24	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:01:26	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:01:26	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:01:28	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:01:28	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:01:31	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:01:40	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:01:42	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:01:42	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:01:45	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:01:45	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:01:47	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:01:56	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:01:58	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:01:58	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:02:01	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:02:01	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:02:03	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:02:13	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:02:15	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:02:15	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:02:17	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:02:17	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:02:19	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:02:28	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:02:31	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:02:31	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:02:33	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:02:33	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:02:35	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:02:44	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:02:46	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:02:46	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:02:49	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:02:49	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:02:51	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:03:00	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:03:02	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:03:02	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:03:04	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:03:04	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:03:07	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:03:16	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:03:18	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:03:18	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:03:20	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:03:20	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:03:22	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:03:32	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:03:34	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:03:34	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:03:36	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:03:36	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:03:38	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:03:48	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:03:50	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:03:50	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:03:52	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:03:52	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:03:54	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:04:03	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:04:06	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:04:06	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:04:08	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:04:08	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:04:10	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:04:19	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-10 09:04:21	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-10 09:04:25	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:04:28	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:04:28	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:04:30	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:04:30	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:04:32	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:04:41	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:04:44	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:04:44	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:04:46	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:04:46	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:04:48	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:04:57	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:04:59	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:04:59	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:05:02	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:05:02	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:05:04	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:05:13	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:05:15	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:05:15	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:05:18	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:05:18	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:05:20	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:05:29	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:05:31	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:05:31	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:05:33	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:05:33	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:05:36	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:05:45	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:05:47	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:05:47	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:05:49	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:05:49	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:05:51	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:06:01	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:06:03	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:06:03	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:06:05	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:06:05	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:06:07	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:06:17	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:06:19	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:06:19	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:06:21	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:06:21	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:06:23	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:06:33	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:06:35	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:06:35	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:06:37	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:06:37	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:06:39	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:06:48	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:06:51	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:06:51	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:06:53	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:06:53	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:06:55	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:07:04	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:07:07	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:07:07	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:07:09	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:07:09	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:07:11	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:07:20	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-10 09:07:22	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-10 09:07:26	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:07:29	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:07:29	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:07:31	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:07:31	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:07:33	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:07:42	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:07:44	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:07:44	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:07:47	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:07:47	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:07:49	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:07:58	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:08:00	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:08:00	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:08:03	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:08:03	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:08:05	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:08:14	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:08:16	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:08:16	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:08:18	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:08:18	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:08:21	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:08:30	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:08:32	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:08:32	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:08:34	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:08:34	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:08:36	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:08:46	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:08:48	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:08:48	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:08:50	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:08:50	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:08:52	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:09:02	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:09:04	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:09:04	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:09:06	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:09:06	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:09:08	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:09:17	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-10 09:09:20	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:09:22	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:09:22	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:09:24	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:09:24	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:09:26	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:09:35	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:09:38	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:09:38	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:09:40	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:09:40	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:09:42	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:09:51	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:09:53	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:09:53	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:09:56	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:09:56	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:09:58	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:10:07	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:10:09	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:10:09	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:10:12	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:10:12	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:10:14	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:10:20	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-10 09:10:22	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 4 s
+2026-09-10 09:10:29	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:10:32	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:10:32	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:10:34	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:10:34	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:10:36	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:10:46	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:10:48	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:10:48	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:10:50	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:10:50	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:10:52	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:11:01	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:11:04	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:11:04	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:11:06	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:11:06	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:11:08	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:11:17	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:11:19	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:11:19	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:11:22	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:11:22	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:11:24	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:11:33	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:11:35	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:11:35	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:11:37	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:11:37	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:11:40	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:11:49	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:11:51	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:11:51	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:11:53	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:11:53	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:11:55	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:12:05	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:12:07	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:12:07	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:12:09	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:12:09	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:12:11	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:12:17	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-10 09:12:23	WARN	rate_limit				429 Too Many Requests for /device/status, retrying in 2 s
+2026-09-10 09:12:25	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:12:27	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:12:27	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:12:29	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:12:29	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:12:31	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:12:41	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:12:43	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:12:43	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:12:45	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:12:45	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:12:47	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:12:56	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:12:59	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:12:59	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:13:01	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:13:01	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:13:03	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:13:13	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:13:15	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:13:15	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:13:17	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:13:17	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:13:19	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:13:28	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:13:31	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:13:31	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:13:33	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:13:33	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:13:35	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:13:44	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:13:47	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:13:47	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:13:49	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:13:49	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:13:51	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:14:00	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:14:02	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:14:02	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:14:05	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:14:05	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:14:07	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:14:16	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:14:18	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:14:18	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:14:20	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:14:20	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:14:23	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:14:32	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:14:34	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:14:34	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:14:36	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:14:36	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:14:38	INFO	send	ps1	206ef102c9d8	3	turn=on
+2026-09-10 09:14:48	INFO	reconcile	ps1	206ef102c9d8	1	actual=off; desired=on
+2026-09-10 09:14:50	INFO	send	ps1	206ef102c9d8	1	turn=on
+2026-09-10 09:14:50	INFO	reconcile	ps1	206ef102c9d8	2	actual=off; desired=on
+2026-09-10 09:14:52	INFO	send	ps1	206ef102c9d8	2	turn=on
+2026-09-10 09:14:52	INFO	reconcile	ps1	206ef102c9d8	3	actual=off; desired=on
+2026-09-10 09:14:54	INFO	send	ps1	206ef102c9d8	3	turn=on
