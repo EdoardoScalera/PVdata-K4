@@ -1,12 +1,7 @@
-in gui.py, and all relative sub files:
-check if github support every 1 minute upload or if it create problems 
-add open github repo button link: https://github.com/EdoardoScalera/PVdata-K4
-rename scenario "constant" to "constant load"
-in the status section: add last github push to repo, remove requested scenario (same info as in pending scenario)
-rename "scenario state" box into "logger state"
-shelly and controller share the same check box, remove controller checkbox
-make sure that "stop shelly+controller" shut all the sockets off 
-
-in index.html:
-labview data are not uploaded to the dashboard on github. 
-fix "Download failed: can't access property "replace", time is undefined" this happen when try to download all file as zip
+shelly_logger_vtest.ps1 is still not working properly, the data pulled from the API are different from what is shown in the cloud api webpage.
+If a strip is genuinely unreachable via the cloud API (connection error, timeout, DNS failure, etc.), Fetch-StatusSafe returns $null, and that device’s state becomes OFFLINE with power_w = $null
+The overall status for the row becomes PARTIAL when at least one other device is OK, or OFFLINE when all devices are offline, and grandTotalPower is then computed only from the remaining OK devices (or 0 if none).
+If the entire polling loop crashes, the outer catch forces a row with Status = OFFLINE and TotalPower = 0, and the dashboard JSON is also set to 0 W, so the script never deliberately keeps the last non‑zero value when the API is unavailable
+To bring the logger closer to what the web dashboard reports, you could extend Get-DeviceReadState to treat devices as OFFLINE when their device_status indicates loss of Wi‑Fi/cloud connectivity or stale data.
+Typical changes would be: check flags like wifi_sta.connected or a timestamp / uptime field in device_status, and if they indicate offline or old data, return status = 'OFFLINE' with power_w = $null instead of OK, so those strips don’t inflate grandTotalPower.
+Plan a strategy to modify shelly_logger_vtest.ps1 to solve this problem
