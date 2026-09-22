@@ -462,6 +462,12 @@
       const container = document.getElementById('downloadFileSelector');
       if (!container) return;
 
+      // Preserve checkbox selections across filter re-renders.
+      const previouslySelected = new Set(
+        [...document.querySelectorAll('input[name="dataFile"]:checked')]
+          .map((input) => input.value)
+      );
+
       const filteredEntries = getFilteredEntries();
       const groupedEntries = filteredEntries.reduce((groups, [key, fileInfo]) => {
         const groupName = key.split('/')[0] || 'Repository';
@@ -489,10 +495,15 @@
             const label = document.createElement('label');
             label.className = 'file-option';
             const displayName = fileInfo.label || key.replace(/^.*[\\/]/, '');
-            label.innerHTML = `
-              <input type="checkbox" name="dataFile" value="${key}">
-              <span>${displayName}</span>
-            `;
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.name = 'dataFile';
+            input.value = key;
+            input.checked = previouslySelected.has(key);
+            const text = document.createElement('span');
+            text.textContent = displayName;
+            label.appendChild(input);
+            label.appendChild(text);
             content.appendChild(label);
           });
 
@@ -503,16 +514,22 @@
 
       const allLabel = document.createElement('label');
       allLabel.className = 'file-option download-all-option';
-      allLabel.innerHTML = `
-        <input type="checkbox" name="dataFile" value="ALL">
-        <span>Download all as ZIP</span>
-      `;
+      const allInput = document.createElement('input');
+      allInput.type = 'checkbox';
+      allInput.name = 'dataFile';
+      allInput.value = 'ALL';
+      allInput.checked = previouslySelected.has('ALL');
+      const allText = document.createElement('span');
+      allText.textContent = 'Download all as ZIP';
+      allLabel.appendChild(allInput);
+      allLabel.appendChild(allText);
       fragment.appendChild(allLabel);
       container.appendChild(fragment);
 
       container.querySelectorAll('.file-option input[name="dataFile"]').forEach(input => {
         input.addEventListener('change', handleDownloadSelection);
       });
+      updateSelectionStates();
     };
 
     const populateManifestFilters = () => {
@@ -566,64 +583,173 @@
       renderDownloadFileOptions();
     };
 
+    const fetchDatasetText = async (fileInfo) => {
+      const response = await fetch(fileInfo.path, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`HTTP ${response.status} for ${fileInfo.name}`);
+      const text = await response.text();
+      return text.replace(/^\uFEFF/, '');
+    };
+
     const parseDateParts = (value) => {
       const text = String(value ?? '').trim();
       if (!text) return new Date(NaN);
-      if (text.includes('_')) {
-        const [date, time] = text.split('_');
-        if (date && time) {
-          return new Date(`${date.replace(/-/g, '/')} ${time.replace(/-/g, ':')}`);
-        }
+      let m = text.match(/^(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})$/);
+      if (m) return new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +m[6]);
+      m = text.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})[ T](\d{1,2}):(\d{2})(?::(\d{2}))?/);
+      if (m) return new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +(m[6] || 0));
+      m = text.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})$/);
+      if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+      m = text.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*([AP]M)?$/i);
+      if (m) {
+        let year = +m[3];
+        if (year < 100) year += 2000;
+        let hour = +m[4];
+        const mer = (m[7] || '').toUpperCase();
+        if (mer === 'PM' && hour < 12) hour += 12;
+        if (mer === 'AM' && hour === 12) hour = 0;
+        return new Date(year, +m[1] - 1, +m[2], hour, +m[5], +(m[6] || 0));
       }
-      const parsed = new Date(text.replace(/-/g, '/'));
-      return isNaN(parsed.getTime()) ? new Date(text) : parsed;
+      const fallback = new Date(text.replace(/-/g, '/'));
+      return fallback;
     };
 
-    // Determine which column(s) hold the timestamp and how to parse them,
-    // based on the file's actual header. pv files exist in two layouts:
-    //   old - separate 'date' and 'time' columns
-    //   new - single merged 'datetime' column (YYYY/MM/DD hh:mm)
-    // Returns { indexes, parse } where indexes are the timestamp columns to
-    // strip and parse converts a data row into a Date.
-    const getTimestampInfo = (type, headerCells) => {
-      if (type === 'pv') {
-        const datetimeIdx = headerCells.indexOf('datetime');
-        if (datetimeIdx !== -1) {
-          return {
-            indexes: [datetimeIdx],
-            parse: (row) => new Date(row[datetimeIdx].replace(/-/g, '/'))
-          };
+    // Case-insensitive timestamp column detection from the actual header.
+    // Supports: datetime/date_time, separate date+time, ts/ts_utc/ts_local.
+    const getTimestampInfo = (headerCells) => {
+      const lower = headerCells.map((c) => String(c ?? '').trim().toLowerCase());
+      const find = (...names) => {
+        for (const name of names) {
+          const i = lower.indexOf(name);
+          if (i !== -1) return i;
         }
-        const dateIdx = headerCells.indexOf('date');
-        const timeIdx = headerCells.indexOf('time');
-        if (dateIdx !== -1 && timeIdx !== -1) {
-          return {
-            indexes: [dateIdx, timeIdx],
-            parse: (row) => new Date(`${row[dateIdx].replace(/-/g, '/')} ${row[timeIdx]}`)
-          };
-        }
-      }
-      return {
-        indexes: [0],
-        parse: (row) => parseDateParts(row[0])
+        return -1;
       };
+      const dtIdx = find('datetime', 'date_time', 'timestamp');
+      if (dtIdx !== -1) {
+        return { indexes: [dtIdx], parse: (row) => parseDateParts(row[dtIdx]) };
+      }
+      const dateIdx = find('date');
+      const timeIdx = find('time');
+      if (dateIdx !== -1 && timeIdx !== -1) {
+        return {
+          indexes: [dateIdx, timeIdx],
+          parse: (row) => parseDateParts(`${row[dateIdx]} ${row[timeIdx]}`)
+        };
+      }
+      const tsIdx = find('ts', 'ts_utc', 'ts_local');
+      if (tsIdx !== -1) {
+        return { indexes: [tsIdx], parse: (row) => parseDateParts(row[tsIdx]) };
+      }
+      return { indexes: [0], parse: (row) => parseDateParts(row[0]) };
+    };
+
+    const formatLocalStamp = (date) => {
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}` +
+             `_${pad(date.getHours())}-${pad(date.getMinutes())}`;
     };
 
     const formatDownloadName = (fileKey, from, to) => {
-      const baseName = fileKey.split('/').pop()?.replace(/\.txt$/i, '') || fileKey;
-      const fromPart = from ? from.toISOString().slice(0,16).replace(/[:T]/g, '-') : 'begin';
-      const toPart = to ? to.toISOString().slice(0,16).replace(/[:T]/g, '-') : 'end';
+      const baseName = fileKey.split('/').pop()?.replace(/\.(txt|csv)$/i, '') || fileKey;
+      const fromPart = from ? formatLocalStamp(from) : 'begin';
+      const toPart = to ? formatLocalStamp(to) : 'end';
       return `${baseName}_${fromPart}_${toPart}.csv`;
     };
 
-    const splitRow = (type, line) => {
-      const trimmed = line?.trim();
-      if (!trimmed) return [];
-      // All repository datasets (irradiance/poa, load, pv, and weather) are
-      // tab-separated and use commas as DECIMAL separators (e.g. "43,82").
-      // We must split on tabs only - splitting on commas too would blow each
-      // value into two columns (8-column irradiance rows would become 15).
-      return trimmed.split('\t').map(value => value.trim());
+    // Split one delimited line. Only the carriage return is stripped from the
+    // raw line - never trim() the whole line, otherwise trailing empty
+    // fields (e.g. load rows ending in a tab) are lost.
+    const splitRow = (line, delim) => {
+      const raw = String(line ?? '').replace(/\r$/, '');
+      if (!raw.trim()) return [];
+      return raw.split(delim).map((cell) => cell.trim());
+    };
+
+    const parseCsvLine = (line) => {
+      const raw = String(line ?? '').replace(/\r$/, '');
+      const cells = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < raw.length; i++) {
+        const ch = raw[i];
+        if (inQuotes) {
+          if (ch === '"' && raw[i + 1] === '"') { current += '"'; i++; }
+          else if (ch === '"') inQuotes = false;
+          else current += ch;
+        } else if (ch === '"') inQuotes = true;
+        else if (ch === ',') { cells.push(current.trim()); current = ''; }
+        else current += ch;
+      }
+      cells.push(current.trim());
+      return cells;
+    };
+
+    // Weather-station export: 2-row preamble, then rows of
+    // time,status,name1,value1,name2,value2,...
+    const parseWeatherStationCsv = (nonEmptyLines) => {
+      const header = ['datetime', 'status'];
+      const rows = [];
+      for (const line of nonEmptyLines) {
+        const cells = parseCsvLine(line);
+        if (!cells[0] || !/\d/.test(cells[0])) continue;
+        const date = parseDateParts(cells[0]);
+        if (Number.isNaN(date.getTime())) continue;
+        if (rows.length === 0) {
+          for (let i = 2; i + 1 < cells.length; i += 2) {
+            header.push(cells[i] || `col${header.length}`);
+          }
+        }
+        const row = [cells[0], cells[1] ?? ''];
+        for (let i = 2; i + 1 < cells.length; i += 2) row.push(cells[i + 1] ?? '');
+        rows.push({ date, cells: row });
+      }
+      return { headerCells: header, rows };
+    };
+
+    // Detect delimiter from the header line. Tabs win because tab-separated
+    // datasets also contain commas as decimal separators (e.g. "43,82").
+    const detectDelimiter = (headerLine) => (headerLine.includes('\t') ? '\t' : ',');
+
+    const parseDataset = (text, fileInfo) => {
+      const clean = String(text ?? '').replace(/^\uFEFF/, '');
+      const nonEmpty = [];
+      for (const line of clean.split(/\r?\n/)) {
+        if (line.trim() !== '') nonEmpty.push(line);
+      }
+      if (!nonEmpty.length) return { headerCells: [], rows: [] };
+
+      if (/\.csv$/i.test(fileInfo.name) && !nonEmpty[0].includes('\t')) {
+        return parseWeatherStationCsv(nonEmpty);
+      }
+
+      const headerLine = nonEmpty[0];
+      // Free-text files (e.g. Scripts/mods.txt) have no tab structure;
+      // export every line as a single-column CSV.
+      if (!headerLine.includes('\t')) {
+        return {
+          headerCells: ['line'],
+          rows: nonEmpty.map((line) => ({ date: null, cells: [line.replace(/\r$/, '')] }))
+        };
+      }
+
+      const delim = detectDelimiter(headerLine);
+      const headerCells = splitRow(headerLine, delim);
+      const { parse } = getTimestampInfo(headerCells);
+      const rows = [];
+      for (const line of nonEmpty.slice(1)) {
+        const cells = splitRow(line, delim);
+        if (!cells.length) continue;
+        rows.push({ date: parse(cells), cells });
+      }
+      return { headerCells, rows };
+    };
+
+    const rowPassesDateFilter = (row, fromDate, toDate) => {
+      if (!fromDate && !toDate) return true;
+      if (!row.date || Number.isNaN(row.date.getTime())) return false;
+      if (fromDate && row.date < fromDate) return false;
+      if (toDate && row.date > toDate) return false;
+      return true;
     };
 
     // Quote CSV fields containing commas (e.g. the decimal separators in
@@ -646,22 +772,13 @@
     const buildCsvPayload = async (fileKey, fromDate, toDate) => {
       const fileInfo = dataFiles[fileKey];
       if (!fileInfo) throw new Error(`Unsupported dataset: ${fileKey}`);
-      const response = await fetch(fileInfo.path, { cache: 'no-store' });
-      if (!response.ok) throw new Error(`HTTP ${response.status} for ${fileInfo.name}`);
-      const text = await response.text();
-      const lines = text.split(/\r?\n/).filter(Boolean);
-      const headerCells = splitRow(fileInfo.type, lines[0]);
-      const header = csvLine(headerCells);
-      const { parse } = getTimestampInfo(fileInfo.type, headerCells);
-      const rows = lines.slice(1).map(line => splitRow(fileInfo.type, line));
-      const filtered = rows.filter(row => {
-        const rowDate = parse(row);
-        if (Number.isNaN(rowDate.getTime())) return false;
-        if (fromDate && rowDate < fromDate) return false;
-        if (toDate && rowDate > toDate) return false;
-        return true;
-      });
-      return [header, ...filtered.map(row => csvLine(row))].join('\n');
+      const text = await fetchDatasetText(fileInfo);
+      const { headerCells, rows } = parseDataset(text, fileInfo);
+      const out = [csvLine(headerCells)];
+      for (const row of rows) {
+        if (rowPassesDateFilter(row, fromDate, toDate)) out.push(csvLine(row.cells));
+      }
+      return out.join('\n');
     };
 
     // Format a Date as a local minute-bucket key (e.g. "YYYY-MM-DD HH:MM").
@@ -677,24 +794,19 @@
       const files = await Promise.all(fileKeys.map(async (fileKey) => {
         const fileInfo = dataFiles[fileKey];
         if (!fileInfo) throw new Error(`Unsupported dataset: ${fileKey}`);
-        const response = await fetch(fileInfo.path, { cache: 'no-store' });
-        if (!response.ok) throw new Error(`HTTP ${response.status} for ${fileInfo.name}`);
-        const text = await response.text();
-        const lines = text.split(/\r?\n/).filter(Boolean);
-        const headerCells = splitRow(fileInfo.type, lines[0]);
-        const { indexes: timestampIndexes, parse } = getTimestampInfo(fileInfo.type, headerCells);
+        const text = await fetchDatasetText(fileInfo);
+        const { headerCells, rows } = parseDataset(text, fileInfo);
+        const { indexes: timestampIndexes } = getTimestampInfo(headerCells);
         const dataHeader = headerCells.filter((_, i) => !timestampIndexes.includes(i));
 
         // Map minute-bucket -> data cells (timestamp columns removed).
         const minuteRows = new Map();
-        for (const line of lines.slice(1)) {
-          const row = splitRow(fileInfo.type, line);
-          const rowDate = parse(row);
-          if (Number.isNaN(rowDate.getTime())) continue;
-          if (fromDate && rowDate < fromDate) continue;
-          if (toDate && rowDate > toDate) continue;
-          const key = toMinuteKey(rowDate);
-          const dataCells = row.filter((_, i) => !timestampIndexes.includes(i));
+        for (const row of rows) {
+          if (!row.date || Number.isNaN(row.date.getTime())) continue;
+          if (fromDate && row.date < fromDate) continue;
+          if (toDate && row.date > toDate) continue;
+          const key = toMinuteKey(row.date);
+          const dataCells = row.cells.filter((_, i) => !timestampIndexes.includes(i));
           // Keep the last reading within the same minute.
           minuteRows.set(key, dataCells);
         }
@@ -749,8 +861,8 @@
     };
 
     const formatCombinedName = (fileKeys, fromDate, toDate) => {
-      const fromPart = fromDate ? fromDate.toISOString().slice(0, 16).replace(/[:T]/g, '-') : 'begin';
-      const toPart = toDate ? toDate.toISOString().slice(0, 16).replace(/[:T]/g, '-') : 'end';
+      const fromPart = fromDate ? formatLocalStamp(fromDate) : 'begin';
+      const toPart = toDate ? formatLocalStamp(toDate) : 'end';
       const tilt = document.getElementById('downloadTilt')?.value || '';
       const distance = document.getElementById('downloadDistance')?.value || '';
       const scenario = document.getElementById('downloadScenario')?.value || '';
@@ -770,13 +882,21 @@
       downloadBlob(blob, formatCombinedName(fileKeys, fromDate, toDate));
     };
 
+    // Append the anchor to the document and revoke the object URL on a
+    // timeout - revoking synchronously after click() cancels the download
+    // in some browsers.
     const downloadBlob = (blob, fileName) => {
       const url = URL.createObjectURL(blob);
       const anchor = document.createElement('a');
       anchor.href = url;
       anchor.download = fileName;
+      anchor.style.display = 'none';
+      document.body.appendChild(anchor);
       anchor.click();
-      URL.revokeObjectURL(url);
+      setTimeout(() => {
+        anchor.remove();
+        URL.revokeObjectURL(url);
+      }, 1500);
     };
 
     const downloadFile = async (fileKey, fromDate, toDate) => {
@@ -846,13 +966,29 @@
       if (!selectedInputs.length) throw new Error('Select at least one dataset file.');
       const { fromDate, toDate } = getDateRange();
       const fileKeys = [...selectedInputs].map((input) => input.value);
-      // Multiple files are combined into a single time-aligned CSV instead of
-      // being downloaded separately; a single file is downloaded as-is.
-      if (fileKeys.length > 1) {
-        await downloadCombined(fileKeys, fromDate, toDate);
+
+      if (fileKeys.length === 1) {
+        await downloadFile(fileKeys[0], fromDate, toDate);
         return;
       }
-      await downloadFile(fileKeys[0], fromDate, toDate);
+
+      // Scripts (free-text notes) stay downloadable but are excluded from the
+      // minute-aligned merge.
+      const mergeableKeys = fileKeys.filter((key) => dataFiles[key]?.type !== 'scripts');
+      const scriptKeys = fileKeys.filter((key) => dataFiles[key]?.type === 'scripts');
+
+      if (mergeableKeys.length >= 2) {
+        await downloadCombined(mergeableKeys, fromDate, toDate);
+        for (const key of scriptKeys) {
+          await downloadFile(key, fromDate, toDate);
+        }
+        return;
+      }
+
+      // One data file + scripts, or only scripts: download each individually.
+      for (const key of fileKeys) {
+        await downloadFile(key, fromDate, toDate);
+      }
     };
 
     document.getElementById('downloadButton').addEventListener('click', async () => {
