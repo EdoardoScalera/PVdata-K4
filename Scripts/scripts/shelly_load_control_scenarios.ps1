@@ -32,6 +32,18 @@ $script:PendingScenario = $null
 $script:ScenarioRequestPath = $ScenarioRequestPath
 $script:ConstantTargetW = $ConstantTargetW
 $script:StatusPath = $StatusPath
+$script:BatteryGateOpen = $true
+$script:BatteryPrevMa = $null
+$script:BatteryLastMa = $null
+$script:BatteryLastVoltage = $null
+$script:BatteryTrend = 'unknown'
+$script:BatteryDataWarnReason = $null
+$script:PvLogPath = $null
+$script:BatteryGateEnabled = $true
+$script:BatteryThresholdV = 49.0
+$script:BatteryHysteresisV = 3.0
+$script:BatteryMaWindow = 5
+$script:BatteryStaleSeconds = 180
 
 $DashboardFile = "C:\Users\5CG7471GSJ\Documents\DATA\Dashboard\dashboard_values.json"
 
@@ -155,6 +167,157 @@ function Write-EventLog {
     $ts = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
     $line = @($ts, $Level, $Eventname, $StripName, $DeviceId, $Channel, $Message) -join "`t"
     Add-Content -Path $script:LogPath -Value $line -Encoding utf8
+}
+
+function Get-PvLogVoltages {
+    param(
+        [string]$Path,
+        [int]$Window,
+        [int]$StaleSeconds
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Path) -or -not (Test-Path -LiteralPath $Path)) {
+        return [PSCustomObject]@{ ok = $false; reason = "pv_log_missing: $Path"; samples = @() }
+    }
+
+    try {
+        $header = Get-Content -LiteralPath $Path -Head 1 -ErrorAction Stop
+        if ([string]::IsNullOrWhiteSpace($header)) {
+            return [PSCustomObject]@{ ok = $false; reason = 'empty_pv_log'; samples = @() }
+        }
+        $header = $header.TrimStart([char]0xFEFF)
+        $columns = $header -split "`t"
+
+        $voltageIndex = -1
+        $dateIndex = -1
+        $timeIndex = -1
+        for ($i = 0; $i -lt $columns.Count; $i++) {
+            $name = $columns[$i].Trim().ToLowerInvariant()
+            if ($name -eq 'battery_voltage_v') { $voltageIndex = $i }
+            elseif ($name -eq 'datetime') { $dateIndex = $i; $timeIndex = -1 }
+            elseif ($name -eq 'date') { $dateIndex = $i }
+            elseif ($name -eq 'time') { $timeIndex = $i }
+        }
+
+        if ($voltageIndex -lt 0) {
+            return [PSCustomObject]@{ ok = $false; reason = 'battery_voltage_V column not found'; samples = @() }
+        }
+
+        $lines = Get-Content -LiteralPath $Path -Tail $Window -ErrorAction Stop
+        $samples = @()
+        foreach ($line in @($lines)) {
+            if ([string]::IsNullOrWhiteSpace($line)) { continue }
+            $fields = $line -split "`t"
+            if ($voltageIndex -ge $fields.Count) { continue }
+
+            $rawVoltage = $fields[$voltageIndex] -replace ',', '.'
+            $voltage = [double]0
+            $culture = [System.Globalization.CultureInfo]::InvariantCulture
+            if (-not [double]::TryParse($rawVoltage, [System.Globalization.NumberStyles]::Float, $culture, [ref]$voltage)) { continue }
+
+            $timestamp = $null
+            if ($dateIndex -ge 0 -and $dateIndex -lt $fields.Count) {
+                $tsRaw = $fields[$dateIndex]
+                if ($timeIndex -ge 0 -and $timeIndex -lt $fields.Count) {
+                    $tsRaw = "$tsRaw $($fields[$timeIndex])"
+                }
+                $parsed = [datetime]::MinValue
+                if ([datetime]::TryParse($tsRaw, $culture, [System.Globalization.DateTimeStyles]::None, [ref]$parsed)) {
+                    $timestamp = $parsed
+                }
+            }
+
+            $samples += [PSCustomObject]@{ ts = $timestamp; voltage = $voltage }
+        }
+
+        if ($samples.Count -lt $Window) {
+            return [PSCustomObject]@{ ok = $false; reason = "insufficient_samples: $($samples.Count)/$Window"; samples = $samples }
+        }
+
+        $last = $samples[$samples.Count - 1]
+        if ($null -ne $last.ts) {
+            $ageSeconds = ((Get-Date) - $last.ts).TotalSeconds
+            if ($ageSeconds -gt $StaleSeconds) {
+                return [PSCustomObject]@{ ok = $false; reason = ("stale_data: age={0}s" -f [int]$ageSeconds); samples = $samples }
+            }
+        }
+
+        return [PSCustomObject]@{ ok = $true; reason = ''; samples = $samples }
+    }
+    catch {
+        return [PSCustomObject]@{ ok = $false; reason = "pv_log_read_failed: $($_.Exception.Message)"; samples = @() }
+    }
+}
+
+function Update-BatteryGate {
+    param(
+        [string]$LogPath,
+        [int]$Window,
+        [int]$StaleSeconds,
+        [double]$ThresholdV,
+        [double]$HysteresisV,
+        [bool]$Enabled
+    )
+
+    if (-not $Enabled) {
+        $script:BatteryTrend = 'disabled'
+        if (-not $script:BatteryGateOpen) {
+            $script:BatteryGateOpen = $true
+            Write-EventLog -Level 'INFO' -Eventname 'battery_restore' -Message 'battery_gate_enabled=false; gate forced open.'
+            Write-ConsoleLoadChange -Message 'BATTERY GATE OPEN: battery gate disabled. Scenario loads allowed.'
+        }
+        return $script:BatteryGateOpen
+    }
+
+    $reading = Get-PvLogVoltages -Path $LogPath -Window $Window -StaleSeconds $StaleSeconds
+    if (-not $reading.ok) {
+        $reason = [string]$reading.reason
+        if ($reason -ne $script:BatteryDataWarnReason) {
+            Write-EventLog -Level 'WARN' -Event 'battery_data_invalid' -Message $reason
+            $script:BatteryDataWarnReason = $reason
+        }
+        $script:BatteryPrevMa = $null
+        $script:BatteryLastMa = $null
+        $script:BatteryTrend = 'unknown'
+        if (-not $script:BatteryGateOpen) {
+            $script:BatteryGateOpen = $true
+            Write-EventLog -Level 'WARN' -Eventname 'battery_restore' -Message "invalid_voltage_data; failing open. reason=$reason"
+            Write-ConsoleLoadChange -Message "BATTERY GATE OPEN (fail-safe): voltage data invalid ($reason). Scenario loads allowed."
+        }
+        return $script:BatteryGateOpen
+    }
+    $script:BatteryDataWarnReason = $null
+
+    $ma = [double]($reading.samples | Measure-Object -Property voltage -Average).Average
+    $script:BatteryLastVoltage = [double]$reading.samples[$reading.samples.Count - 1].voltage
+    $script:BatteryLastMa = [math]::Round($ma, 3)
+    $restoreLevel = $ThresholdV + $HysteresisV
+
+    $trend = 'unknown'
+    if ($null -ne $script:BatteryPrevMa) {
+        if ($ma -lt $script:BatteryPrevMa) { $trend = 'falling' }
+        elseif ($ma -gt $script:BatteryPrevMa) { $trend = 'rising' }
+        else { $trend = 'flat' }
+    }
+    $script:BatteryTrend = $trend
+
+    if ($script:BatteryGateOpen) {
+        if ($ma -le $ThresholdV -and $trend -eq 'falling') {
+            $script:BatteryGateOpen = $false
+            Write-EventLog -Level 'WARN' -Eventname 'battery_shed' -Message ("ma={0:F3}V threshold={1:F1}V trend={2}; all sockets forced off" -f $ma, $ThresholdV, $trend)
+            Write-ConsoleLoadChange -Message ("BATTERY SHED: MA{0}={1:F2}V <= {2:F1}V and falling. Sockets forced OFF." -f $Window, $ma, $ThresholdV)
+        }
+    }
+    else {
+        if ($ma -ge $restoreLevel -and $trend -eq 'rising') {
+            $script:BatteryGateOpen = $true
+            Write-EventLog -Level 'INFO' -Eventname 'battery_restore' -Message ("ma={0:F3}V restore={1:F1}V trend={2}; scenario load re-enabled" -f $ma, $restoreLevel, $trend)
+            Write-ConsoleLoadChange -Message ("BATTERY RESTORE: MA{0}={1:F2}V >= {2:F1}V and rising. Scenario loads re-enabled." -f $Window, $ma, $restoreLevel)
+        }
+    }
+
+    $script:BatteryPrevMa = $ma
+    return $script:BatteryGateOpen
 }
 
 function Get-Config {
@@ -664,6 +827,10 @@ function Write-StatusFile {
         scenario_request_path = $script:ScenarioRequestPath
         scenario_request_file_present = $pendingExists
         scenario_request_file = $pendingFile
+        battery_gate_open = $script:BatteryGateOpen
+        battery_ma_v = $script:BatteryLastMa
+        battery_last_voltage_v = $script:BatteryLastVoltage
+        battery_trend = $script:BatteryTrend
     }
 
     Write-JsonFile -Path $Path -Payload $payload
@@ -796,10 +963,35 @@ if ($config.PSObject.Properties.Name -contains 'scenario_status_path' -and $conf
 if ($config.PSObject.Properties.Name -contains 'constant_target_w' -and $config.constant_target_w -and -not $PSBoundParameters.ContainsKey('ConstantTargetW')) {
     $script:ConstantTargetW = [double]$config.constant_target_w
 }
+if ($config.PSObject.Properties.Name -contains 'pv_log_path' -and $config.pv_log_path) {
+    $script:PvLogPath = Resolve-ConfigRelativePath -Value ([string]$config.pv_log_path)
+}
+else {
+    $script:PvLogPath = Join-Path $configDirectory 'pv_mppt.txt'
+}
+if ($config.PSObject.Properties.Name -contains 'battery_gate_enabled') {
+    $script:BatteryGateEnabled = [bool]$config.battery_gate_enabled
+}
+if ($config.PSObject.Properties.Name -contains 'battery_voltage_threshold_v') {
+    $script:BatteryThresholdV = [double]$config.battery_voltage_threshold_v
+}
+if ($config.PSObject.Properties.Name -contains 'battery_hysteresis_v') {
+    $script:BatteryHysteresisV = [double]$config.battery_hysteresis_v
+}
+if ($config.PSObject.Properties.Name -contains 'battery_ma_window') {
+    $script:BatteryMaWindow = [int]$config.battery_ma_window
+}
+if ($config.PSObject.Properties.Name -contains 'battery_stale_seconds') {
+    $script:BatteryStaleSeconds = [int]$config.battery_stale_seconds
+}
+if ($script:BatteryThresholdV -le 0) { throw 'battery_voltage_threshold_v must be greater than 0.' }
+if ($script:BatteryHysteresisV -lt 0) { throw 'battery_hysteresis_v must be greater than or equal to 0.' }
+if ($script:BatteryMaWindow -lt 1) { throw 'battery_ma_window must be at least 1.' }
+if ($script:BatteryStaleSeconds -lt 1) { throw 'battery_stale_seconds must be at least 1.' }
 
 $script:ActiveScenario = $resolvedScenario
 New-EventLogFile -Path $script:LogPath
-Write-EventLog -Level 'INFO' -Eventname 'startup' -Message "Loaded config from $ConfigPath; startup_scenario=$($script:ActiveScenario); scenario_request_path=$($script:ScenarioRequestPath); scenario_status_path=$($script:StatusPath); constant_target_w=$($script:ConstantTargetW)"
+Write-EventLog -Level 'INFO' -Eventname 'startup' -Message "Loaded config from $ConfigPath; startup_scenario=$($script:ActiveScenario); scenario_request_path=$($script:ScenarioRequestPath); scenario_status_path=$($script:StatusPath); constant_target_w=$($script:ConstantTargetW); pv_log_path=$($script:PvLogPath); battery_gate_enabled=$($script:BatteryGateEnabled); battery_threshold_v=$($script:BatteryThresholdV); battery_hysteresis_v=$($script:BatteryHysteresisV); battery_ma_window=$($script:BatteryMaWindow); battery_stale_seconds=$($script:BatteryStaleSeconds)"
 Write-ConsoleLoadChange -Message "Starting controller with scenario '$($script:ActiveScenario)'."
 Write-StatusFile -Path $script:StatusPath
 
@@ -815,10 +1007,15 @@ while ($true) {
     try {
         Update-PendingScenario -RequestPath $script:ScenarioRequestPath
         Update-PlanIfBoundaryChanged -Now $cycleStarted -Config $config -ProfileStepMinutes $profileStepMinutes
+        [void](Update-BatteryGate -LogPath $script:PvLogPath -Window $script:BatteryMaWindow -StaleSeconds $script:BatteryStaleSeconds -ThresholdV $script:BatteryThresholdV -HysteresisV $script:BatteryHysteresisV -Enabled $script:BatteryGateEnabled)
 
         foreach ($strip in $config.strips) {
             $stripPlan = $script:CurrentPlan.by_strip[$strip.name]
-            Sync-StripToDesiredState -ServerUri $config.server_uri -AuthKey $config.auth_key -Strip $strip -DesiredStates $stripPlan.states -MinGapMs $minGapMs
+            $desiredStates = $stripPlan.states
+            if (-not $script:BatteryGateOpen) {
+                $desiredStates = New-Object bool[] $strip.loads_w.Count
+            }
+            Sync-StripToDesiredState -ServerUri $config.server_uri -AuthKey $config.auth_key -Strip $strip -DesiredStates $desiredStates -MinGapMs $minGapMs
             Start-Sleep -Milliseconds $delayBetweenStripsMs
         }
 
@@ -833,6 +1030,8 @@ while ($true) {
                         source_ts_local = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
                         active_scenario = $script:ActiveScenario
                         current_target_w = [math]::Round($script:CurrentWholeTarget, 2)
+                        battery_gate_open = $script:BatteryGateOpen
+                        battery_ma_v = $script:BatteryLastMa
                         ts_local = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
     }
 

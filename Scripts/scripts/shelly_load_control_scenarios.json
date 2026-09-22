@@ -9,6 +9,12 @@
   "scenario_request_path": "scenario_request.json",
   "scenario_status_path": "scenario_status.json",
   "constant_target_w": 1200,
+  "pv_log_path": "C:\\Users\\5CG7471GSJ\\Documents\\DATA\\PV\\pv_mppt.txt",
+  "battery_gate_enabled": true,
+  "battery_voltage_threshold_v": 49,
+  "battery_hysteresis_v": 3,
+  "battery_ma_window": 5,
+  "battery_stale_seconds": 180,
   "whole_house_profile": [
 {"time": "00:00", "target_w": 250},
 {"time": "00:15", "target_w": 250},
