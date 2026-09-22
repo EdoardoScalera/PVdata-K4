@@ -1,5 +1,5 @@
 ﻿{
-    "generated_at":  "2026-09-22 10:45:00",
+    "generated_at":  "2026-09-22 11:33:05",
     "files":  [
                   {
                       "key":  "Irradiance/poa_tilt30_distance50_all_on.txt",
@@ -392,6 +392,17 @@
                       "name":  "shelly_reconnect_events.txt",
                       "label":  "shelly_reconnect_events.txt",
                       "type":  "scripts",
+                      "tilt":  null,
+                      "distance":  null,
+                      "scenario":  null,
+                      "constant_target_w":  null
+                  },
+                  {
+                      "key":  "Weather/L0260901 - L0260921.csv",
+                      "path":  "../Weather/L0260901 - L0260921.csv",
+                      "name":  "L0260901 - L0260921.csv",
+                      "label":  "L0260901 - L0260921.csv",
+                      "type":  "weather",
                       "tilt":  null,
                       "distance":  null,
                       "scenario":  null,

@@ -96790,3 +96790,12 @@
 2026-09-14 10:22:03	WARN	offline	ps2	98a3167b6a8c		The remote server returned an error: (400) Bad Request.
 2026-09-14 10:22:06	WARN	offline	ps3	98a3166b6128		The remote server returned an error: (400) Bad Request.
 2026-09-14 10:22:09	INFO	shutdown_complete				RunOnce all_off completed; all loads off.
+2026-09-22 10:51:22	INFO	startup				Loaded config from C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\shelly_load_control_scenarios.json; startup_scenario=all_off; scenario_request_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_request.json; scenario_status_path=C:\Users\5CG7471GSJ\Documents\DATA\Scripts\GUI\scripts\scenario_status.json; constant_target_w=1200
+2026-09-22 10:51:22	INFO	strip_plan	ps1	206ef102c9d8		slot=2026-09-22 10:45; scenario=all_off; target_strip_w=0; states=[0,0,0,0]
+2026-09-22 10:51:22	INFO	strip_plan	ps2	98a3167b6a8c		slot=2026-09-22 10:45; scenario=all_off; target_strip_w=0; states=[0,0,0,0]
+2026-09-22 10:51:22	INFO	strip_plan	ps3	98a3166b6128		slot=2026-09-22 10:45; scenario=all_off; target_strip_w=0; states=[0,0,0,0]
+2026-09-22 10:51:22	INFO	load_change				SCENARIO=all_off slot=2026-09-22 10:45 target=0W nominal=0W overshoot=0W states: ps1=[0,0,0,0]; ps2=[0,0,0,0]; ps3=[0,0,0,0]
+2026-09-22 10:51:23	INFO	online	ps1	206ef102c9d8		device reachable again
+2026-09-22 10:51:26	INFO	online	ps2	98a3167b6a8c		device reachable again
+2026-09-22 10:51:30	INFO	online	ps3	98a3166b6128		device reachable again
+2026-09-22 10:51:33	INFO	shutdown_complete				RunOnce all_off completed; all loads off.
