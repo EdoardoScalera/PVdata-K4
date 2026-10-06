@@ -32,17 +32,25 @@ $script:PendingScenario = $null
 $script:ScenarioRequestPath = $ScenarioRequestPath
 $script:ConstantTargetW = $ConstantTargetW
 $script:StatusPath = $StatusPath
-$script:BatteryGateOpen = $true
+$script:BatteryGateOpen = $false
+$script:BatteryControlState = 'HOLD_OFF'
 $script:BatteryPrevMa = $null
 $script:BatteryLastMa = $null
+$script:BatteryLastDv = $null
 $script:BatteryLastVoltage = $null
+$script:BatteryMaHistory = @()
 $script:BatteryTrend = 'unknown'
+$script:BatteryCountLowFalling = 0
+$script:BatteryCountHighRising = 0
 $script:BatteryDataWarnReason = $null
 $script:PvLogPath = $null
 $script:BatteryGateEnabled = $true
 $script:BatteryThresholdV = 49.0
 $script:BatteryHysteresisV = 3.0
-$script:BatteryMaWindow = 5
+$script:BatteryMaWindow = 3
+$script:BatteryConfirmLow = 2
+$script:BatteryConfirmHigh = 2
+$script:BatteryDeadbandV = 0.05
 $script:BatteryStaleSeconds = 180
 
 $DashboardFile = "C:\Users\5CG7471GSJ\Documents\DATA\Dashboard\dashboard_values.json"
@@ -256,11 +264,17 @@ function Update-BatteryGate {
         [int]$StaleSeconds,
         [double]$ThresholdV,
         [double]$HysteresisV,
-        [bool]$Enabled
+        [bool]$Enabled,
+        [int]$ConfirmLow = $script:BatteryConfirmLow,
+        [int]$ConfirmHigh = $script:BatteryConfirmHigh,
+        [double]$DeadbandV = $script:BatteryDeadbandV
     )
 
     if (-not $Enabled) {
         $script:BatteryTrend = 'disabled'
+        $script:BatteryControlState = 'SAFE_HIGH'
+        $script:BatteryCountLowFalling = 0
+        $script:BatteryCountHighRising = 0
         if (-not $script:BatteryGateOpen) {
             $script:BatteryGateOpen = $true
             Write-EventLog -Level 'INFO' -Eventname 'battery_restore' -Message 'battery_gate_enabled=false; gate forced open.'
@@ -278,11 +292,16 @@ function Update-BatteryGate {
         }
         $script:BatteryPrevMa = $null
         $script:BatteryLastMa = $null
+        $script:BatteryLastDv = $null
         $script:BatteryTrend = 'unknown'
-        if (-not $script:BatteryGateOpen) {
-            $script:BatteryGateOpen = $true
-            Write-EventLog -Level 'WARN' -Eventname 'battery_restore' -Message "invalid_voltage_data; failing open. reason=$reason"
-            Write-ConsoleLoadChange -Message "BATTERY GATE OPEN (fail-safe): voltage data invalid ($reason). Scenario loads allowed."
+        $script:BatteryCountLowFalling = 0
+        $script:BatteryCountHighRising = 0
+        # Fail-closed: invalid/stale data forces load OFF (HOLD_OFF).
+        $script:BatteryControlState = 'HOLD_OFF'
+        if ($script:BatteryGateOpen) {
+            $script:BatteryGateOpen = $false
+            Write-EventLog -Level 'WARN' -Eventname 'battery_shed' -Message ("invalid_voltage_data; failing closed. reason={0}" -f $reason)
+            Write-ConsoleLoadChange -Message ("BATTERY SHED (fail-safe): voltage data invalid ({0}). Sockets forced OFF." -f $reason)
         }
         return $script:BatteryGateOpen
     }
@@ -291,28 +310,61 @@ function Update-BatteryGate {
     $ma = [double]($reading.samples | Measure-Object -Property voltage -Average).Average
     $script:BatteryLastVoltage = [double]$reading.samples[$reading.samples.Count - 1].voltage
     $script:BatteryLastMa = [math]::Round($ma, 3)
+    # In-memory store of the raw voltages backing the current MA (last Window samples).
+    $script:BatteryMaHistory = @($reading.samples | ForEach-Object { [double]$_.voltage })
     $restoreLevel = $ThresholdV + $HysteresisV
 
     $trend = 'unknown'
+    $dv = $null
     if ($null -ne $script:BatteryPrevMa) {
-        if ($ma -lt $script:BatteryPrevMa) { $trend = 'falling' }
-        elseif ($ma -gt $script:BatteryPrevMa) { $trend = 'rising' }
+        $dv = $ma - $script:BatteryPrevMa
+        $script:BatteryLastDv = [math]::Round([double]$dv, 3)
+        if ($dv -gt $DeadbandV) { $trend = 'rising' }
+        elseif ($dv -lt (-1.0 * $DeadbandV)) { $trend = 'falling' }
         else { $trend = 'flat' }
+    }
+    else {
+        $script:BatteryLastDv = $null
     }
     $script:BatteryTrend = $trend
 
     if ($script:BatteryGateOpen) {
+        $script:BatteryCountHighRising = 0
         if ($ma -le $ThresholdV -and $trend -eq 'falling') {
+            $script:BatteryCountLowFalling++
+        }
+        else {
+            if ($script:BatteryCountLowFalling -ne 0) { $script:BatteryCountLowFalling = 0 }
+        }
+        if ($script:BatteryCountLowFalling -ge $ConfirmLow) {
             $script:BatteryGateOpen = $false
-            Write-EventLog -Level 'WARN' -Eventname 'battery_shed' -Message ("ma={0:F3}V threshold={1:F1}V trend={2}; all sockets forced off" -f $ma, $ThresholdV, $trend)
-            Write-ConsoleLoadChange -Message ("BATTERY SHED: MA{0}={1:F2}V <= {2:F1}V and falling. Sockets forced OFF." -f $Window, $ma, $ThresholdV)
+            $script:BatteryControlState = 'SAFE_LOW'
+            Write-EventLog -Level 'WARN' -Eventname 'battery_shed' -Message ("ma={0:F3}V threshold={1:F1}V trend={2} dV={3}V count={4}/{5}; all sockets forced off" -f $ma, $ThresholdV, $trend, $script:BatteryLastDv, $script:BatteryCountLowFalling, $ConfirmLow)
+            Write-ConsoleLoadChange -Message ("BATTERY SHED: MA{0}={1:F2}V <= {2:F1}V and falling ({3}/{4}). Sockets forced OFF." -f $Window, $ma, $ThresholdV, $script:BatteryCountLowFalling, $ConfirmLow)
+            $script:BatteryCountLowFalling = 0
+        }
+        else {
+            $script:BatteryControlState = 'SAFE_HIGH'
         }
     }
     else {
+        $script:BatteryCountLowFalling = 0
         if ($ma -ge $restoreLevel -and $trend -eq 'rising') {
+            $script:BatteryCountHighRising++
+        }
+        else {
+            if ($script:BatteryCountHighRising -ne 0) { $script:BatteryCountHighRising = 0 }
+        }
+        if ($script:BatteryCountHighRising -ge $ConfirmHigh) {
             $script:BatteryGateOpen = $true
-            Write-EventLog -Level 'INFO' -Eventname 'battery_restore' -Message ("ma={0:F3}V restore={1:F1}V trend={2}; scenario load re-enabled" -f $ma, $restoreLevel, $trend)
-            Write-ConsoleLoadChange -Message ("BATTERY RESTORE: MA{0}={1:F2}V >= {2:F1}V and rising. Scenario loads re-enabled." -f $Window, $ma, $restoreLevel)
+            $script:BatteryControlState = 'SAFE_HIGH'
+            Write-EventLog -Level 'INFO' -Eventname 'battery_restore' -Message ("ma={0:F3}V restore={1:F1}V trend={2} dV={3}V count={4}/{5}; scenario load re-enabled" -f $ma, $restoreLevel, $trend, $script:BatteryLastDv, $script:BatteryCountHighRising, $ConfirmHigh)
+            Write-ConsoleLoadChange -Message ("BATTERY RESTORE: MA{0}={1:F2}V >= {2:F1}V and rising ({3}/{4}). Scenario loads re-enabled." -f $Window, $ma, $restoreLevel, $script:BatteryCountHighRising, $ConfirmHigh)
+            $script:BatteryCountHighRising = 0
+        }
+        else {
+            if ($ma -le $ThresholdV) { $script:BatteryControlState = 'SAFE_LOW' }
+            else { $script:BatteryControlState = 'HOLD_OFF' }
         }
     }
 
@@ -828,9 +880,21 @@ function Write-StatusFile {
         scenario_request_file_present = $pendingExists
         scenario_request_file = $pendingFile
         battery_gate_open = $script:BatteryGateOpen
+        battery_control_state = $script:BatteryControlState
         battery_ma_v = $script:BatteryLastMa
+        battery_prev_ma_v = $script:BatteryPrevMa
         battery_last_voltage_v = $script:BatteryLastVoltage
+        battery_ma_history_v = $script:BatteryMaHistory
         battery_trend = $script:BatteryTrend
+        battery_last_dv_v = $script:BatteryLastDv
+        battery_count_low_falling = $script:BatteryCountLowFalling
+        battery_count_high_rising = $script:BatteryCountHighRising
+        battery_threshold_v = $script:BatteryThresholdV
+        battery_restore_v = ($script:BatteryThresholdV + $script:BatteryHysteresisV)
+        battery_ma_window = $script:BatteryMaWindow
+        battery_confirm_low = $script:BatteryConfirmLow
+        battery_confirm_high = $script:BatteryConfirmHigh
+        battery_deadband_v = $script:BatteryDeadbandV
     }
 
     Write-JsonFile -Path $Path -Payload $payload
@@ -981,17 +1045,37 @@ if ($config.PSObject.Properties.Name -contains 'battery_hysteresis_v') {
 if ($config.PSObject.Properties.Name -contains 'battery_ma_window') {
     $script:BatteryMaWindow = [int]$config.battery_ma_window
 }
+if ($config.PSObject.Properties.Name -contains 'battery_confirm_low') {
+    $script:BatteryConfirmLow = [int]$config.battery_confirm_low
+}
+if ($config.PSObject.Properties.Name -contains 'battery_confirm_high') {
+    $script:BatteryConfirmHigh = [int]$config.battery_confirm_high
+}
+if ($config.PSObject.Properties.Name -contains 'battery_deadband_v') {
+    $script:BatteryDeadbandV = [double]$config.battery_deadband_v
+}
 if ($config.PSObject.Properties.Name -contains 'battery_stale_seconds') {
     $script:BatteryStaleSeconds = [int]$config.battery_stale_seconds
 }
 if ($script:BatteryThresholdV -le 0) { throw 'battery_voltage_threshold_v must be greater than 0.' }
 if ($script:BatteryHysteresisV -lt 0) { throw 'battery_hysteresis_v must be greater than or equal to 0.' }
 if ($script:BatteryMaWindow -lt 1) { throw 'battery_ma_window must be at least 1.' }
+if ($script:BatteryConfirmLow -lt 1) { throw 'battery_confirm_low must be at least 1.' }
+if ($script:BatteryConfirmHigh -lt 1) { throw 'battery_confirm_high must be at least 1.' }
+if ($script:BatteryDeadbandV -lt 0) { throw 'battery_deadband_v must be greater than or equal to 0.' }
 if ($script:BatteryStaleSeconds -lt 1) { throw 'battery_stale_seconds must be at least 1.' }
 
 $script:ActiveScenario = $resolvedScenario
+$script:BatteryGateOpen = $false
+$script:BatteryControlState = 'HOLD_OFF'
+$script:BatteryPrevMa = $null
+$script:BatteryLastMa = $null
+$script:BatteryLastDv = $null
+$script:BatteryCountLowFalling = 0
+$script:BatteryCountHighRising = 0
+$script:BatteryMaHistory = @()
 New-EventLogFile -Path $script:LogPath
-Write-EventLog -Level 'INFO' -Eventname 'startup' -Message "Loaded config from $ConfigPath; startup_scenario=$($script:ActiveScenario); scenario_request_path=$($script:ScenarioRequestPath); scenario_status_path=$($script:StatusPath); constant_target_w=$($script:ConstantTargetW); pv_log_path=$($script:PvLogPath); battery_gate_enabled=$($script:BatteryGateEnabled); battery_threshold_v=$($script:BatteryThresholdV); battery_hysteresis_v=$($script:BatteryHysteresisV); battery_ma_window=$($script:BatteryMaWindow); battery_stale_seconds=$($script:BatteryStaleSeconds)"
+Write-EventLog -Level 'INFO' -Eventname 'startup' -Message "Loaded config from $ConfigPath; startup_scenario=$($script:ActiveScenario); scenario_request_path=$($script:ScenarioRequestPath); scenario_status_path=$($script:StatusPath); constant_target_w=$($script:ConstantTargetW); pv_log_path=$($script:PvLogPath); battery_gate_enabled=$($script:BatteryGateEnabled); battery_threshold_v=$($script:BatteryThresholdV); battery_hysteresis_v=$($script:BatteryHysteresisV); battery_ma_window=$($script:BatteryMaWindow); battery_confirm_low=$($script:BatteryConfirmLow); battery_confirm_high=$($script:BatteryConfirmHigh); battery_deadband_v=$($script:BatteryDeadbandV); battery_stale_seconds=$($script:BatteryStaleSeconds); initial_gate=closed(HOLD_OFF fail-closed)"
 Write-ConsoleLoadChange -Message "Starting controller with scenario '$($script:ActiveScenario)'."
 Write-StatusFile -Path $script:StatusPath
 
@@ -1007,7 +1091,7 @@ while ($true) {
     try {
         Update-PendingScenario -RequestPath $script:ScenarioRequestPath
         Update-PlanIfBoundaryChanged -Now $cycleStarted -Config $config -ProfileStepMinutes $profileStepMinutes
-        [void](Update-BatteryGate -LogPath $script:PvLogPath -Window $script:BatteryMaWindow -StaleSeconds $script:BatteryStaleSeconds -ThresholdV $script:BatteryThresholdV -HysteresisV $script:BatteryHysteresisV -Enabled $script:BatteryGateEnabled)
+        [void](Update-BatteryGate -LogPath $script:PvLogPath -Window $script:BatteryMaWindow -StaleSeconds $script:BatteryStaleSeconds -ThresholdV $script:BatteryThresholdV -HysteresisV $script:BatteryHysteresisV -Enabled $script:BatteryGateEnabled -ConfirmLow $script:BatteryConfirmLow -ConfirmHigh $script:BatteryConfirmHigh -DeadbandV $script:BatteryDeadbandV)
 
         foreach ($strip in $config.strips) {
             $stripPlan = $script:CurrentPlan.by_strip[$strip.name]
@@ -1031,7 +1115,11 @@ while ($true) {
                         active_scenario = $script:ActiveScenario
                         current_target_w = [math]::Round($script:CurrentWholeTarget, 2)
                         battery_gate_open = $script:BatteryGateOpen
+                        battery_control_state = $script:BatteryControlState
                         battery_ma_v = $script:BatteryLastMa
+                        battery_trend = $script:BatteryTrend
+                        battery_count_low = $script:BatteryCountLowFalling
+                        battery_count_high = $script:BatteryCountHighRising
                         ts_local = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
     }
 
