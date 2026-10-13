@@ -1,0 +1,2903 @@
+#!script_ver "7.00"
+#!script 0
+# Setup created at 2010-12-21 13:09:15 by MAWS LIZARD 8.0.0
+
+print( "\nMAWS software version is too low to run this setup\n");
+print( "Minimum required version 7.00\n");
+print( "**** Setup execution aborted ***** \n");
+
+<:ServiceConnector:"COM0Listener",COM0:>
+COM0Listener(<:App_cfg:"IdleTime",<:Integer:30:>:>);
+COM0Listener(<:App_cfg:"ScrapChars",<:Integer:0:>:>);
+<:ServiceConnector:"DSI486_0_0Listener",DSI486_0_0:>
+DSI486_0_0Listener(<:App_cfg:"IdleTime",<:Integer:30:>:>);
+DSI486_0_0Listener(<:App_cfg:"ScrapChars",<:Integer:0:>:>);
+<:ServiceConnector:"DSI486_0_1Listener",DSI486_0_1:>
+DSI486_0_1Listener(<:App_cfg:"IdleTime",<:Integer:30:>:>);
+DSI486_0_1Listener(<:App_cfg:"ScrapChars",<:Integer:0:>:>);
+DSI486_0_1Listener(<:App_source2:"","Open",DSI486_0_1_InOpener,<:App_do:"OPEN",0,0:>,-1,0:>);
+DSI486_0_1Listener(<:App_source2:"","Close",DSI486_0_1_InOpener,<:App_do:"CLOSE",0,0:>,-1,0:>);
+END # End of script 0
+
+#!script 1
+
+SParServer(<:App_resvalue:"sid",17,<:String:"":>,"",0:>);
+SParServer(<:App_resvalue:"altitude",17,<:Float:0:>,"",0:>);
+SParServer(<:App_resvalue:"HMP155",17,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"PMT16A",17,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"QMT110_1",17,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"QMT110_2",17,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"RG13",17,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"CMP6",17,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"WA15",17,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"Latitude",17,<:Float:0:>,"",0:>);
+SParServer(<:App_resvalue:"Longitude",17,<:Float:0:>,"",0:>);
+SParServer(<:App_resvalue:"IRU_9429",17,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"WIND",17,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"EVAPCALC",17,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"PRESCALC",17,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"WCHCALC",17,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MDICALC",17,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"speedup",17,<:Float:0:>,"",0:>);
+SParServer(<:App_resvalue:"SHSensorHeight",17,<:Float:0:>,"",0:>);
+SParServer(<:App_resvalue:"QMD",17,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"evap_days",17,<:Float:1:>,"",0:>);
+SParServer(<:App_resvalue:"_oc_local_interval",17,<:Float:15.000:>,"",0:>);
+SParServer(<:App_resvalue:"_table_local_interval",17,<:Float:60.000:>,"",0:>);
+SParServer(<:App_resvalue:"_status_interval",17,<:Float:60.000:>,"",0:>);
+SParServer(<:App_resvalue:"evap_albedo",17,<:Float:.25:>,"",0:>);
+SParServer(<:App_resvalue:"sname",17,<:String:"AWS330":>,"",0:>);
+SParServer(<:App_resvalue:"pslevel",17,<:Float:1.2:>,"",0:>);
+SParServer(<:App_resvalue:"DC_Alarm:low_limit",8209,<:Float:10.800:>,"",0:>);
+SParServer(<:App_resvalue:"EMAIL:auth",8209,<:String:"none":>,"",0:>);
+SParServer(<:App_resvalue:"EMAIL:sender",8209,<:String:"AWS330@vaisala.com":>,"",0:>);
+SParServer(<:App_resvalue:"EMAIL:server",8209,<:String:"not set":>,"",0:>);
+SParServer(<:App_resvalue:"EMAIL:recipient",8209,<:String:"not set":>,"",0:>);
+SParServer(<:App_resvalue:"FTP:pass",8209,<:String:"Net set":>,"",0:>);
+SParServer(<:App_resvalue:"FTP:server",8209,<:String:"Not set":>,"",0:>);
+SParServer(<:App_resvalue:"FTP:user",8209,<:String:"Not set":>,"",0:>);
+SParServer(<:App_resvalue:"GSM_Modem:pin",8209,<:String:"0000":>,"",0:>);
+SParServer(<:App_resvalue:"GSM_Modem:smscentre",8209,<:String:"":>,"",0:>);
+SParServer(<:App_resvalue:"hosts:ftp.myserver.net:ftp:port",8209,<:Integer:21:>,"",0:>);
+SParServer(<:App_resvalue:"hosts:ftp.myserver.net:ftp:username",8209,<:String:"change-user":>,"",0:>);
+SParServer(<:App_resvalue:"hosts:ftp.myserver.net:ftp:password",8209,<:String:"chane-pass":>,"",0:>);
+SParServer(<:App_resvalue:"hosts:smtp.myserver.net:smtp:username",8209,<:String:"change-user":>,"",0:>);
+SParServer(<:App_resvalue:"hosts:smtp.myserver.net:smtp:password",8209,<:String:"change-pwd":>,"",0:>);
+SParServer(<:App_resvalue:"hosts:smtp.myserver.net:smtp:port",8209,<:Integer:25:>,"",0:>);
+SParServer(<:App_resvalue:"hosts:ntp.myserver.net:ntp:username",8209,<:String:"change-user":>,"",0:>);
+SParServer(<:App_resvalue:"hosts:ntp.myserver.net:ntp:password",8209,<:String:"change-pwd":>,"",0:>);
+SParServer(<:App_resvalue:"hosts:ntp.myserver.net:ntp:port",8209,<:Integer:123:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:sms_to_local",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:alrtech_to_email",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:alrtech_to_socket",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:alrtech_to_sms",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:csv_to_com0",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:table_to_com0",8209,<:Integer:1:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:sms_to_com0",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:alrtech_to_com0",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:alrmet_to_com0",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:table_to_local",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:alrtech_to_local",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:alrmet_to_local",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:alrtech_list",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:csv_to_socket",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:alrtech_to_ftp",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:csv_to_local",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:sms_to_sms",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:alrmet_to_sms",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:table_to_ftp",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:csv_to_ftp",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:table_to_socket",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:sms_to_ftp",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:table_to_email",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:sms_to_socket",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:csv_to_email",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:table_interval",8209,<:Float:0.000:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:sms_interval",8209,<:Float:0.000:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:csv_interval",8209,<:Float:0.000:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:alrmet_to_ftp",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:alrmet_to_email",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:alrmet_to_socket",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"MessageDispatcher:sms_to_email",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"netif0:isp",8209,<:String:"*99***1#":>,"",0:>);
+SParServer(<:App_resvalue:"netif0:apn",8209,<:String:"internet":>,"",0:>);
+SParServer(<:App_resvalue:"netif0:auth",8209,<:String:"any":>,"",0:>);
+SParServer(<:App_resvalue:"netif0:username",8209,<:String:"none":>,"",0:>);
+SParServer(<:App_resvalue:"netif0:password",8209,<:String:"none":>,"",0:>);
+SParServer(<:App_resvalue:"netif0:staticip",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"netif0:address",8209,<:String:"10.0.0.2":>,"",0:>);
+SParServer(<:App_resvalue:"netif0:subnetmask",8209,<:String:"255.255.255.0":>,"",0:>);
+SParServer(<:App_resvalue:"netif0:gateway",8209,<:String:"10.0.0.1":>,"",0:>);
+SParServer(<:App_resvalue:"netif0:dns1",8209,<:String:"":>,"",0:>);
+SParServer(<:App_resvalue:"netif0:dns2",8209,<:String:"":>,"",0:>);
+SParServer(<:App_resvalue:"netif0:ifpriority",8209,<:Integer:1:>,"",0:>);
+SParServer(<:App_resvalue:"netif0:vjcompress",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"netif0:servername",8209,<:String:"":>,"",0:>);
+SParServer(<:App_resvalue:"netif0:auth_both",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"netif1:isp",8209,<:String:"*99***1#":>,"",0:>);
+SParServer(<:App_resvalue:"netif1:apn",8209,<:String:"internet":>,"",0:>);
+SParServer(<:App_resvalue:"netif1:auth",8209,<:String:"any":>,"",0:>);
+SParServer(<:App_resvalue:"netif1:username",8209,<:String:"none":>,"",0:>);
+SParServer(<:App_resvalue:"netif1:password",8209,<:String:"none":>,"",0:>);
+SParServer(<:App_resvalue:"netif1:staticip",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"netif1:address",8209,<:String:"10.0.0.2":>,"",0:>);
+SParServer(<:App_resvalue:"netif1:subnetmask",8209,<:String:"255.255.255.0":>,"",0:>);
+SParServer(<:App_resvalue:"netif1:gateway",8209,<:String:"10.0.0.1":>,"",0:>);
+SParServer(<:App_resvalue:"netif1:dns1",8209,<:String:"":>,"",0:>);
+SParServer(<:App_resvalue:"netif1:dns2",8209,<:String:"":>,"",0:>);
+SParServer(<:App_resvalue:"netif1:ifpriority",8209,<:Integer:1:>,"",0:>);
+SParServer(<:App_resvalue:"netif1:vjcompress",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"netif1:servername",8209,<:String:"":>,"",0:>);
+SParServer(<:App_resvalue:"netif1:auth_both",8209,<:Integer:0:>,"",0:>);
+SParServer(<:App_resvalue:"NTP:server1",8209,<:String:"Not set":>,"",0:>);
+SParServer(<:App_resvalue:"NTP:timetol",8209,<:Integer:5000:>,"",0:>);
+SParServer(<:App_resvalue:"NTP:interval",8209,<:Float:0.000:>,"",0:>);
+SParServer(<:App_resvalue:"PR_Alarm:high_limit",8209,<:Float:20.000:>,"",0:>);
+SParServer(<:App_resvalue:"PR_On:pr_limit",8209,<:Float:0.100:>,"",0:>);
+SParServer(<:App_resvalue:"Precipitation:RGResolution",8209,<:Float:0.20:>,"",0:>);
+SParServer(<:App_resvalue:"SensorStatusScanner:startdelay",8209,<:Float:120.00:>,"",0:>);
+SParServer(<:App_resvalue:"SetupManager:uri",8209,<:String:"":>,"",0:>);
+SParServer(<:App_resvalue:"SMS:sendto",8209,<:String:"not set":>,"",0:>);
+SParServer(<:App_resvalue:"TA_AlarmHigh:high_limit",8209,<:Float:40.000:>,"",0:>);
+SParServer(<:App_resvalue:"TA_AlarmLow:low_limit",8209,<:Float:0.000:>,"",0:>);
+SParServer(<:App_resvalue:"VCOM0:host1",8209,<:String:"10.0.0.5":>,"",0:>);
+SParServer(<:App_resvalue:"VCOM0:retry1",8209,<:Integer:3:>,"",0:>);
+SParServer(<:App_resvalue:"VCOM0:netif1",8209,<:String:"netif0":>,"",0:>);
+SParServer(<:App_resvalue:"VCOM0:port1",8209,<:Integer:10001:>,"",0:>);
+SParServer(<:App_resvalue:"WD_Selector:timeout",8209,<:Float:2.00:>,"",0:>);
+SParServer(<:App_resvalue:"WS_Alarm:high_limit",8209,<:Float:25.000:>,"",0:>);
+SParServer(<:App_resvalue:"WS_Selector:timeout",8209,<:Float:2.00:>,"",0:>);
+
+COM0(<:SerialCommand:19,1:>);
+COM0(<:SerialConfiguration:9600,8,1,0:>);
+COM0(<:SerialHandshake:0,20:>);
+COM0(<:TxControl:1,1,0,50:>);
+COM0(<:SerialCommand:2,4096:>);
+COM0(<:SerialCommand:1,4096:>);
+
+COM1(<:SerialCommand:19,1:>);
+COM1(<:SerialConfiguration:9600,8,1,0:>);
+COM1(<:SerialHandshake:0,20:>);
+COM1(<:TxControl:1,0,20,-1:>);
+COM1(<:SerialCommand:2,4096:>);
+COM1(<:SerialCommand:1,4096:>);
+COM1(<:TxDummies:0,0,0:>);
+
+DSI486_0_0(<:SerialCommand:19,1:>);
+DSI486_0_0(<:SerialConfiguration:9600,8,1,0:>);
+DSI486_0_0(<:SerialHandshake:0,20:>);
+DSI486_0_0(<:TxControl:1,0,30,20:>);
+DSI486_0_0(<:SerialCommand:2,4096:>);
+DSI486_0_0(<:SerialCommand:1,4096:>);
+DSI486_0_0(<:TxDummies:0,0,0:>);
+
+DSI486_0_1(<:SerialCommand:19,1:>);
+DSI486_0_1(<:SerialConfiguration:4800,8,1,0:>);
+DSI486_0_1(<:SerialHandshake:0,20:>);
+DSI486_0_1(<:TxControl:1,0,30,20:>);
+DSI486_0_1(<:SerialCommand:2,4096:>);
+DSI486_0_1(<:SerialCommand:1,4096:>);
+DSI486_0_1(<:TxDummies:0,0,0:>);
+print( "\nStarting to execute setup\n");
+
+<:CreateNetIfCtrlPPPmodem:"PPPModem_5_1","DSI486_0_1","",0:>
+<:NetIfInfoCreator:"NetIfInfo",0:>
+
+NetIfManager(<:AddNetIf:"netif0",PPPModem_5_1,1000,"netif0",0:>);NetIfManager(<:AddNetIf:"netif1",PPPModem_5_1,1000,"netif1",2:>);
+<:VComTCP:"VCOM0",50001,65,75,1451:>
+<:VComTCP:"VCOM1",50000,300,75,1449:>
+<:PollServer:"COM1_Poll",COM1:>
+<:Extparse:"Extparser":>
+<:SignalFilter:"SignalFilter_1":>
+<:SParTev:"SParTev_1",1,134,"_oc_local_interval","":>
+<:SParTev:"SParTev_11",1,75,"_status_interval","":>
+<:SParTev:"SParTev_13",1,152,"NTP:interval","":>
+<:SParTev:"SParTev_14",1,148,"_table_local_interval","":>
+<:SParTev:"SParTev_2",1,135,"MessageDispatcher:csv_interval","":>
+<:SParTev:"SParTev_3",1,142,"MessageDispatcher:sms_interval","":>
+<:SParTev:"SParTev_4",1,149,"MessageDispatcher:table_interval","":>
+<:SParTev:"SParTev_6",1,141,"_status_interval","":>
+<:SParTev:"SParTev_7",1,130,"_status_interval","":>
+<:ExcitCtrl:"COMMON_EXCITATION":>
+<:QMI108:"QMI108_1":>
+<:CreateNetIfOpener:"DSI486_0_1_InOpener","netif1",0,-1003,0:>
+<:SMTPClient:"EMAIL":>
+<:FTPClient:"FTP":>
+<:NTPClient:"NTP":>
+<:SMSMessenger:"SMS":>
+<:ConfMath:"SunShineDuration_daily_h",4,1,0,0,0,"":>
+<:ConfMath:"ClockSpeeder",1,0,0,0,0,"":>
+<:ConfMath:"MessageDispatcher",0,6,11,5,0,"":>
+<:ConfMath:"SensorStatusScanner",1,5,13,2,8,"":>
+<:ConfMath:"TA_06_18_Max_Hold",1,1,0,0,0,"":>
+<:ConfMath:"TA_18_06_Min_Hold",1,1,0,0,0,"":>
+<:ConfMath:"UptimeCounter",0,1,0,0,8,"":>
+<:WAV15:"WindDirection":>
+<:FastFreqMeasure:"WindSpeed":>
+<:WT50:"WMT700",COM1_Poll,"A",1,800,1:>
+<:Report:"Alarm_Email":>
+<:Report:"Alarm_FTP":>
+<:Report:"Alarm_SMS":>
+<:Report:"AlarmingValues":>
+<:Report:"AVG_1MIN":>
+<:Report:"DC_AlarmMessage":>
+<:Report:"Obs_Email":>
+<:Report:"Obs_FTP":>
+<:Report:"Obs_SMS":>
+<:Report:"OC":>
+<:Report:"OC_Telemetry":>
+<:Report:"QMD_Met_1":>
+<:Report:"QMD_Met_2":>
+<:Report:"SensorAlarmMessage":>
+<:Report:"SensorStatus":>
+<:Report:"SMS_Message":>
+<:Report:"SMS_SensorAlarmMessage":>
+<:Report:"TABLE":>
+<:Report:"Table_Telemetry":>
+<:Report:"Technical_Alarm":>
+<:Report:"TI_AlarmMessage":>
+<:Report:"UTC_Timestamp":>
+<:LogServer:"LogServer_L0":>
+<:HistServer:"HistServer_L0":>
+<:ValueMonitor:"DC_Alarm":>
+<:ValueMonitor:"TI_Alarm":>
+<:ModemCtrl:"GSM_Modem":>
+<:OutCTRL:"GSM_Modem_Pwr",0,0,0:>
+<:Pollcli:"Pollcli_COM0":>
+<:Pollcli:"Pollcli_DSI486_0_0":>
+<:Pollcli:"Pollcli_DSI486_0_1":>
+<:Pollcli:"Pollcli_VCOM1":>
+<:OutCTRL:"PowerControl_1",0,0,0:>
+<:MMI:"QMD_1":>
+<:MMIspi:"MMI_SPI_1":>
+<:CMD_WINDDIR:"winddircalc2",WindDirection,"WD":>
+ComPorts(<:App_source2:"","MOD1_2",DSI486_0_0,<:String:"Uses pins A1 (D-), A2 (D+)":>,-1,0:>);
+ComPorts(<:App_source2:"","MOD1_1",DSI486_0_1,<:String:"Uses pins A3 (D- or TxD), A4 (D+ or RxD)":>,-1,0:>);
+END # End of script 1
+
+#!script 10001
+
+AdclShell(<:App_cfg:"shell_log",<:Component:0:>:>);
+
+DaylightSavingTime(<:String:"0, 3600, U, 0":>);
+SysInfo(<:StrSrc:"sensors","",3,1,0:>)
+
+PPPModem_5_1(<:App_cfg:"MODEM",<:Component:GSM_Modem:>:>);
+
+VCOM0(<:SerialCommand:2,4096:>);
+
+VCOM1(<:SerialCommand:2,4096:>);
+
+Extparser(<:App_cfg:"remote_log",<:Component:0:>:>);
+
+SignalFilter_1(<:App_cfg:"Sender",<:Component:SParServer:>:>);
+SignalFilter_1(<:App_cfg:"Signal",<:String:"MenuServer":>:>);
+SignalFilter_1(<:App_cfg:"ID",<:String:"altitude":>:>);
+SignalFilter_1(<:App_cfg:"ID",<:String:"evap_albedo":>:>);
+SignalFilter_1(<:App_cfg:"ID",<:String:"Latitude":>:>);
+SignalFilter_1(<:App_cfg:"ID",<:String:"Longitude":>:>);
+SignalFilter_1(<:App_cfg:"ID",<:String:"pslevel":>:>);
+SignalFilter_1(<:App_cfg:"ID",<:String:"SHSensorHeight":>:>);
+SignalFilter_1(<:App_cfg:"ID",<:String:"sname":>:>);
+
+EMAIL(<:SmtpCfg:"vaisala.com","","","","netif0","","/Ram",50,2,4:>);
+EMAIL(<:App_cfg:"auth",<:Integer:0:>:>);
+EMAIL(<:SmtpTxCfg:<:App_source:"","",Obs_Email,<:App_lastvalue:"rep":>:>,"sender","recipient","",<:App_source:"","",0,<:App_lastvalue:"":>:>,2:>);
+EMAIL(<:SmtpTxCfg:<:App_source:"","",Alarm_Email,<:App_lastvalue:"rep":>:>,"sender","recipient","",<:App_source:"","",0,<:App_lastvalue:"":>:>,2:>);
+
+FTP(<:FtpCfg:"","","","netif0","","/Ram","50",2,156:>);
+FTP(<:FtpTxCfg:<:App_source:"","",Obs_FTP,<:App_lastvalue:"rep":>:>,"",<:App_source:"","",0,<:App_lastvalue:"":>:>,0:>);
+FTP(<:FtpTxCfg:<:App_source:"","",Alarm_FTP,<:App_lastvalue:"rep":>:>,"",<:App_source:"","",0,<:App_lastvalue:"":>:>,0:>);
+
+NTP(<:NtpCliCfg:"",123,"",123,3,5000,"netif0","",3,5000,2,1:>);
+
+SMS(<:SmsTxCfg:GSM_Modem,"",160,5,10000,1,0:>);
+
+WindDirection(<:App_cfg:"DriverName",<:String:"QMI108_1":>:>);
+WindDirection(<:App_cfg:"VaneBits",<:Integer:6:>:>);
+WindDirection(<:App_cfg:"VanePowerBit",<:Integer:0:>:>);
+WindDirection(<:App_cfg:"VanePowerInvert",<:Integer:0:>:>);
+WindDirection(<:App_cfg:"DirResolution",<:Float:5.625:>:>);
+WindDirection(<:App_cfg:"CodeGapStart",<:Integer:65536:>:>);
+WindDirection(<:App_cfg:"CodeGapLength",<:Integer:0:>:>);
+WindDirection(<:WAV15_config:"WD",-1,2,60,1:>);
+
+WindSpeed(<:D_Meas_config:"Meas",2,0,1,0,0,20000,20000,0,0.3278,0.1007,0,0:>);
+WindSpeed(<:App_cfg:"SampleInterval",<:Integer:1000:>:>);
+
+LogServer_L0(<:Log_config:1,"/Log/","L0",180:>);
+LogServer_L0(<:Log_itemcfg2:AVG_1MIN,"rep",4,0,1,0,<:App_lastvalue:"rep":>,-1,0:>);
+LogServer_L0(<:App_cfg:"TargetDir",<:String:"/Ext/(sname)":>:>);
+
+HistServer_L0(<:Hist_config:"/Ext/(sname)","L0",LogServer_L0:>);
+
+DC_Alarm(<:vmon_config:Charger,"",<:App_lastvalue:"External_DC":>,DC_AlarmMessage,<:App_do:"rep",0,1:>,0,<:App_do:"",0,1:>,0,0,1,0,0,1,0,SParServer,"",<:App_lastvalue:"DC_Alarm:low_limit":>:>);
+DC_Alarm(<:App_source2:"","invtrig",0,<:App_do:"",0,1:>,-1,0:>);
+DC_Alarm(<:App_cfg:"invcfg",<:Integer:0:>:>);
+
+TI_Alarm(<:vmon_config:INT_PT100,"",<:App_lastvalue:"T_int":>,TI_AlarmMessage,<:App_do:"rep",0,1:>,0,<:App_do:"",0,1:>,-65,65,1,0,0,3,0,0,"",<:App_lastvalue:"":>:>);
+TI_Alarm(<:App_source2:"","invtrig",0,<:App_do:"",0,1:>,-1,0:>);
+TI_Alarm(<:App_cfg:"invcfg",<:Integer:0:>:>);
+
+GSM_Modem(<:ModemConfig:DSI486_0_1,"GSM_Modem",1000,250,1,30000,5,GSM_Modem_Pwr,<:App_do:"ON",0,1:>,<:App_do:"OFF",0,1:>,10000,<:App_source:"","",0,<:Null:>:>,0:>);
+GSM_Modem(<:ModemCmd:"AT_query","AT\r",0:>);
+GSM_Modem(<:ModemCmd:"AT_escape","+++",0:>);
+GSM_Modem(<:ModemCmd:"AT_set","ATV1E0\r",0:>);
+GSM_Modem(<:ModemCmd:"AT_hangup","ATH\r",0:>);
+GSM_Modem(<:ModemCmd:"AT_reset","ATZ\r",0:>);
+GSM_Modem(<:ModemCmd:"AT_creaPDP","AT+CGDCONT=1,\"IP\",\"{apn}\"\r",0:>);
+GSM_Modem(<:ModemCmd:"AT_pinquery","AT+CPIN?\r",0:>);
+GSM_Modem(<:ModemCmd:"AT_pinset","AT+CPIN=\"{pin}\"\r",0:>);
+GSM_Modem(<:ModemCmd:"AT_dial","ATD{isp}\r",0:>);
+GSM_Modem(<:ModemCmd:"AT_smstype","AT+CMGF=1\r",0:>);
+GSM_Modem(<:ModemCmd:"AT_smscentre","AT+CSCA=\"{smscentre}\"\r",0:>);
+GSM_Modem(<:ModemCmd:"AT_answer","ATA\r",0:>);
+GSM_Modem(<:ModemCmd:"AT_pindelay","DELAY(5000)",0:>);
+GSM_Modem(<:ModemCmd:"AT_disconndelay","DELAY(2000)",0:>);
+GSM_Modem(<:ModemCmd:"AT_smsrecset","AT+CNMI=2,1\r",0:>);
+GSM_Modem(<:ModemCmd:"AT_smsretr","AT+CMGR={smsindex}\r",0:>);
+GSM_Modem(<:ModemCmd:"AT_smsdelete","AT+CMGD={smsindex}\r",0:>);
+GSM_Modem(<:ModemCmd:"AT_sendsms","AT+CMGS=\"{smsto}\"\r",0:>);
+GSM_Modem(<:ModemCmd:"AT_smscontent","{smscontent}\x1A",0:>);
+GSM_Modem(<:ModemCmd:"AT_smsdelay","DELAY(1000)",0:>);
+GSM_Modem(<:ModemCmd:"AT_freesms","AT+CMGD=1\r",0:>);
+GSM_Modem(<:ModemResp:"AT_ok",0,"OK\r\n",0:>);
+GSM_Modem(<:ModemResp:"AT_error",1,"ERROR\r\n",0:>);
+GSM_Modem(<:ModemResp:"AT_connect",0,"CONNECT",0:>);
+GSM_Modem(<:ModemResp:"AT_dialfail",1,"\r\nNO CARRIER\r\n",0:>);
+GSM_Modem(<:ModemResp:"AT_disconn",0,"\r\nNO CARRIER\r\n",0:>);
+GSM_Modem(<:ModemResp:"AT_busy",1,"BUSY\r\n",0:>);
+GSM_Modem(<:ModemResp:"AT_pinrq",0,"+CPIN: SIM PIN\r\n\r\nOK\r\n",0:>);
+GSM_Modem(<:ModemResp:"AT_pinok",0,"+CPIN: READY\r\n\r\nOK\r\n",0:>);
+GSM_Modem(<:ModemResp:"AT_ring",0,"\r\nRING\r\n",1:>);
+GSM_Modem(<:ModemResp:"AT_disconnected",0,"\r\nNO CARRIER\r\n",4:>);
+GSM_Modem(<:ModemResp:"AT_smsind",0,"+CMTI: \"MT\",{var}",2:>);
+GSM_Modem(<:ModemResp:"AT_smscontentok",0,"+CMGR: {var}\r\n\r\nOK\r\n",0:>);
+GSM_Modem(<:ModemResp:"AT_smserror",1,"+CMS ERROR: {var}",0:>);
+GSM_Modem(<:ModemResp:"AT_entersms",0,">",0:>);
+GSM_Modem(<:ModemResp:"AT_smsok",0,"+CMGS: {VAR}\r\n\r\nOK\r\n",0:>);
+GSM_Modem(<:ModemCmdExchange:"init",0,"AT_query","AT_ok",5000,1,1,"":>);
+GSM_Modem(<:ModemCmdExchange:"init",0,"AT_escape","AT_disconn",5000,1,2,"AT_ok":>);
+GSM_Modem(<:ModemCmdExchange:"init",0,"AT_pinquery","AT_pinok,AT_pinrq,AT_error",5000,1,0,"":>);
+GSM_Modem(<:ModemCmdExchange:"init",0,"AT_pinset","AT_ok,AT_error",5000,1,0,"AT_pinrq":>);
+GSM_Modem(<:ModemCmdExchange:"init",0,"AT_pindelay","",5000,1,0,"AT_ok":>);
+GSM_Modem(<:ModemCmdExchange:"init",0,"AT_reset","AT_ok,AT_error",5000,1,0,"":>);
+GSM_Modem(<:ModemCmdExchange:"init",0,"AT_set","AT_ok,AT_error",5000,1,0,"":>);
+GSM_Modem(<:ModemCmdExchange:"init",0,"AT_smstype","AT_ok,AT_error",5000,1,0,"":>);
+GSM_Modem(<:ModemCmdExchange:"init",0,"AT_smsrecset","AT_ok,AT_error",5000,1,0,"":>);
+GSM_Modem(<:ModemCmdExchange:"init",0,"AT_smscentre","AT_ok,AT_error",5000,1,5,"":>);
+GSM_Modem(<:ModemCmdExchange:"init",0,"AT_freesms","AT_ok,AT_error",5000,1,1,"":>);
+GSM_Modem(<:ModemCmdExchange:"dial",0,"AT_creaPDP","AT_ok,AT_error",5000,1,0,"":>);
+GSM_Modem(<:ModemCmdExchange:"dial",0,"AT_dial","AT_connect,AT_error,AT_dialfail,AT_busy",60000,1,0,"":>);
+GSM_Modem(<:ModemCmdExchange:"connected",1,"AT_disconndelay","",5000,1,0,"":>);
+GSM_Modem(<:ModemCmdExchange:"connected",1,"AT_hangup","AT_ok,AT_error,AT_disconn",5000,1,1,"":>);
+GSM_Modem(<:ModemCmdExchange:"connected",1,"AT_query","AT_ok",5000,1,1,"":>);
+GSM_Modem(<:ModemCmdExchange:"connected",1,"AT_escape","AT_disconn,AT_ok",5000,1,3,"AT_ok":>);
+GSM_Modem(<:ModemCmdExchange:"answer",0,"AT_answer","AT_connect,AT_dialfail",30000,1,0,"AT_ok":>);
+GSM_Modem(<:ModemCmdExchange:"closing",0,"AT_hangup","AT_ok",5000,1,0,"":>);
+GSM_Modem(<:ModemCmdExchange:"fetchmsg",0,"AT_smsretr","AT_smscontentok,AT_smserror,AT_error",5000,1,1,"":>);
+GSM_Modem(<:ModemCmdExchange:"fetchmsg",0,"AT_smsdelete","AT_ok,AT_error",5000,1,0,"":>);
+GSM_Modem(<:ModemCmdExchange:"sendmsg",0,"AT_sendsms","AT_entersms,AT_error,AT_smserror",5000,1,0,"":>);
+GSM_Modem(<:ModemCmdExchange:"sendmsg",0,"AT_smsdelay","",5000,1,0,"":>);
+GSM_Modem(<:ModemCmdExchange:"sendmsg",0,"AT_smscontent","AT_smscontentok,AT_ok,AT_error,AT_smserror",10000,1,1,"":>);
+GSM_Modem(<:ModemAsynchResp:"connected","AT_disconnected",0:>);
+GSM_Modem(<:ModemAsynchResp:"closed","AT_ring",0:>);
+GSM_Modem(<:ModemAsynchResp:"closed","AT_smsind",0:>);
+
+GSM_Modem_Pwr(<:App_source2:"","OFF",COMMON_EXCITATION,<:Integer:13:>,-1,0:>);
+GSM_Modem_Pwr(<:App_source2:"","ON",COMMON_EXCITATION,<:Integer:3:>,-1,0:>);
+
+Pollcli_COM0(<:App_source2:"sid","CSV",OC,<:App_do:"SENDTO",COM0,0:>,-1,0:>);
+Pollcli_COM0(<:App_source2:"sid","TABLE",TABLE,<:App_do:"SENDTO",COM0,0:>,-1,0:>);
+
+Pollcli_DSI486_0_0(<:App_source2:"sid","TABLE",TABLE,<:App_do:"SENDTO",DSI486_0_0,0:>,-1,0:>);
+Pollcli_DSI486_0_0(<:App_source2:"sid","CSV",OC,<:App_do:"SENDTO",DSI486_0_0,0:>,-1,0:>);
+
+Pollcli_DSI486_0_1(<:App_source2:"sid","CSV",OC,<:App_do:"SENDTO",DSI486_0_1,0:>,-1,0:>);
+Pollcli_DSI486_0_1(<:App_source2:"sid","TABLE",TABLE,<:App_do:"SENDTO",DSI486_0_1,0:>,-1,0:>);
+
+Pollcli_VCOM1(<:App_source2:"sid","TABLE",TABLE,<:App_do:"SENDTO",VCOM1,0:>,-1,0:>);
+Pollcli_VCOM1(<:App_source2:"sid","CSV",OC,<:App_do:"SENDTO",VCOM1,0:>,-1,0:>);
+
+PowerControl_1(<:App_source2:"","ON",COMMON_EXCITATION,<:Integer:11:>,-1,0:>);
+PowerControl_1(<:App_source2:"","OFF",COMMON_EXCITATION,<:Integer:1:>,-1,0:>);
+
+QMD_1(<:MMICfg:MMI_SPI_1,256,<:String:"~MENU~{~Reports~_reports~Static Parameters~<SignalFilter_1>~System Info~<SysInfo>~Time & Date~_time~Display Settings~_mmisetup_endmenu}":>:>);
+QMD_1(<:App_cfg:"mmi_log",<:Component:0:>:>);
+
+WMT700(<:App_cfg:"dir",<:Integer:1:>:>);
+WMT700(<:App_cfg:"spd",<:Integer:1:>:>);
+END # End of script 10001
+
+#!script 15000
+Alarm_Email(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+Alarm_Email(<:StrSrc:"","",4,1,0:>);
+Alarm_Email(<:App_source3:"","","MessageDispatcher",<:App_lastvalue:"alarm_out":>,-1,0:>);
+END # End of script 15000
+#!script 15001
+Alarm_FTP(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+Alarm_FTP(<:StrSrc:"","",4,1,0:>);
+Alarm_FTP(<:App_source3:"","","MessageDispatcher",<:App_lastvalue:"alarm_out":>,-1,0:>);
+END # End of script 15001
+#!script 15002
+Alarm_SMS(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+Alarm_SMS(<:StrSrc:"","",4,1,0:>);
+Alarm_SMS(<:App_source3:"","","MessageDispatcher",<:App_lastvalue:"alarm_out":>,-1,0:>);
+END # End of script 15002
+#!script 15003
+AlarmingValues(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+AlarmingValues(<:StrSrc:"","",4,2,0:>);
+AlarmingValues(<:App_source3:"","","TA_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+AlarmingValues(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"SpdMax10m":>,-1,0:>);
+AlarmingValues(<:App_source3:"","","PR_1hour_sum",<:App_lastvalue:"Sum":>,-1,0:>);
+END # End of script 15003
+#!script 15004
+AVG_1MIN(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+AVG_1MIN(<:StrSrc:"","",4,3,0:>);
+AVG_1MIN(<:App_source3:"","","TA_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","RH_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","DPCalc_1",<:App_lastvalue:"DP":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","WetBulb_1min_avg",<:App_lastvalue:"twet":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","QFECalc_1",<:App_lastvalue:"QF":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","QFFCalc_1",<:App_lastvalue:"QF":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","QNHCalc_1",<:App_lastvalue:"QNH":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"DirAvg2m":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"DirMin2m":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"DirMax2m":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"SpdAvg2m":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"SpdMin2m":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"SpdMax2m":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","Precipitation",<:App_lastvalue:"PR":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","PR_intensity_1hour",<:App_lastvalue:"value":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","Global_irradiation_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","SunShineDuration_daily_min",<:App_lastvalue:"Sum":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","TG1_10Min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","TG2_10Min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","SnowDepth",<:App_lastvalue:"SH":>,-1,0:>);
+AVG_1MIN(<:App_source3:"","","EvapCalc_1",<:App_lastvalue:"evap":>,-1,0:>);
+END # End of script 15004
+#!script 15005
+ClockSpeeder(<:StrSrc:"","",100,3,0:>);
+ClockSpeeder(<:App_source3:"speedup","speedup","SParServer",<:App_lastvalue:"speedup":>,-1,1:>);
+END # End of script 15005
+#!script 15006
+DC_AlarmMessage(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+DC_AlarmMessage(<:StrSrc:"","",4,4,0:>);
+DC_AlarmMessage(<:App_source3:"","","SParServer",<:App_lastvalue:"sname":>,-1,0:>);
+DC_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_YY":>,-1,0:>);
+DC_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_MM":>,-1,0:>);
+DC_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_DD":>,-1,0:>);
+DC_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_h":>,-1,0:>);
+DC_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_m":>,-1,0:>);
+DC_AlarmMessage(<:App_source3:"","","Charger",<:App_lastvalue:"External_DC":>,-1,0:>);
+END # End of script 15006
+#!script 15007
+MessageDispatcher(<:StrSrc:"","",100,4,0:>);
+MessageDispatcher(<:App_source3:"rep","CSV_REP","OC_Telemetry",<:App_lastvalue:"rep":>,-1,137:>);
+MessageDispatcher(<:App_source3:"rep","TABLE_REP","Table_Telemetry",<:App_lastvalue:"rep":>,-1,137:>);
+MessageDispatcher(<:App_source3:"rep","SMS_REP","SMS_Message",<:App_lastvalue:"rep":>,-1,137:>);
+MessageDispatcher(<:App_source3:"socket_out","","VCOM0",<:Null:>,-1,130:>);
+MessageDispatcher(<:App_source3:"obs_ftp","obs_ftp","Obs_FTP",<:App_do:"rep",0,1:>,-1,34:>);
+MessageDispatcher(<:App_source3:"obs_email","obs_email","Obs_Email",<:App_do:"rep",0,1:>,-1,34:>);
+MessageDispatcher(<:App_source3:"obs_sms","obs_sms","Obs_SMS",<:App_do:"rep",0,1:>,-1,34:>);
+MessageDispatcher(<:App_source3:"obs_out","","0",<:Null:>,-1,130:>);
+MessageDispatcher(<:App_source3:"alarm_out","","0",<:Null:>,-1,130:>);
+MessageDispatcher(<:App_source3:"rep","WS_AlarmMessage","WS_AlarmMessage",<:App_lastvalue:"rep":>,-1,137:>);
+MessageDispatcher(<:App_source3:"rep","TA_AlarmMessage","TA_AlarmMessage",<:App_lastvalue:"rep":>,-1,137:>);
+MessageDispatcher(<:App_source3:"rep","PR_AlarmMessage","PR_AlarmMessage",<:App_lastvalue:"rep":>,-1,137:>);
+MessageDispatcher(<:App_source3:"rep","SensorAlarmMessage","SensorAlarmMessage",<:App_lastvalue:"rep":>,-1,137:>);
+MessageDispatcher(<:App_source3:"alarm_ftp","alarm_ftp","Alarm_FTP",<:App_do:"rep",0,1:>,-1,34:>);
+MessageDispatcher(<:App_source3:"alarm_email","alarm_email","Alarm_Email",<:App_do:"rep",0,1:>,-1,34:>);
+MessageDispatcher(<:App_source3:"alarm_sms","alarm_sms","Alarm_SMS",<:App_do:"rep",0,1:>,-1,34:>);
+MessageDispatcher(<:App_source3:"rep","SMS_SensorAlarmMessage","SMS_SensorAlarmMessage",<:App_lastvalue:"rep":>,-1,137:>);
+MessageDispatcher(<:App_source3:"local_out","","DSI486_0_0",<:Null:>,-1,4226:>);
+MessageDispatcher(<:App_source3:"com0_out","","COM0",<:Null:>,-1,4226:>);
+MessageDispatcher(<:App_source3:"rep","DC_AlarmMessage","DC_AlarmMessage",<:App_lastvalue:"rep":>,-1,137:>);
+MessageDispatcher(<:App_source3:"rep","TI_AlarmMessage","TI_AlarmMessage",<:App_lastvalue:"rep":>,-1,137:>);
+MessageDispatcher(<:App_source3:"rep","TechAlarmMessage","Technical_Alarm",<:App_lastvalue:"rep":>,-1,137:>);
+END # End of script 15007
+#!script 15008
+Obs_Email(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+Obs_Email(<:StrSrc:"","",4,5,0:>);
+Obs_Email(<:App_source3:"","","MessageDispatcher",<:App_lastvalue:"obs_out":>,-1,0:>);
+END # End of script 15008
+#!script 15009
+Obs_FTP(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+Obs_FTP(<:StrSrc:"","",4,5,0:>);
+Obs_FTP(<:App_source3:"","","MessageDispatcher",<:App_lastvalue:"obs_out":>,-1,0:>);
+END # End of script 15009
+#!script 15010
+Obs_SMS(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+Obs_SMS(<:StrSrc:"","",4,5,0:>);
+Obs_SMS(<:App_source3:"","","MessageDispatcher",<:App_lastvalue:"obs_out":>,-1,0:>);
+END # End of script 15010
+#!script 15011
+OC(<:StrSrc:"","",4,6,0:>);
+OC(<:App_source3:"","","SParServer",<:App_lastvalue:"sname":>,-1,0:>);
+OC(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_YY":>,-1,0:>);
+OC(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_MM":>,-1,0:>);
+OC(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_DD":>,-1,0:>);
+OC(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_h":>,-1,0:>);
+OC(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_m":>,-1,0:>);
+OC(<:App_source3:"","","TA_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","TA_Hourly_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","TA_Daily_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","TA_Daily_avg",<:App_lastvalue:"Min":>,-1,0:>);
+OC(<:App_source3:"","","TA_Daily_avg",<:App_lastvalue:"Max":>,-1,0:>);
+OC(<:App_source3:"","","RH_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","RH_Hourly_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","DPCalc_1",<:App_lastvalue:"DP":>,-1,0:>);
+OC(<:App_source3:"","","DP_Hourly_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","WetBulb_1min_avg",<:App_lastvalue:"MDI":>,-1,0:>);
+OC(<:App_source3:"","","WetBulb_1hour_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","HICalc_1",<:App_lastvalue:"HI":>,-1,0:>);
+OC(<:App_source3:"","","WChCalc_1",<:App_lastvalue:"WCh":>,-1,0:>);
+OC(<:App_source3:"","","QFECalc_1",<:App_lastvalue:"QF":>,-1,0:>);
+OC(<:App_source3:"","","QFE_Hourly_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","QFE_Hourly_avg",<:App_lastvalue:"Min":>,-1,0:>);
+OC(<:App_source3:"","","QFE_Hourly_avg",<:App_lastvalue:"Max":>,-1,0:>);
+OC(<:App_source3:"","","QFE_Daily_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","QFE_Daily_avg",<:App_lastvalue:"Min":>,-1,0:>);
+OC(<:App_source3:"","","QFE_Daily_avg",<:App_lastvalue:"Max":>,-1,0:>);
+OC(<:App_source3:"","","QFFCalc_1",<:App_lastvalue:"QF":>,-1,0:>);
+OC(<:App_source3:"","","QFF_Hourly_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","QFF_Hourly_avg",<:App_lastvalue:"Min":>,-1,0:>);
+OC(<:App_source3:"","","QFF_Hourly_avg",<:App_lastvalue:"Max":>,-1,0:>);
+OC(<:App_source3:"","","QFF_Daily_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","QFF_Daily_avg",<:App_lastvalue:"Min":>,-1,0:>);
+OC(<:App_source3:"","","QFF_Daily_avg",<:App_lastvalue:"Max":>,-1,0:>);
+OC(<:App_source3:"","","QNHCalc_1",<:App_lastvalue:"QNH":>,-1,0:>);
+OC(<:App_source3:"","","QNH_Hourly_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","QNH_Hourly_avg",<:App_lastvalue:"Min":>,-1,0:>);
+OC(<:App_source3:"","","QNH_Hourly_avg",<:App_lastvalue:"Max":>,-1,0:>);
+OC(<:App_source3:"","","QNH_Daily_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","QNH_Daily_avg",<:App_lastvalue:"Min":>,-1,0:>);
+OC(<:App_source3:"","","QNH_Daily_avg",<:App_lastvalue:"Max":>,-1,0:>);
+OC(<:App_source3:"","","PTendCalc_1",<:App_lastvalue:"ptrend":>,-1,0:>);
+OC(<:App_source3:"","","PTendCalc_1",<:App_lastvalue:"ptend":>,-1,0:>);
+OC(<:App_source3:"","","VapourPressure_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"SpdAvg3s":>,-1,0:>);
+OC(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"DirAvg3s":>,-1,0:>);
+OC(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"DirAvg2m":>,-1,0:>);
+OC(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"DirMin2m":>,-1,0:>);
+OC(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"DirMax2m":>,-1,0:>);
+OC(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"SpdAvg2m":>,-1,0:>);
+OC(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"SpdMin2m":>,-1,0:>);
+OC(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"SpdMax2m":>,-1,0:>);
+OC(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"DirAvg10m":>,-1,0:>);
+OC(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"DirMin10m":>,-1,0:>);
+OC(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"DirMax10m":>,-1,0:>);
+OC(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"SpdAvg10m":>,-1,0:>);
+OC(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"SpdMin10m":>,-1,0:>);
+OC(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"SpdMax10m":>,-1,0:>);
+OC(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"GustDir":>,-1,0:>);
+OC(<:App_source3:"","","PR_1min_sum",<:App_lastvalue:"Sum":>,-1,0:>);
+OC(<:App_source3:"","","PR_10min_sum",<:App_lastvalue:"Sum":>,-1,0:>);
+OC(<:App_source3:"","","PR_30min_sum",<:App_lastvalue:"Sum":>,-1,0:>);
+OC(<:App_source3:"","","PR_1hour_sum",<:App_lastvalue:"Sum":>,-1,0:>);
+OC(<:App_source3:"","","PR_3hour_sum",<:App_lastvalue:"Sum":>,-1,0:>);
+OC(<:App_source3:"","","PR_6hour_sum",<:App_lastvalue:"Sum":>,-1,0:>);
+OC(<:App_source3:"","","PR_12hour_sum",<:App_lastvalue:"Sum":>,-1,0:>);
+OC(<:App_source3:"","","PR24h",<:App_lastvalue:"Sum":>,-1,0:>);
+OC(<:App_source3:"","","PR_intensity_1hour",<:App_lastvalue:"value":>,-1,0:>);
+OC(<:App_source3:"","","SnowDepth_1h",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","TG1_10Min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","TG1_Hourly_Avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","TG1_Hourly_Avg",<:App_lastvalue:"Min":>,-1,0:>);
+OC(<:App_source3:"","","TG1_Hourly_Avg",<:App_lastvalue:"Max":>,-1,0:>);
+OC(<:App_source3:"","","TG1_Daily_Avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","TG1_Daily_Avg",<:App_lastvalue:"Min":>,-1,0:>);
+OC(<:App_source3:"","","TG1_Daily_Avg",<:App_lastvalue:"Max":>,-1,0:>);
+OC(<:App_source3:"","","TG2_10Min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","TG2_Hourly_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","TG2_10Min_avg",<:App_lastvalue:"Min":>,-1,0:>);
+OC(<:App_source3:"","","TG2_10Min_avg",<:App_lastvalue:"Max":>,-1,0:>);
+OC(<:App_source3:"","","TG2_Daily_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","TG2_Daily_avg",<:App_lastvalue:"Min":>,-1,0:>);
+OC(<:App_source3:"","","TG2_Daily_avg",<:App_lastvalue:"Max":>,-1,0:>);
+OC(<:App_source3:"","","Global_irradiation_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","Global_Radiation_1h_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","Global_Radiation_1d_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+OC(<:App_source3:"","","SunShineDuration_daily_min",<:App_lastvalue:"Sum":>,-1,0:>);
+OC(<:App_source3:"","","EvapCalc_1",<:App_lastvalue:"evap":>,-1,0:>);
+OC(<:App_source3:"","","UptimeCounter",<:App_lastvalue:"minutes":>,-1,0:>);
+OC(<:App_source3:"","","SysInfo",<:App_lastvalue:"qml_status":>,-1,0:>);
+OC(<:App_source3:"","","Charger",<:App_lastvalue:"External_DC":>,-1,0:>);
+END # End of script 15011
+#!script 15012
+OC_Telemetry(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+OC_Telemetry(<:StrSrc:"","",4,7,0:>);
+OC_Telemetry(<:App_source3:"","","OC",<:App_lastvalue:"rep":>,-1,0:>);
+END # End of script 15012
+#!script 15013
+QMD_Met_1(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+QMD_Met_1(<:StrSrc:"","",4,9,0:>);
+QMD_Met_1(<:App_source3:"","","TA_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+QMD_Met_1(<:App_source3:"","","Temperature",<:App_lastvalue:"status":>,-1,0:>);
+QMD_Met_1(<:App_source3:"","","RH_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+QMD_Met_1(<:App_source3:"","","Humidity",<:App_lastvalue:"status":>,-1,0:>);
+QMD_Met_1(<:App_source3:"","","PA_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+QMD_Met_1(<:App_source3:"","","Pressure",<:App_lastvalue:"status":>,-1,0:>);
+QMD_Met_1(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"DirAvg10m":>,-1,0:>);
+QMD_Met_1(<:App_source3:"","","WD_Selector",<:App_lastvalue:"sensorstout":>,-1,0:>);
+QMD_Met_1(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"SpdAvg10m":>,-1,0:>);
+QMD_Met_1(<:App_source3:"","","WS_Selector",<:App_lastvalue:"sensorstout":>,-1,0:>);
+END # End of script 15013
+#!script 15014
+QMD_Met_2(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+QMD_Met_2(<:StrSrc:"","",4,10,0:>);
+QMD_Met_2(<:App_source3:"","","PR_10min_sum",<:App_lastvalue:"Sum":>,-1,0:>);
+QMD_Met_2(<:App_source3:"","","Precipitation",<:App_lastvalue:"status":>,-1,0:>);
+QMD_Met_2(<:App_source3:"","","Global_irradiation_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+QMD_Met_2(<:App_source3:"","","SolarRadiation",<:App_lastvalue:"status":>,-1,0:>);
+END # End of script 15014
+#!script 15015
+SensorAlarmMessage(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+SensorAlarmMessage(<:StrSrc:"","",4,14,0:>);
+SensorAlarmMessage(<:App_source3:"","","TABLE",<:App_lastvalue:"rep":>,-1,0:>);
+SensorAlarmMessage(<:App_source3:"","","SensorStatusScanner",<:App_lastvalue:"failure_description":>,-1,0:>);
+END # End of script 15015
+#!script 15016
+SensorStatus(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+SensorStatus(<:StrSrc:"","",4,15,0:>);
+SensorStatus(<:App_source3:"","","Temperature",<:App_lastvalue:"status":>,-1,0:>);
+SensorStatus(<:App_source3:"","","Humidity",<:App_lastvalue:"status":>,-1,0:>);
+SensorStatus(<:App_source3:"","","Pressure",<:App_lastvalue:"status":>,-1,0:>);
+SensorStatus(<:App_source3:"","","WD_Selector",<:App_lastvalue:"sensorstout":>,-1,0:>);
+SensorStatus(<:App_source3:"","","WS_Selector",<:App_lastvalue:"sensorstout":>,-1,0:>);
+SensorStatus(<:App_source3:"","","Precipitation",<:App_lastvalue:"status":>,-1,0:>);
+SensorStatus(<:App_source3:"","","SolarRadiation",<:App_lastvalue:"status":>,-1,0:>);
+SensorStatus(<:App_source3:"","","SoilTemp1",<:App_lastvalue:"status":>,-1,0:>);
+SensorStatus(<:App_source3:"","","SoilTemp2",<:App_lastvalue:"status":>,-1,0:>);
+SensorStatus(<:App_source3:"","","SnowDepth",<:App_lastvalue:"status":>,-1,0:>);
+SensorStatus(<:App_source3:"","","DC_Alarm",<:App_lastvalue:"status":>,-1,0:>);
+SensorStatus(<:App_source3:"","","TI_Alarm",<:App_lastvalue:"status":>,-1,0:>);
+END # End of script 15016
+#!script 15017
+SensorStatusScanner(<:StrSrc:"","",100,6,0:>);
+SensorStatusScanner(<:App_source3:"sensor_status","sensor_status","SensorStatus",<:Null:>,-1,4162:>);
+SensorStatusScanner(<:App_source3:"rep","sensor_status_in","SensorStatus",<:App_lastvalue:"rep":>,-1,137:>);
+SensorStatusScanner(<:App_source3:"SensorAlarmMessage","SensorAlarmMessage","SensorAlarmMessage",<:App_do:"rep",0,1:>,-1,34:>);
+SensorStatusScanner(<:App_source3:"Table","Table","TABLE",<:App_do:"rep",0,0:>,-1,34:>);
+SensorStatusScanner(<:App_source3:"SensorStatusScanner:startdelay","start_delay","SParServer",<:App_lastvalue:"SensorStatusScanner:startdelay":>,-1,257:>);
+SensorStatusScanner(<:App_source3:"_TA_name","TA_name","0",<:App_lastvalue:"":>,-1,129:>);
+SensorStatusScanner(<:App_source3:"_RH_name","RH_name","0",<:App_lastvalue:"":>,-1,129:>);
+SensorStatusScanner(<:App_source3:"_PA_name","PA_name","0",<:App_lastvalue:"":>,-1,129:>);
+SensorStatusScanner(<:App_source3:"_WD_name","WD_name","0",<:App_lastvalue:"":>,-1,129:>);
+SensorStatusScanner(<:App_source3:"_WS_name","WS_name","0",<:App_lastvalue:"":>,-1,129:>);
+SensorStatusScanner(<:App_source3:"_PR_name","PR_name","0",<:App_lastvalue:"":>,-1,129:>);
+SensorStatusScanner(<:App_source3:"_SR_name","SR_name","0",<:App_lastvalue:"":>,-1,129:>);
+SensorStatusScanner(<:App_source3:"_ST1_name","ST1_name","0",<:App_lastvalue:"":>,-1,129:>);
+SensorStatusScanner(<:App_source3:"_ST2_name","ST2_name","0",<:App_lastvalue:"":>,-1,129:>);
+SensorStatusScanner(<:App_source3:"_SH_name","SH_name","0",<:App_lastvalue:"":>,-1,129:>);
+SensorStatusScanner(<:App_source3:"failure_description","","0",<:Null:>,-1,130:>);
+SensorStatusScanner(<:App_source3:"_DC_name","DC_name","0",<:App_lastvalue:"":>,-1,129:>);
+SensorStatusScanner(<:App_source3:"_TI_name","TI_name","0",<:App_lastvalue:"":>,-1,129:>);
+SensorStatusScanner(<:App_source3:"SMS_SensorAlarmMessage","SMS_SensorAlarmMessage","SMS_SensorAlarmMessage",<:App_do:"rep",0,1:>,-1,34:>);
+SensorStatusScanner(<:App_source3:"TechAlarmMessage","TechAlarmMessage","Technical_Alarm",<:App_do:"rep",0,1:>,-1,34:>);
+SensorStatusScanner(<:App_source3:"currAlarmMessage","","0",<:Null:>,-1,130:>);
+SensorStatusScanner(<:App_resvalue:"_TA_name",1,<:String:"Air temperature sensor failure":>,"",0:>);
+SensorStatusScanner(<:App_resvalue:"_RH_name",1,<:String:"Humidity sensor failure":>,"",0:>);
+SensorStatusScanner(<:App_resvalue:"_PA_name",1,<:String:"Barometric pressure sensor failure":>,"",0:>);
+SensorStatusScanner(<:App_resvalue:"_WD_name",1,<:String:"Wind direction sensor failure":>,"",0:>);
+SensorStatusScanner(<:App_resvalue:"_WS_name",1,<:String:"Wind speed sensor failure":>,"",0:>);
+SensorStatusScanner(<:App_resvalue:"_PR_name",1,<:String:"Tipping bucket sensor failure":>,"",0:>);
+SensorStatusScanner(<:App_resvalue:"_SR_name",1,<:String:"Solar radiation sensor failure":>,"",0:>);
+SensorStatusScanner(<:App_resvalue:"_ST1_name",1,<:String:"Soil temperature 1 sensor failure":>,"",0:>);
+SensorStatusScanner(<:App_resvalue:"_ST2_name",1,<:String:"Soil temperature 2 sensor failure":>,"",0:>);
+SensorStatusScanner(<:App_resvalue:"_SH_name",1,<:String:"Snow height sensor failure":>,"",0:>);
+SensorStatusScanner(<:App_resvalue:"_DC_name",1,<:String:"DC supply voltage low":>,"",0:>);
+SensorStatusScanner(<:App_resvalue:"_TI_name",1,<:String:"Internal temperature out of range":>,"",0:>);
+END # End of script 15017
+#!script 15018
+SMS_Message(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+SMS_Message(<:StrSrc:"","",4,16,0:>);
+SMS_Message(<:App_source3:"","","SParServer",<:App_lastvalue:"sname":>,-1,0:>);
+SMS_Message(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_YY":>,-1,0:>);
+SMS_Message(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_MM":>,-1,0:>);
+SMS_Message(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_DD":>,-1,0:>);
+SMS_Message(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_h":>,-1,0:>);
+SMS_Message(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_m":>,-1,0:>);
+SMS_Message(<:App_source3:"","","TA_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+SMS_Message(<:App_source3:"","","RH_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+SMS_Message(<:App_source3:"","","DPCalc_1",<:App_lastvalue:"DP":>,-1,0:>);
+SMS_Message(<:App_source3:"","","PA_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+SMS_Message(<:App_source3:"","","PR_1hour_sum",<:App_lastvalue:"Sum":>,-1,0:>);
+SMS_Message(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"DirAvg10m":>,-1,0:>);
+SMS_Message(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"SpdAvg10m":>,-1,0:>);
+SMS_Message(<:App_source3:"","","Global_Radiation_1h_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+SMS_Message(<:App_source3:"","","TG1_10Min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+SMS_Message(<:App_source3:"","","TG2_10Min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+SMS_Message(<:App_source3:"","","SnowDepth_1h",<:App_lastvalue:"Avg":>,-1,0:>);
+END # End of script 15018
+#!script 15019
+SMS_SensorAlarmMessage(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+SMS_SensorAlarmMessage(<:StrSrc:"","",4,17,0:>);
+SMS_SensorAlarmMessage(<:App_source3:"","","SParServer",<:App_lastvalue:"sname":>,-1,0:>);
+SMS_SensorAlarmMessage(<:App_source3:"","","SensorStatusScanner",<:App_lastvalue:"failure_description":>,-1,0:>);
+END # End of script 15019
+#!script 15020
+SunShineDuration_daily_h(<:App_source3:"Sum","A","SunShineDuration_daily_min",<:App_lastvalue:"Sum":>,-1,17:>);
+SunShineDuration_daily_h(<:App_source3:"","B","0",<:App_lastvalue:"":>,-1,17:>);
+SunShineDuration_daily_h(<:App_source3:"","C","0",<:App_lastvalue:"":>,-1,17:>);
+SunShineDuration_daily_h(<:App_source3:"","D","0",<:App_lastvalue:"D":>,-1,17:>);
+SunShineDuration_daily_h(<:App_source3:"value","value","0",<:Null:>,-1,2:>);
+SunShineDuration_daily_h(<:StrSrc:"","",100,2,0:>);
+END # End of script 15020
+#!script 15021
+TA_06_18_Max_Hold(<:StrSrc:"","",100,7,0:>);
+TA_06_18_Max_Hold(<:App_source3:"TA_Max_12h","TA_12h_Max_in","TA_Max_06_18",<:App_lastvalue:"TA_Max_12h":>,-1,257:>);
+TA_06_18_Max_Hold(<:App_source3:"TA_12h_Max","TA_12h_Max","0",<:Null:>,-1,2:>);
+END # End of script 15021
+#!script 15022
+TA_18_06_Min_Hold(<:StrSrc:"","",100,8,0:>);
+TA_18_06_Min_Hold(<:App_source3:"TA_Min_12h","TA_12h_Min_in","TA_Min_18_06",<:App_lastvalue:"TA_Min_12h":>,-1,257:>);
+TA_18_06_Min_Hold(<:App_source3:"TA_12h_Min","TA_12h_Min","0",<:Null:>,-1,2:>);
+END # End of script 15022
+#!script 15023
+TABLE(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+TABLE(<:StrSrc:"","",4,19,0:>);
+TABLE(<:App_source3:"","","SParServer",<:App_lastvalue:"sname":>,-1,0:>);
+TABLE(<:App_source3:"","","UTC_Timestamp",<:App_lastvalue:"rep":>,-1,0:>);
+TABLE(<:App_source3:"","","INT_PT100",<:App_lastvalue:"T_int":>,-1,0:>);
+TABLE(<:App_source3:"","","Charger",<:App_lastvalue:"External_DC":>,-1,0:>);
+TABLE(<:App_source3:"","","Temperature",<:App_lastvalue:"TA":>,-1,0:>);
+TABLE(<:App_source3:"","","TA_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+TABLE(<:App_source3:"","","Temperature",<:App_lastvalue:"status":>,-1,0:>);
+TABLE(<:App_source3:"","","Pressure",<:App_lastvalue:"PA":>,-1,0:>);
+TABLE(<:App_source3:"","","PA_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+TABLE(<:App_source3:"","","Pressure",<:App_lastvalue:"status":>,-1,0:>);
+TABLE(<:App_source3:"","","Humidity",<:App_lastvalue:"RH":>,-1,0:>);
+TABLE(<:App_source3:"","","RH_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+TABLE(<:App_source3:"","","Humidity",<:App_lastvalue:"status":>,-1,0:>);
+TABLE(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"DirAvg3s":>,-1,0:>);
+TABLE(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"DirAvg10m":>,-1,0:>);
+TABLE(<:App_source3:"","","WD_Selector",<:App_lastvalue:"sensorstout":>,-1,0:>);
+TABLE(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"SpdAvg3s":>,-1,0:>);
+TABLE(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"SpdAvg10m":>,-1,0:>);
+TABLE(<:App_source3:"","","WS_Selector",<:App_lastvalue:"sensorstout":>,-1,0:>);
+TABLE(<:App_source3:"","","PulsesToMM",<:App_lastvalue:"value":>,-1,0:>);
+TABLE(<:App_source3:"","","PR_intensity_1hour",<:App_lastvalue:"value":>,-1,0:>);
+TABLE(<:App_source3:"","","Precipitation",<:App_lastvalue:"status":>,-1,0:>);
+TABLE(<:App_source3:"","","SnowDepth",<:App_lastvalue:"SH":>,-1,0:>);
+TABLE(<:App_source3:"","","SnowDepth_to_cm",<:App_lastvalue:"value":>,-1,0:>);
+TABLE(<:App_source3:"","","SnowDepth",<:App_lastvalue:"status":>,-1,0:>);
+TABLE(<:App_source3:"","","SolarRadiation",<:App_lastvalue:"SR":>,-1,0:>);
+TABLE(<:App_source3:"","","Global_irradiation_1min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+TABLE(<:App_source3:"","","SolarRadiation",<:App_lastvalue:"status":>,-1,0:>);
+TABLE(<:App_source3:"","","SoilTemp1",<:App_lastvalue:"TG":>,-1,0:>);
+TABLE(<:App_source3:"","","TG1_10Min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+TABLE(<:App_source3:"","","SoilTemp1",<:App_lastvalue:"status":>,-1,0:>);
+TABLE(<:App_source3:"","","SoilTemp2",<:App_lastvalue:"TG":>,-1,0:>);
+TABLE(<:App_source3:"","","TG2_10Min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+TABLE(<:App_source3:"","","SoilTemp2",<:App_lastvalue:"status":>,-1,0:>);
+END # End of script 15023
+#!script 15024
+Table_Telemetry(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+Table_Telemetry(<:StrSrc:"","",4,7,0:>);
+Table_Telemetry(<:App_source3:"","","TABLE",<:App_lastvalue:"rep":>,-1,0:>);
+END # End of script 15024
+#!script 15025
+Technical_Alarm(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+Technical_Alarm(<:StrSrc:"","",4,20,0:>);
+Technical_Alarm(<:App_source3:"","","SParServer",<:App_lastvalue:"sname":>,-1,0:>);
+Technical_Alarm(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_YY":>,-1,0:>);
+Technical_Alarm(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_MM":>,-1,0:>);
+Technical_Alarm(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_DD":>,-1,0:>);
+Technical_Alarm(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_h":>,-1,0:>);
+Technical_Alarm(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_m":>,-1,0:>);
+Technical_Alarm(<:App_source3:"","","SensorStatusScanner",<:App_lastvalue:"currAlarmMessage":>,-1,0:>);
+END # End of script 15025
+#!script 15026
+TI_AlarmMessage(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+TI_AlarmMessage(<:StrSrc:"","",4,21,0:>);
+TI_AlarmMessage(<:App_source3:"","","SParServer",<:App_lastvalue:"sname":>,-1,0:>);
+TI_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_YY":>,-1,0:>);
+TI_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_MM":>,-1,0:>);
+TI_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_DD":>,-1,0:>);
+TI_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_h":>,-1,0:>);
+TI_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_m":>,-1,0:>);
+TI_AlarmMessage(<:App_source3:"","","INT_PT100",<:App_lastvalue:"T_int":>,-1,0:>);
+END # End of script 15026
+#!script 15027
+UptimeCounter(<:StrSrc:"","",100,9,0:>);
+UptimeCounter(<:App_source3:"minutes","minutes","0",<:Null:>,-1,66:>);
+END # End of script 15027
+#!script 15028
+UTC_Timestamp(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+UTC_Timestamp(<:StrSrc:"","",4,22,0:>);
+UTC_Timestamp(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_YY":>,-1,0:>);
+UTC_Timestamp(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_MM":>,-1,0:>);
+UTC_Timestamp(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_DD":>,-1,0:>);
+UTC_Timestamp(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_h":>,-1,0:>);
+UTC_Timestamp(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_m":>,-1,0:>);
+UTC_Timestamp(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_s":>,-1,0:>);
+END # End of script 15028
+
+
+#!script 20001
+Tev(<:CTimer:1,0,0,'L',0,0,0,<:App_do:"start",0,1:>,GSM_Modem:>);
+Tev(<:CTimer:3,1,1,'L',2,2000,60000,<:Null:>,LogServer_L0:>);
+Tev(<:CTimer:8,1,1,'L',2,2005,1000,<:App_do:"poll",0,1:>,WMT700:>);
+Tev(<:CTimer:10,1,1,'L',2,2007,1000,<:App_do:"Meas",0,1:>,WindSpeed:>);
+Tev(<:CTimer:13,1,1,'L',2,2010,1000,<:App_do:"WD",0,1:>,WindDirection:>);
+Tev(<:CTimer:14,1,1,'L',2,2012,0,<:App_do:"ON",0,1:>,GSM_Modem_Pwr:>);
+Tev(<:CTimer:15,1,1,'L',2,2013,0,<:App_do:"OFF",0,1:>,GSM_Modem_Pwr:>);
+Tev(<:CTimer:16,1,1,'L',2,2030,86400000,<:App_do:"init",0,1:>,GSM_Modem:>);
+Tev(<:CTimer:17,1,1,'L',2,11032,10000,<:App_do:"CALC",0,1:>,ClockSpeeder:>);
+Tev(<:CTimer:18,1,1,'L',2,12012,60000,<:App_do:"OFF",0,1:>,PowerControl_1:>);
+Tev(<:CTimer:21,1,1,'L',2,12033,60000,<:App_do:"CALC",0,1:>,UptimeCounter:>);
+Tev(<:CTimer:75,1,1,'L',2,12092,0,<:Null:>,DC_Alarm:>);
+Tev(<:CTimer:77,1,1,'L',2,12094,60000,<:Null:>,TI_Alarm:>);
+Tev(<:CTimer:114,1,1,'L',2,12133,60000,<:App_do:"CALC",0,1:>,SunShineDuration_daily_h:>);
+Tev(<:CTimer:126,1,1,'L',2,13150,0,<:App_do:"",0,1:>,Alarm_Email:>);
+Tev(<:CTimer:127,1,1,'L',2,13151,0,<:App_do:"",0,1:>,Alarm_FTP:>);
+Tev(<:CTimer:128,1,1,'L',2,13151,60000,<:App_do:"",0,1:>,AVG_1MIN:>);
+Tev(<:CTimer:129,1,1,'L',2,13152,0,<:App_do:"",0,1:>,Alarm_SMS:>);
+Tev(<:CTimer:130,1,1,'L',2,13153,0,<:App_do:"",0,1:>,AlarmingValues:>);
+Tev(<:CTimer:131,1,1,'L',2,13156,0,<:App_do:"",0,1:>,Obs_Email:>);
+Tev(<:CTimer:132,1,1,'L',2,13157,0,<:App_do:"",0,1:>,Obs_FTP:>);
+Tev(<:CTimer:133,1,1,'L',2,13158,0,<:App_do:"",0,1:>,Obs_SMS:>);
+Tev(<:CTimer:134,1,1,'L',2,13159,0,<:App_do:"",0,1:>,OC:>);
+Tev(<:CTimer:135,1,1,'L',2,13160,0,<:App_do:"",0,1:>,OC_Telemetry:>);
+Tev(<:CTimer:136,1,1,'L',2,13162,10000,<:App_do:"",0,1:>,QMD_Met_1:>);
+Tev(<:CTimer:137,1,1,'L',2,13163,10000,<:App_do:"",0,1:>,QMD_Met_2:>);
+Tev(<:CTimer:141,1,1,'L',2,13167,0,<:App_do:"",0,1:>,SensorStatus:>);
+Tev(<:CTimer:142,1,1,'L',2,13168,0,<:App_do:"",0,1:>,SMS_Message:>);
+Tev(<:CTimer:143,1,1,'L',2,13169,0,<:App_do:"",0,1:>,SMS_SensorAlarmMessage:>);
+Tev(<:CTimer:144,1,1,'L',2,13171,0,<:App_do:"",0,1:>,Technical_Alarm:>);
+Tev(<:CTimer:145,1,1,'L',2,13173,5000,<:App_do:"",0,1:>,UTC_Timestamp:>);
+Tev(<:CTimer:146,1,1,'L',2,13175,0,<:App_do:"send",0,1:>,EMAIL:>);
+Tev(<:CTimer:147,1,1,'L',2,13176,0,<:App_do:"send",0,1:>,FTP:>);
+Tev(<:CTimer:148,1,1,'L',2,13178,0,<:App_do:"",0,1:>,TABLE:>);
+Tev(<:CTimer:149,1,1,'L',2,13179,0,<:App_do:"",0,1:>,Table_Telemetry:>);
+Tev(<:CTimer:150,1,1,'L',2,13182,0,<:App_do:"",0,1:>,SensorAlarmMessage:>);
+Tev(<:CTimer:151,1,1,'L',2,32011,60000,<:App_do:"ON",0,1:>,PowerControl_1:>);
+Tev(<:CTimer:152,1,1,'L',2,122011,0,<:App_do:"syncTime",0,1:>,NTP:>);
+Tev(<:CTimer:154,1,1,'L',2,21612101,86400000,<:App_do:"CALC",0,1:>,TA_18_06_Min_Hold:>);
+Tev(<:CTimer:157,1,1,'L',2,64812100,86400000,<:App_do:"CALC",0,1:>,TA_06_18_Max_Hold:>);
+END # End of script 20001
+
+#!script 30001
+
+
+
+link(Alarm_Email,EMAIL);
+link(Alarm_FTP,FTP);
+link(Alarm_SMS,SMS);
+link(Obs_Email,EMAIL);
+link(Obs_FTP,FTP);
+link(Obs_SMS,SMS);
+link(COM0,Pollcli_COM0);
+link(DSI486_0_0,Pollcli_DSI486_0_0);
+link(DSI486_0_1,Pollcli_DSI486_0_1);
+link(VCOM1,Pollcli_VCOM1);
+link(QMD_Met_1,QMD_1);
+link(QMD_Met_2,QMD_1);
+<:ServiceConnector:"COM0Listener",COM0:>
+COM0Listener(<:App_cfg:"IdleTime",<:Integer:30:>:>);
+COM0Listener(<:App_cfg:"ScrapChars",<:Integer:0:>:>);
+<:ServiceConnector:"DSI486_0_0Listener",DSI486_0_0:>
+DSI486_0_0Listener(<:App_cfg:"IdleTime",<:Integer:30:>:>);
+DSI486_0_0Listener(<:App_cfg:"ScrapChars",<:Integer:0:>:>);
+<:ServiceConnector:"DSI486_0_1Listener",DSI486_0_1:>
+DSI486_0_1Listener(<:App_cfg:"IdleTime",<:Integer:30:>:>);
+DSI486_0_1Listener(<:App_cfg:"ScrapChars",<:Integer:0:>:>);
+<:ServiceConnector:"VCOM1Listener",VCOM1:>
+VCOM1Listener(<:App_cfg:"IdleTime",<:Integer:30:>:>);
+VCOM1Listener(<:App_cfg:"ScrapChars",<:Integer:0:>:>);
+DSI486_0_1Listener(<:App_source2:"","Open",DSI486_0_1_InOpener,<:App_do:"OPEN",0,0:>,-1,0:>);
+DSI486_0_1Listener(<:App_source2:"","Close",DSI486_0_1_InOpener,<:App_do:"CLOSE",0,0:>,-1,0:>);
+COM0(<:SerialCommand:11,0:>);
+COM0(<:SerialCommand:19,0:>);
+COM1(<:SerialCommand:19,0:>);
+DSI486_0_0(<:SerialCommand:11,0:>);
+DSI486_0_0(<:SerialCommand:19,0:>);
+DSI486_0_1(<:SerialCommand:11,0:>);
+DSI486_0_1(<:SerialCommand:19,0:>);
+VCOM0(<:App_cfg:"DEBUG",<:Component:0:>:>);
+VCOM0(<:SerialCommand:19,0:>);
+VCOM1(<:App_cfg:"SERVCONN",<:Component:VCOM1Listener:>:>);
+VCOM1(<:App_cfg:"DEBUG",<:Component:0:>:>);
+VCOM1(<:SerialCommand:11,0:>);
+VCOM1(<:SerialCommand:19,0:>);
+
+END # End of script 30001
+
+#!script 501
+<:Stat:"DP_Hourly_avg":>
+END # End of script 501
+#!script 502
+<:DPCalc:"DPCalc_1":>
+END # End of script 502
+#!script 503
+<:EvapCalc:"EvapCalc_1",1,10:>
+END # End of script 503
+#!script 504
+<:Stat:"Global_irradiation_1min_avg":>
+END # End of script 504
+#!script 505
+<:Stat:"Global_Radiation_1d_avg":>
+END # End of script 505
+#!script 506
+<:Stat:"Global_Radiation_1h_avg":>
+END # End of script 506
+#!script 507
+<:HICalc:"HICalc_1":>
+END # End of script 507
+#!script 508
+<:SlowMeasure:"Humidity":>
+END # End of script 508
+#!script 509
+<:Stat:"PA_1min_avg":>
+END # End of script 509
+#!script 510
+<:Stat:"PR_10min_sum":>
+END # End of script 510
+#!script 511
+<:Stat:"PR_12hour_sum":>
+END # End of script 511
+#!script 512
+<:Stat:"PR_1hour_sum":>
+END # End of script 512
+#!script 513
+<:Stat:"PR_1min_sum":>
+END # End of script 513
+#!script 514
+<:Stat:"PR_30min_sum":>
+END # End of script 514
+#!script 515
+<:Stat:"PR_3hour_sum":>
+END # End of script 515
+#!script 516
+<:Stat:"PR_6hour_sum":>
+END # End of script 516
+#!script 517
+<:ValueMonitor:"PR_Alarm":>
+END # End of script 517
+#!script 518
+<:Report:"PR_AlarmMessage":>
+END # End of script 518
+#!script 519
+<:ConfMath:"PR_AlarmValue",0,1,2,0,0,"":>
+END # End of script 519
+#!script 520
+<:Stat:"PR_Duration_1d":>
+END # End of script 520
+#!script 521
+<:Stat:"PR_Duration_1h":>
+END # End of script 521
+#!script 522
+<:Convers:"PR_intensity_1hour":>
+END # End of script 522
+#!script 523
+<:ValueMonitor:"PR_On":>
+END # End of script 523
+#!script 524
+<:Stat:"PR24h":>
+END # End of script 524
+#!script 525
+<:CounterMeasure:"Precipitation":>
+END # End of script 525
+#!script 526
+<:PMT16:"Pressure":>
+END # End of script 526
+#!script 527
+<:PTEND:"PTendCalc_1":>
+END # End of script 527
+#!script 528
+<:Stat:"PTendStat_1":>
+END # End of script 528
+#!script 529
+<:CalcArith:"PulsesToMM":>
+END # End of script 529
+#!script 530
+<:Stat:"QFE_Daily_avg":>
+END # End of script 530
+#!script 531
+<:Stat:"QFE_Hourly_avg":>
+END # End of script 531
+#!script 532
+<:QFCalc:"QFECalc_1":>
+END # End of script 532
+#!script 533
+<:Stat:"QFF_Daily_avg":>
+END # End of script 533
+#!script 534
+<:Stat:"QFF_Hourly_avg":>
+END # End of script 534
+#!script 535
+<:QFCalc:"QFFCalc_1":>
+END # End of script 535
+#!script 536
+<:Report:"QMD_Network":>
+END # End of script 536
+#!script 537
+<:Report:"QMD_Soil":>
+END # End of script 537
+#!script 538
+<:Report:"QMD_System":>
+END # End of script 538
+#!script 539
+<:Stat:"QNH_Daily_avg":>
+END # End of script 539
+#!script 540
+<:Stat:"QNH_Hourly_avg":>
+END # End of script 540
+#!script 541
+<:QNHCalc:"QNHCalc_1":>
+END # End of script 541
+#!script 542
+<:Wind:"QuickWind_1":>
+END # End of script 542
+#!script 543
+<:Stat:"RH_1min_avg":>
+END # End of script 543
+#!script 544
+<:Stat:"RH_Daily":>
+END # End of script 544
+#!script 545
+<:Stat:"RH_Hourly_avg":>
+END # End of script 545
+#!script 546
+<:SlowMeasure:"SnowDepth":>
+END # End of script 546
+#!script 547
+<:Stat:"SnowDepth_1h":>
+END # End of script 547
+#!script 548
+<:ConfMath:"SnowDepth_to_cm",4,1,0,0,0,"":>
+END # End of script 548
+#!script 549
+<:SlowMeasure:"SoilTemp1":>
+END # End of script 549
+#!script 550
+<:SlowMeasure:"SoilTemp2":>
+END # End of script 550
+#!script 551
+<:RadiationSensor:"SolarRadiation":>
+END # End of script 551
+#!script 552
+<:SParTev:"SParTev_10",1,122,"_status_interval","":>
+END # End of script 552
+#!script 553
+<:SParTev:"SParTev_12",1,124,"_status_interval","":>
+END # End of script 553
+#!script 554
+<:SParTev:"SParTev_8",1,123,"_status_interval","":>
+END # End of script 554
+#!script 555
+<:SParTev:"SParTev_9",1,125,"_status_interval","":>
+END # End of script 555
+#!script 556
+<:SSCalc:"SunShineCalc_1",85,0.4,120:>
+END # End of script 556
+#!script 557
+<:Stat:"SunShineDuration_daily_min":>
+END # End of script 557
+#!script 558
+<:Stat:"TA_1min_avg":>
+END # End of script 558
+#!script 559
+<:ValueMonitor:"TA_AlarmHigh":>
+END # End of script 559
+#!script 560
+<:ValueMonitor:"TA_AlarmLow":>
+END # End of script 560
+#!script 561
+<:Report:"TA_AlarmMessage":>
+END # End of script 561
+#!script 562
+<:ConfMath:"TA_AlarmValue",0,1,2,0,0,"":>
+END # End of script 562
+#!script 563
+<:Stat:"TA_Daily_avg":>
+END # End of script 563
+#!script 564
+<:Stat:"TA_Hourly_avg":>
+END # End of script 564
+#!script 565
+<:Stat:"TA_Max_06_18":>
+END # End of script 565
+#!script 566
+<:Stat:"TA_Min_18_06":>
+END # End of script 566
+#!script 567
+<:Stat:"TA_PrecDay":>
+END # End of script 567
+#!script 568
+<:SlowMeasure:"Temperature":>
+END # End of script 568
+#!script 569
+<:Stat:"TG1_10Min_avg":>
+END # End of script 569
+#!script 570
+<:Stat:"TG1_Daily_Avg":>
+END # End of script 570
+#!script 571
+<:Stat:"TG1_Hourly_Avg":>
+END # End of script 571
+#!script 572
+<:Stat:"TG2_10Min_avg":>
+END # End of script 572
+#!script 573
+<:Stat:"TG2_Daily_avg":>
+END # End of script 573
+#!script 574
+<:Stat:"TG2_Hourly_avg":>
+END # End of script 574
+#!script 575
+<:Stat:"VapourPressure_avg":>
+END # End of script 575
+#!script 576
+<:WChCalc2:"WChCalc_1":>
+END # End of script 576
+#!script 577
+<:ConfMath:"WD_Selector",5,2,0,0,0,"":>
+END # End of script 577
+#!script 578
+<:Stat:"WetBulb_1hour_avg":>
+END # End of script 578
+#!script 579
+<:MDICalc:"WetBulb_1min_avg":>
+END # End of script 579
+#!script 580
+<:ValueMonitor:"WS_Alarm":>
+END # End of script 580
+#!script 581
+<:Report:"WS_AlarmMessage":>
+END # End of script 581
+#!script 582
+<:ConfMath:"WS_AlarmValue",0,1,2,0,0,"":>
+END # End of script 582
+#!script 583
+<:Stat:"WS_day_avg":>
+END # End of script 583
+#!script 584
+<:ConfMath:"WS_Selector",5,2,0,0,0,"":>
+END # End of script 584
+#!script 10501
+DP_Hourly_avg(<:Stat_config:DPCalc_1,"DP",1,263,1,0:>);
+DP_Hourly_avg(<:Stat_query:"Avg",4,1,1,1:>);
+DP_Hourly_avg(<:Stat_query:"Min",1,1,1,1:>);
+DP_Hourly_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10501
+#!script 10502
+DPCalc_1(<:App_source:"","temp",TA_1min_avg,<:App_lastvalue:"Avg":>:>);
+DPCalc_1(<:App_source:"","humi",RH_1min_avg,<:App_lastvalue:"Avg":>:>);
+END # End of script 10502
+#!script 10503
+EvapCalc_1(<:App_source:"","sr1",Global_Radiation_1d_avg,<:App_lastvalue:"Avg":>:>);
+EvapCalc_1(<:App_source:"","sr2",0,<:App_lastvalue:"":>:>);
+EvapCalc_1(<:App_source:"","albedo",SParServer,<:App_lastvalue:"evap_albedo":>:>);
+EvapCalc_1(<:App_source:"","wsa",WS_day_avg,<:App_lastvalue:"Avg":>:>);
+EvapCalc_1(<:App_source:"","ta",TA_Daily_avg,<:App_lastvalue:"Avg":>:>);
+EvapCalc_1(<:App_source:"","ta_min",TA_Daily_avg,<:App_lastvalue:"Min":>:>);
+EvapCalc_1(<:App_source:"","ta_max",TA_Daily_avg,<:App_lastvalue:"Max":>:>);
+EvapCalc_1(<:App_source:"","rh",RH_Daily,<:App_lastvalue:"Avg":>:>);
+EvapCalc_1(<:App_source:"","rh_min",RH_Daily,<:App_lastvalue:"Min":>:>);
+EvapCalc_1(<:App_source:"","rh_max",RH_Daily,<:App_lastvalue:"Max":>:>);
+EvapCalc_1(<:App_source:"","Tnn",TA_PrecDay,<:App_lastvalue:"TA_PrecDay_Avg":>:>);
+EvapCalc_1(<:App_source:"","Td",SParServer,<:App_lastvalue:"evap_days":>:>);
+EvapCalc_1(<:App_source:"","pa",QFE_Daily_avg,<:App_lastvalue:"Avg":>:>);
+END # End of script 10503
+#!script 10504
+Global_irradiation_1min_avg(<:Stat_config:SolarRadiation,"SR",1,263,6,0:>);
+Global_irradiation_1min_avg(<:Stat_query:"Avg",4,6,6,4:>);
+Global_irradiation_1min_avg(<:Stat_query:"Min",1,6,6,4:>);
+Global_irradiation_1min_avg(<:Stat_query:"Max",2,6,6,4:>);
+END # End of script 10504
+#!script 10505
+Global_Radiation_1d_avg(<:Stat_config:SolarRadiation,"SR",1,263,1,0:>);
+Global_Radiation_1d_avg(<:Stat_query:"Avg",4,1,1,1:>);
+Global_Radiation_1d_avg(<:Stat_query:"Min",1,1,1,1:>);
+Global_Radiation_1d_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10505
+#!script 10506
+Global_Radiation_1h_avg(<:Stat_config:SolarRadiation,"SR",1,263,1,0:>);
+Global_Radiation_1h_avg(<:Stat_query:"Avg",4,1,1,1:>);
+Global_Radiation_1h_avg(<:Stat_query:"Min",1,1,1,1:>);
+Global_Radiation_1h_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10506
+#!script 10507
+HICalc_1(<:App_source:"","temp",TA_1min_avg,<:App_lastvalue:"Avg":>:>);
+HICalc_1(<:App_source:"","humi",RH_1min_avg,<:App_lastvalue:"Avg":>:>);
+END # End of script 10507
+#!script 10508
+Humidity(<:A_Meas_config:"RH",3,12.0,0.0,500,0,0,0,0,0,4.0,104.0,50.0,3.0,0.0,100.0,0.0,0.0:>);
+END # End of script 10508
+#!script 10509
+PA_1min_avg(<:Stat_config:Pressure,"PA",1,263,6,0:>);
+PA_1min_avg(<:Stat_query:"Avg",4,6,6,4:>);
+PA_1min_avg(<:Stat_query:"Min",1,6,6,4:>);
+PA_1min_avg(<:Stat_query:"Max",2,6,6,4:>);
+END # End of script 10509
+#!script 10510
+PR_10min_sum(<:Stat_config:PulsesToMM,"value",1,1288,1,0:>);
+PR_10min_sum(<:Stat_query:"Sum",8,1,1,1:>);
+END # End of script 10510
+#!script 10511
+PR_12hour_sum(<:Stat_config:PulsesToMM,"value",1,1288,1,0:>);
+PR_12hour_sum(<:Stat_query:"Sum",8,1,1,1:>);
+END # End of script 10511
+#!script 10512
+PR_1hour_sum(<:Stat_config:PulsesToMM,"value",1,1288,1,0:>);
+PR_1hour_sum(<:Stat_query:"Sum",8,1,1,1:>);
+END # End of script 10512
+#!script 10513
+PR_1min_sum(<:Stat_config:PulsesToMM,"value",1,1288,1,0:>);
+PR_1min_sum(<:Stat_query:"Sum",8,1,1,1:>);
+END # End of script 10513
+#!script 10514
+PR_30min_sum(<:Stat_config:PulsesToMM,"value",1,1288,1,0:>);
+PR_30min_sum(<:Stat_query:"Sum",8,1,1,1:>);
+END # End of script 10514
+#!script 10515
+PR_3hour_sum(<:Stat_config:PulsesToMM,"value",1,1288,1,0:>);
+PR_3hour_sum(<:Stat_query:"Sum",8,1,1,1:>);
+END # End of script 10515
+#!script 10516
+PR_6hour_sum(<:Stat_config:PulsesToMM,"value",1,1288,1,0:>);
+PR_6hour_sum(<:Stat_query:"Sum",8,1,1,1:>);
+END # End of script 10516
+#!script 10517
+PR_Alarm(<:vmon_config:PR_AlarmValue,"",<:App_lastvalue:"out_value":>,PR_AlarmMessage,<:App_do:"",0,1:>,0,<:App_do:"",0,1:>,0,0,1,0,0,2,0,SParServer,"",<:App_lastvalue:"PR_Alarm:high_limit":>:>);
+PR_Alarm(<:App_source2:"","invtrig",0,<:App_do:"rep",0,1:>,-1,0:>);
+PR_Alarm(<:App_cfg:"invcfg",<:Integer:0:>:>);
+END # End of script 10517
+#!script 10518
+PR_AlarmMessage(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+PR_AlarmMessage(<:StrSrc:"","",4,8,0:>);
+PR_AlarmMessage(<:App_source3:"","","SParServer",<:App_lastvalue:"sname":>,-1,0:>);
+PR_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_YY":>,-1,0:>);
+PR_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_MM":>,-1,0:>);
+PR_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_DD":>,-1,0:>);
+PR_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_h":>,-1,0:>);
+PR_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_m":>,-1,0:>);
+PR_AlarmMessage(<:App_source3:"","","PR_AlarmValue",<:App_lastvalue:"out_value":>,-1,0:>);
+END # End of script 10518
+#!script 10519
+PR_AlarmValue(<:StrSrc:"","",100,5,0:>);
+PR_AlarmValue(<:App_source3:"rep","value_message","AlarmingValues",<:App_lastvalue:"rep":>,-1,137:>);
+PR_AlarmValue(<:App_source3:"_value_tag","value_tag","0",<:App_lastvalue:"":>,-1,129:>);
+PR_AlarmValue(<:App_source3:"out_value","out_value","0",<:Null:>,-1,2:>);
+PR_AlarmValue(<:App_resvalue:"_value_tag",1,<:String:"PR":>,"",0:>);
+END # End of script 10519
+#!script 10520
+PR_Duration_1d(<:Stat_config:PR_On,"status",0,1288,1,0:>);
+PR_Duration_1d(<:Stat_query:"Sum",8,1,1,1:>);
+END # End of script 10520
+#!script 10521
+PR_Duration_1h(<:Stat_config:PR_On,"status",0,1288,1,0:>);
+PR_Duration_1h(<:Stat_query:"Sum",8,1,1,1:>);
+END # End of script 10521
+#!script 10522
+PR_intensity_1hour(<:st_unit_conv:0.0,6.0,0.0:>);
+PR_intensity_1hour(<:App_source:"Sum","",PR_10min_sum,<:Null:>:>);
+END # End of script 10522
+#!script 10523
+PR_On(<:vmon_config:PR_10min_sum,"",<:App_lastvalue:"Sum":>,0,<:App_do:"",0,1:>,0,<:App_do:"",0,1:>,0,0,0,0,0,2,0,SParServer,"",<:App_lastvalue:"PR_On:pr_limit":>:>);
+PR_On(<:App_source2:"","invtrig",0,<:App_do:"",0,1:>,-1,0:>);
+PR_On(<:App_cfg:"invcfg",<:Integer:0:>:>);
+END # End of script 10523
+#!script 10524
+PR24h(<:Stat_config:PulsesToMM,"value",1,1288,1440,0:>);
+PR24h(<:Stat_query:"Sum",8,1440,1440,1:>);
+END # End of script 10524
+#!script 10525
+Precipitation(<:D_Meas_config:"PR",1,1,1,100,0,100,-9999,-9999,0,1.0,0,0:>);
+END # End of script 10525
+#!script 10526
+Pressure(<:PMT16_config:"PA",0,600.0,1100.0,2.0,5.0:>);
+END # End of script 10526
+#!script 10527
+PTendCalc_1(<:App_source:"","p0",PTendStat_1,<:App_lastvalue:"PA0H":>:>);
+PTendCalc_1(<:App_source:"","p180",PTendStat_1,<:App_lastvalue:"PA3H":>:>);
+PTendCalc_1(<:App_source:"","pm180",PTendStat_1,<:App_lastvalue:"PM3H":>:>);
+PTendCalc_1(<:App_source:"","pa15",PTendStat_1,<:App_lastvalue:"PA15":>:>);
+PTendCalc_1(<:App_source:"","pa30",PTendStat_1,<:App_lastvalue:"PA30":>:>);
+PTendCalc_1(<:App_source:"","pa45",PTendStat_1,<:App_lastvalue:"PA45":>:>);
+PTendCalc_1(<:App_source:"","pa60",PTendStat_1,<:App_lastvalue:"PA60":>:>);
+PTendCalc_1(<:App_source:"","pa75",PTendStat_1,<:App_lastvalue:"PA75":>:>);
+PTendCalc_1(<:App_source:"","pa90",PTendStat_1,<:App_lastvalue:"PA90":>:>);
+PTendCalc_1(<:App_source:"","pa105",PTendStat_1,<:App_lastvalue:"PA105":>:>);
+PTendCalc_1(<:App_source:"","pa120",PTendStat_1,<:App_lastvalue:"PA120":>:>);
+PTendCalc_1(<:App_source:"","pa135",PTendStat_1,<:App_lastvalue:"PA135":>:>);
+PTendCalc_1(<:App_source:"","pa150",PTendStat_1,<:App_lastvalue:"PA150":>:>);
+PTendCalc_1(<:App_source:"","pa165",PTendStat_1,<:App_lastvalue:"PA165":>:>);
+PTendCalc_1(<:App_source:"","pa180",PTendStat_1,<:App_lastvalue:"PA180":>:>);
+END # End of script 10527
+#!script 10528
+PTendStat_1(<:Stat_config:QFECalc_1,"QF",1,261,180,0:>);
+PTendStat_1(<:Stat_query:"PA3H",1,180,1,1:>);
+PTendStat_1(<:Stat_query:"PA0H",1,1,1,1:>);
+PTendStat_1(<:Stat_query:"PM3H",1,180,180,178:>);
+PTendStat_1(<:Stat_query:"PA15",4,15,15,1:>);
+PTendStat_1(<:Stat_query:"PA30",4,30,15,1:>);
+PTendStat_1(<:Stat_query:"PA45",4,45,15,1:>);
+PTendStat_1(<:Stat_query:"PA60",4,60,15,1:>);
+PTendStat_1(<:Stat_query:"PA75",4,75,15,1:>);
+PTendStat_1(<:Stat_query:"PA90",4,90,15,1:>);
+PTendStat_1(<:Stat_query:"PA105",4,105,15,1:>);
+PTendStat_1(<:Stat_query:"PA120",4,120,15,1:>);
+PTendStat_1(<:Stat_query:"PA135",4,135,15,1:>);
+PTendStat_1(<:Stat_query:"PA150",4,150,15,1:>);
+PTendStat_1(<:Stat_query:"PA165",4,165,15,1:>);
+PTendStat_1(<:Stat_query:"PA180",4,180,15,1:>);
+END # End of script 10528
+#!script 10529
+PulsesToMM(<:App_source:"","op1",Precipitation,<:App_lastvalue:"PR":>:>);
+PulsesToMM(<:App_source:"","op2",SParServer,<:App_lastvalue:"Precipitation:RGResolution":>:>);
+PulsesToMM(<:App_cfg:"a_op",<:Integer:2:>:>);
+END # End of script 10529
+#!script 10530
+QFE_Daily_avg(<:Stat_config:QFECalc_1,"QF",1,263,1,0:>);
+QFE_Daily_avg(<:Stat_query:"Avg",4,1,1,1:>);
+QFE_Daily_avg(<:Stat_query:"Min",1,1,1,1:>);
+QFE_Daily_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10530
+#!script 10531
+QFE_Hourly_avg(<:Stat_config:QFECalc_1,"QF",1,263,1,0:>);
+QFE_Hourly_avg(<:Stat_query:"Avg",4,1,1,1:>);
+QFE_Hourly_avg(<:Stat_query:"Min",1,1,1,1:>);
+QFE_Hourly_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10531
+#!script 10532
+QFECalc_1(<:App_source:"","level",SParServer,<:App_lastvalue:"pslevel":>:>);
+QFECalc_1(<:App_source:"","temp",TA_1min_avg,<:App_lastvalue:"Avg":>:>);
+QFECalc_1(<:App_source:"","pres",PA_1min_avg,<:App_lastvalue:"Avg":>:>);
+END # End of script 10532
+#!script 10533
+QFF_Daily_avg(<:Stat_config:QFFCalc_1,"QF",1,263,1,0:>);
+QFF_Daily_avg(<:Stat_query:"Avg",4,1,1,1:>);
+QFF_Daily_avg(<:Stat_query:"Min",1,1,1,1:>);
+QFF_Daily_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10533
+#!script 10534
+QFF_Hourly_avg(<:Stat_config:QFFCalc_1,"QF",1,263,1,0:>);
+QFF_Hourly_avg(<:Stat_query:"Avg",4,1,1,1:>);
+QFF_Hourly_avg(<:Stat_query:"Min",1,1,1,1:>);
+QFF_Hourly_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10534
+#!script 10535
+QFFCalc_1(<:App_source:"","level",SParServer,<:App_lastvalue:"altitude":>:>);
+QFFCalc_1(<:App_source:"","temp",TA_1min_avg,<:App_lastvalue:"Avg":>:>);
+QFFCalc_1(<:App_source:"","pres",QFECalc_1,<:App_lastvalue:"QF":>:>);
+END # End of script 10535
+#!script 10536
+QMD_Network(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+QMD_Network(<:StrSrc:"","",4,11,0:>);
+QMD_Network(<:App_source3:"","","NetIfInfo",<:App_lastvalue:"address":>,-1,0:>);
+QMD_Network(<:App_source3:"","","NetIfInfo",<:App_lastvalue:"subnetmask":>,-1,0:>);
+QMD_Network(<:App_source3:"","","NetIfInfo",<:App_lastvalue:"gateway":>,-1,0:>);
+QMD_Network(<:App_source3:"","","NetIfInfo",<:App_lastvalue:"dns1":>,-1,0:>);
+QMD_Network(<:App_source3:"","","NetIfInfo",<:App_lastvalue:"dns2":>,-1,0:>);
+END # End of script 10536
+#!script 10537
+QMD_Soil(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+QMD_Soil(<:StrSrc:"","",4,12,0:>);
+QMD_Soil(<:App_source3:"","","SnowDepth_to_cm",<:App_lastvalue:"value":>,-1,0:>);
+QMD_Soil(<:App_source3:"","","SnowDepth",<:App_lastvalue:"status":>,-1,0:>);
+QMD_Soil(<:App_source3:"","","TG1_10Min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+QMD_Soil(<:App_source3:"","","SoilTemp1",<:App_lastvalue:"status":>,-1,0:>);
+QMD_Soil(<:App_source3:"","","TG2_10Min_avg",<:App_lastvalue:"Avg":>,-1,0:>);
+QMD_Soil(<:App_source3:"","","SoilTemp2",<:App_lastvalue:"status":>,-1,0:>);
+END # End of script 10537
+#!script 10538
+QMD_System(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+QMD_System(<:StrSrc:"","",4,13,0:>);
+QMD_System(<:App_source3:"","","Charger",<:App_lastvalue:"External_DC":>,-1,0:>);
+QMD_System(<:App_source3:"","","INT_PT100",<:App_lastvalue:"T_int":>,-1,0:>);
+QMD_System(<:App_source3:"","","SysInfo",<:App_lastvalue:"setup_info":>,-1,0:>);
+QMD_System(<:App_source3:"","","SysInfo",<:App_lastvalue:"sw_rev":>,-1,0:>);
+QMD_System(<:App_source3:"","","SysInfo",<:App_lastvalue:"hw_rev":>,-1,0:>);
+END # End of script 10538
+#!script 10539
+QNH_Daily_avg(<:Stat_config:QNHCalc_1,"QNH",1,263,1,0:>);
+QNH_Daily_avg(<:Stat_query:"Avg",4,1,1,1:>);
+QNH_Daily_avg(<:Stat_query:"Min",1,1,1,1:>);
+QNH_Daily_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10539
+#!script 10540
+QNH_Hourly_avg(<:Stat_config:QNHCalc_1,"QNH",1,263,1,0:>);
+QNH_Hourly_avg(<:Stat_query:"Avg",4,1,1,1:>);
+QNH_Hourly_avg(<:Stat_query:"Min",1,1,1,1:>);
+QNH_Hourly_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10540
+#!script 10541
+QNHCalc_1(<:App_source:"","altitude",SParServer,<:App_lastvalue:"altitude":>:>);
+QNHCalc_1(<:App_source:"","QFE",QFECalc_1,<:App_lastvalue:"QF":>:>);
+END # End of script 10541
+#!script 10542
+QuickWind_1(<:App_source:"meas_out","wdy",WD_Selector,<:Null:>:>);
+QuickWind_1(<:App_source:"meas_out","wsx",WS_Selector,<:Null:>:>);
+QuickWind_1(<:WindConfTable:0,3:>);
+QuickWind_1(<:WindConfTable:1,200:>);
+QuickWind_1(<:WindConfCalc:"Wind3s",63,0,3,2:>);
+QuickWind_1(<:WindConfCalc:"Wind2m",63,1,40,30:>);
+QuickWind_1(<:WindConfCalc:"Wind10m",788479,1,200,150:>);
+QuickWind_1(<:WindConfCalcId:"Wind3s","SpdAvg3s","SpdMin3s","SpdMax3s","DirAvg3s","DirMin3s","DirMax3s","","","","","","","","","","","","","","","","","","":>);
+QuickWind_1(<:WindConfCalcId:"Wind2m","SpdAvg2m","SpdMin2m","SpdMax2m","DirAvg2m","DirMin2m","DirMax2m","","","","","","","","","","","","","","","","","","":>);
+QuickWind_1(<:WindConfCalcId:"Wind10m","SpdAvg10m","SpdMin10m","SpdMax10m","DirAvg10m","DirMin10m","DirMax10m","GustDir","GustH","GustM","GustS","LullDir","LullH","LullM","LullS","","","","","","","","","WPow","WRun":>);
+QuickWind_1(<:WindConfig:0,0,1,0,0,0,<:App_do:"",0,1:>,0:>);
+QuickWind_1(<:App_cfg:"WSClamp",<:Float:0.0:>:>);
+END # End of script 10542
+#!script 10543
+RH_1min_avg(<:Stat_config:Humidity,"RH",1,263,6,0:>);
+RH_1min_avg(<:Stat_query:"Avg",4,6,6,4:>);
+RH_1min_avg(<:Stat_query:"Min",1,6,6,4:>);
+RH_1min_avg(<:Stat_query:"Max",2,6,6,4:>);
+END # End of script 10543
+#!script 10544
+RH_Daily(<:Stat_config:RH_1min_avg,"Avg",1,263,1,0:>);
+RH_Daily(<:Stat_query:"Avg",4,1,1,1:>);
+RH_Daily(<:Stat_query:"Min",1,1,1,1:>);
+RH_Daily(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10544
+#!script 10545
+RH_Hourly_avg(<:Stat_config:RH_1min_avg,"Avg",1,263,1,0:>);
+RH_Hourly_avg(<:Stat_query:"Avg",4,1,1,1:>);
+RH_Hourly_avg(<:Stat_query:"Min",1,1,1,1:>);
+RH_Hourly_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10545
+#!script 10546
+SnowDepth(<:A_Meas_config:"SH",0,12.0,0.0,30000,1,10000,0,1,0,300,10700,1000,0.1,304.8,4145.28,0,0:>);
+END # End of script 10546
+#!script 10547
+SnowDepth_1h(<:Stat_config:SnowDepth_to_cm,"value",1,263,60,0:>);
+SnowDepth_1h(<:Stat_query:"Avg",4,60,60,40:>);
+SnowDepth_1h(<:Stat_query:"Min",1,60,60,40:>);
+SnowDepth_1h(<:Stat_query:"Max",2,60,60,40:>);
+END # End of script 10547
+#!script 10548
+SnowDepth_to_cm(<:App_source3:"SHSensorHeight","A","SParServer",<:App_lastvalue:"SHSensorHeight":>,-1,17:>);
+SnowDepth_to_cm(<:App_source3:"SH","B","SnowDepth",<:App_lastvalue:"SH":>,-1,17:>);
+SnowDepth_to_cm(<:App_source3:"","C","0",<:App_lastvalue:"":>,-1,17:>);
+SnowDepth_to_cm(<:App_source3:"","D","0",<:App_lastvalue:"D":>,-1,17:>);
+SnowDepth_to_cm(<:App_source3:"value","value","0",<:Null:>,-1,4098:>);
+SnowDepth_to_cm(<:StrSrc:"","",100,1,0:>);
+END # End of script 10548
+#!script 10549
+SoilTemp1(<:A_Meas_config:"TG",2,0.0,0.0,0,1,0,3,2,1,-50,60,5,5.0,-245.9216,2.3598721,0.00099334,0:>);
+END # End of script 10549
+#!script 10550
+SoilTemp2(<:A_Meas_config:"TG",2,0.0,0.0,0,1,0,3,5,1,-50,60,5,5.0,-245.9216,2.3598721,0.00099334,0:>);
+END # End of script 10550
+#!script 10551
+SolarRadiation(<:A_Meas_config:"SR",0,0.0,0.0,0,0,0,0,6,1,-1,1500,1500,5.0,0,1,0,0:>);
+END # End of script 10551
+#!script 10552
+
+END # End of script 10552
+#!script 10553
+
+END # End of script 10553
+#!script 10554
+
+END # End of script 10554
+#!script 10555
+
+END # End of script 10555
+#!script 10556
+SunShineCalc_1(<:App_source:"","radi",Global_irradiation_1min_avg,<:App_lastvalue:"Avg":>:>);
+SunShineCalc_1(<:App_source:"","lat",SParServer,<:App_lastvalue:"Latitude":>:>);
+SunShineCalc_1(<:App_source:"","lon",SParServer,<:App_lastvalue:"Longitude":>:>);
+END # End of script 10556
+#!script 10557
+SunShineDuration_daily_min(<:Stat_config:SunShineCalc_1,"SS",0,264,1,0:>);
+SunShineDuration_daily_min(<:Stat_query:"Sum",8,1,1,1:>);
+END # End of script 10557
+#!script 10558
+TA_1min_avg(<:Stat_config:Temperature,"TA",1,263,6,0:>);
+TA_1min_avg(<:Stat_query:"Avg",4,6,6,4:>);
+TA_1min_avg(<:Stat_query:"Min",1,6,6,4:>);
+TA_1min_avg(<:Stat_query:"Max",2,6,6,4:>);
+END # End of script 10558
+#!script 10559
+TA_AlarmHigh(<:vmon_config:TA_AlarmValue,"",<:App_lastvalue:"out_value":>,TA_AlarmMessage,<:App_do:"",0,1:>,0,<:App_do:"",0,1:>,0,0,1,0,0,2,0,SParServer,"",<:App_lastvalue:"TA_AlarmHigh:high_limit":>:>);
+TA_AlarmHigh(<:App_source2:"","invtrig",0,<:App_do:"rep",0,1:>,-1,0:>);
+TA_AlarmHigh(<:App_cfg:"invcfg",<:Integer:0:>:>);
+END # End of script 10559
+#!script 10560
+TA_AlarmLow(<:vmon_config:TA_AlarmValue,"",<:App_lastvalue:"out_value":>,TA_AlarmMessage,<:App_do:"",0,1:>,0,<:App_do:"",0,1:>,0,0,1.0,0,0,1,0,SParServer,"",<:App_lastvalue:"TA_AlarmLow:low_limit":>:>);
+TA_AlarmLow(<:App_source2:"","invtrig",0,<:App_do:"rep",0,1:>,-1,0:>);
+TA_AlarmLow(<:App_cfg:"invcfg",<:Integer:0:>:>);
+END # End of script 10560
+#!script 10561
+TA_AlarmMessage(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+TA_AlarmMessage(<:StrSrc:"","",4,18,0:>);
+TA_AlarmMessage(<:App_source3:"","","SParServer",<:App_lastvalue:"sname":>,-1,0:>);
+TA_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_YY":>,-1,0:>);
+TA_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_MM":>,-1,0:>);
+TA_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_DD":>,-1,0:>);
+TA_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_h":>,-1,0:>);
+TA_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_m":>,-1,0:>);
+TA_AlarmMessage(<:App_source3:"","","TA_AlarmValue",<:App_lastvalue:"out_value":>,-1,0:>);
+END # End of script 10561
+#!script 10562
+TA_AlarmValue(<:StrSrc:"","",100,5,0:>);
+TA_AlarmValue(<:App_source3:"rep","value_message","AlarmingValues",<:App_lastvalue:"rep":>,-1,137:>);
+TA_AlarmValue(<:App_source3:"_value_tag","value_tag","0",<:App_lastvalue:"":>,-1,129:>);
+TA_AlarmValue(<:App_source3:"out_value","out_value","0",<:Null:>,-1,2:>);
+TA_AlarmValue(<:App_resvalue:"_value_tag",1,<:String:"TA":>,"",0:>);
+END # End of script 10562
+#!script 10563
+TA_Daily_avg(<:Stat_config:TA_1min_avg,"Avg",1,263,1,0:>);
+TA_Daily_avg(<:Stat_query:"Avg",4,1,1,1:>);
+TA_Daily_avg(<:Stat_query:"Min",1,1,1,1:>);
+TA_Daily_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10563
+#!script 10564
+TA_Hourly_avg(<:Stat_config:TA_1min_avg,"Avg",1,263,1,0:>);
+TA_Hourly_avg(<:Stat_query:"Avg",4,1,1,1:>);
+TA_Hourly_avg(<:Stat_query:"Min",1,1,1,1:>);
+TA_Hourly_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10564
+#!script 10565
+TA_Max_06_18(<:Stat_config:TA_1min_avg,"Avg",1,258,24,0:>);
+TA_Max_06_18(<:Stat_query:"TA_Max_12h",2,12,12,8:>);
+END # End of script 10565
+#!script 10566
+TA_Min_18_06(<:Stat_config:TA_1min_avg,"Avg",1,257,24,0:>);
+TA_Min_18_06(<:Stat_query:"TA_Min_12h",1,12,12,8:>);
+END # End of script 10566
+#!script 10567
+TA_PrecDay(<:Stat_config:TA_1min_avg,"Avg",1,260,2,0:>);
+TA_PrecDay(<:Stat_query:"TA_PrecDay_Avg",4,2,1,1:>);
+END # End of script 10567
+#!script 10568
+Temperature(<:A_Meas_config:"TA",2,0.0,0.0,0,1,0,3,7,1,-70.0,60.0,5.0,5.0,-245.9216,2.3598721,0.00099334,0.0:>);
+END # End of script 10568
+#!script 10569
+TG1_10Min_avg(<:Stat_config:SoilTemp1,"TG",1,263,1,0:>);
+TG1_10Min_avg(<:Stat_query:"Avg",4,1,1,1:>);
+TG1_10Min_avg(<:Stat_query:"Min",1,1,1,1:>);
+TG1_10Min_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10569
+#!script 10570
+TG1_Daily_Avg(<:Stat_config:TG1_10Min_avg,"Avg",1,263,1,0:>);
+TG1_Daily_Avg(<:Stat_query:"Avg",4,1,1,1:>);
+TG1_Daily_Avg(<:Stat_query:"Min",1,1,1,1:>);
+TG1_Daily_Avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10570
+#!script 10571
+TG1_Hourly_Avg(<:Stat_config:SoilTemp1,"TG",1,263,1,0:>);
+TG1_Hourly_Avg(<:Stat_query:"Avg",4,1,1,1:>);
+TG1_Hourly_Avg(<:Stat_query:"Min",1,1,1,1:>);
+TG1_Hourly_Avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10571
+#!script 10572
+TG2_10Min_avg(<:Stat_config:SoilTemp2,"TG",1,263,1,0:>);
+TG2_10Min_avg(<:Stat_query:"Avg",4,1,1,1:>);
+TG2_10Min_avg(<:Stat_query:"Min",1,1,1,1:>);
+TG2_10Min_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10572
+#!script 10573
+TG2_Daily_avg(<:Stat_config:TG2_10Min_avg,"Avg",1,263,1,0:>);
+TG2_Daily_avg(<:Stat_query:"Avg",4,1,1,1:>);
+TG2_Daily_avg(<:Stat_query:"Min",1,1,1,1:>);
+TG2_Daily_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10573
+#!script 10574
+TG2_Hourly_avg(<:Stat_config:SoilTemp2,"TG",1,359,1,0:>);
+TG2_Hourly_avg(<:Stat_query:"Avg",4,1,1,1:>);
+TG2_Hourly_avg(<:Stat_query:"Min",1,1,1,1:>);
+TG2_Hourly_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10574
+#!script 10575
+VapourPressure_avg(<:Stat_config:WetBulb_1min_avg,"Pw",1,263,1,0:>);
+VapourPressure_avg(<:Stat_query:"Avg",4,1,1,1:>);
+VapourPressure_avg(<:Stat_query:"Min",1,1,1,1:>);
+VapourPressure_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10575
+#!script 10576
+WChCalc_1(<:App_source:"","temp",TA_1min_avg,<:App_lastvalue:"Avg":>:>);
+WChCalc_1(<:App_source:"","ws",QuickWind_1,<:App_lastvalue:"SpdAvg2m":>:>);
+END # End of script 10576
+#!script 10577
+WD_Selector(<:StrSrc:"","",100,10,0:>);
+WD_Selector(<:App_source3:"WD","meas_in_WA15","WindDirection",<:App_lastvalue:"WD":>,-1,9:>);
+WD_Selector(<:App_source3:"dir","meas_in_WMT700","WMT700",<:App_lastvalue:"dir":>,-1,9:>);
+WD_Selector(<:App_source3:"meas_out","meas_out","0",<:Null:>,-1,2:>);
+WD_Selector(<:App_source3:"WA15","WA15","SParServer",<:App_lastvalue:"WA15":>,-1,257:>);
+WD_Selector(<:App_source3:"WD_Selector:timeout","timeout","SParServer",<:App_lastvalue:"WD_Selector:timeout":>,-1,257:>);
+WD_Selector(<:App_source3:"status","sensorst","WMT700",<:App_lastvalue:"status":>,-1,257:>);
+WD_Selector(<:App_source3:"sensorstout","sensorstout","0",<:Null:>,-1,66:>);
+END # End of script 10577
+#!script 10578
+WetBulb_1hour_avg(<:Stat_config:WetBulb_1min_avg,"twet",1,263,1,0:>);
+WetBulb_1hour_avg(<:Stat_query:"Avg",4,1,1,1:>);
+WetBulb_1hour_avg(<:Stat_query:"Min",1,1,1,1:>);
+WetBulb_1hour_avg(<:Stat_query:"Max",2,1,1,1:>);
+END # End of script 10578
+#!script 10579
+WetBulb_1min_avg(<:App_source:"","temp",TA_1min_avg,<:App_lastvalue:"Avg":>:>);
+WetBulb_1min_avg(<:App_source:"","dewp",DPCalc_1,<:App_lastvalue:"DP":>:>);
+WetBulb_1min_avg(<:App_source:"","pres",QFECalc_1,<:App_lastvalue:"QF":>:>);
+END # End of script 10579
+#!script 10580
+WS_Alarm(<:vmon_config:WS_AlarmValue,"",<:App_lastvalue:"out_value":>,WS_AlarmMessage,<:App_do:"",0,1:>,0,<:App_do:"",0,1:>,0,0,1,0,0,2,0,SParServer,"",<:App_lastvalue:"WS_Alarm:high_limit":>:>);
+WS_Alarm(<:App_source2:"","invtrig",0,<:App_do:"rep",0,1:>,-1,0:>);
+WS_Alarm(<:App_cfg:"invcfg",<:Integer:0:>:>);
+END # End of script 10580
+#!script 10581
+WS_AlarmMessage(<:ChecksumCfg:1,0,0,0,16,0,0:>);
+WS_AlarmMessage(<:StrSrc:"","",4,23,0:>);
+WS_AlarmMessage(<:App_source3:"","","SParServer",<:App_lastvalue:"sname":>,-1,0:>);
+WS_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_YY":>,-1,0:>);
+WS_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_MM":>,-1,0:>);
+WS_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_DD":>,-1,0:>);
+WS_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_h":>,-1,0:>);
+WS_AlarmMessage(<:App_source3:"","","SysInfo",<:App_lastvalue:"utc_m":>,-1,0:>);
+WS_AlarmMessage(<:App_source3:"","","QuickWind_1",<:App_lastvalue:"SpdMax10m":>,-1,0:>);
+END # End of script 10581
+#!script 10582
+WS_AlarmValue(<:StrSrc:"","",100,5,0:>);
+WS_AlarmValue(<:App_source3:"rep","value_message","AlarmingValues",<:App_lastvalue:"rep":>,-1,137:>);
+WS_AlarmValue(<:App_source3:"_value_tag","value_tag","0",<:App_lastvalue:"":>,-1,129:>);
+WS_AlarmValue(<:App_source3:"out_value","out_value","0",<:Null:>,-1,2:>);
+WS_AlarmValue(<:App_resvalue:"_value_tag",1,<:String:"WS":>,"",0:>);
+END # End of script 10582
+#!script 10583
+WS_day_avg(<:Stat_config:QuickWind_1,"SpdAvg2m",1,263,720,0:>);
+WS_day_avg(<:Stat_query:"Avg",4,720,720,482:>);
+WS_day_avg(<:Stat_query:"Min",1,720,720,482:>);
+WS_day_avg(<:Stat_query:"Max",2,720,720,482:>);
+END # End of script 10583
+#!script 10584
+WS_Selector(<:StrSrc:"","",100,10,0:>);
+WS_Selector(<:App_source3:"Meas","meas_in_WA15","WindSpeed",<:App_lastvalue:"Meas":>,-1,9:>);
+WS_Selector(<:App_source3:"spd","meas_in_WMT700","WMT700",<:App_lastvalue:"spd":>,-1,9:>);
+WS_Selector(<:App_source3:"meas_out","meas_out","0",<:Null:>,-1,2:>);
+WS_Selector(<:App_source3:"WA15","WA15","SParServer",<:App_lastvalue:"WA15":>,-1,257:>);
+WS_Selector(<:App_source3:"WS_Selector:timeout","timeout","SParServer",<:App_lastvalue:"WS_Selector:timeout":>,-1,257:>);
+WS_Selector(<:App_source3:"status","sensorst","WMT700",<:App_lastvalue:"status":>,-1,257:>);
+WS_Selector(<:App_source3:"sensorstout","sensorstout","0",<:Null:>,-1,66:>);
+END # End of script 10584
+#!script 20501
+Tev(<:CTimer:89,1,1,'L',2,12108,3600000,<:Null:>,DP_Hourly_avg:>);
+Tev(<:CTimer:90,1,1,'L',2,12109,3600000,<:App_do:"CALC",0,1:>,DP_Hourly_avg:>);
+END # End of script 20501
+#!script 20502
+Tev(<:CTimer:83,1,1,'L',2,12102,60000,<:App_do:"DP",DPCalc_1,1:>,DPCalc_1:>);
+END # End of script 20502
+#!script 20503
+Tev(<:CTimer:115,1,1,'L',2,12134,86400000,<:App_do:"evap",0,1:>,EvapCalc_1:>);
+END # End of script 20503
+#!script 20504
+Tev(<:CTimer:22,1,1,'L',2,12036,10000,<:Null:>,Global_irradiation_1min_avg:>);
+Tev(<:CTimer:23,1,1,'L',2,12037,10000,<:App_do:"CALC",0,1:>,Global_irradiation_1min_avg:>);
+END # End of script 20504
+#!script 20505
+Tev(<:CTimer:24,1,1,'L',2,12038,86400000,<:Null:>,Global_Radiation_1d_avg:>);
+Tev(<:CTimer:25,1,1,'L',2,12039,86400000,<:App_do:"CALC",0,1:>,Global_Radiation_1d_avg:>);
+END # End of script 20505
+#!script 20506
+Tev(<:CTimer:26,1,1,'L',2,12040,3600000,<:Null:>,Global_Radiation_1h_avg:>);
+Tev(<:CTimer:27,1,1,'L',2,12041,3600000,<:App_do:"CALC",0,1:>,Global_Radiation_1h_avg:>);
+END # End of script 20506
+#!script 20507
+Tev(<:CTimer:84,1,1,'L',2,12103,60000,<:App_do:"HI",0,1:>,HICalc_1:>);
+END # End of script 20507
+#!script 20508
+Tev(<:CTimer:5,1,1,'L',2,2002,10000,<:App_do:"RH",0,1:>,Humidity:>);
+END # End of script 20508
+#!script 20509
+Tev(<:CTimer:28,1,1,'L',2,12042,10000,<:Null:>,PA_1min_avg:>);
+Tev(<:CTimer:29,1,1,'L',2,12043,10000,<:App_do:"CALC",0,1:>,PA_1min_avg:>);
+END # End of script 20509
+#!script 20510
+Tev(<:CTimer:30,1,1,'L',2,12044,600000,<:Null:>,PR_10min_sum:>);
+Tev(<:CTimer:31,1,1,'L',2,12045,600000,<:App_do:"CALC",0,1:>,PR_10min_sum:>);
+END # End of script 20510
+#!script 20511
+Tev(<:CTimer:32,1,1,'L',2,12046,43200000,<:Null:>,PR_12hour_sum:>);
+Tev(<:CTimer:33,1,1,'L',2,12047,43200000,<:App_do:"CALC",0,1:>,PR_12hour_sum:>);
+END # End of script 20511
+#!script 20512
+Tev(<:CTimer:34,1,1,'L',2,12048,3600000,<:Null:>,PR_1hour_sum:>);
+Tev(<:CTimer:35,1,1,'L',2,12049,3600000,<:App_do:"CALC",0,1:>,PR_1hour_sum:>);
+END # End of script 20512
+#!script 20513
+Tev(<:CTimer:36,1,1,'L',2,12050,60000,<:Null:>,PR_1min_sum:>);
+Tev(<:CTimer:37,1,1,'L',2,12051,60000,<:App_do:"CALC",0,1:>,PR_1min_sum:>);
+END # End of script 20513
+#!script 20514
+Tev(<:CTimer:38,1,1,'L',2,12052,1800000,<:Null:>,PR_30min_sum:>);
+Tev(<:CTimer:39,1,1,'L',2,12053,1800000,<:App_do:"CALC",0,1:>,PR_30min_sum:>);
+END # End of script 20514
+#!script 20515
+Tev(<:CTimer:40,1,1,'L',2,12054,10800000,<:Null:>,PR_3hour_sum:>);
+Tev(<:CTimer:41,1,1,'L',2,12055,10800000,<:App_do:"CALC",0,1:>,PR_3hour_sum:>);
+END # End of script 20515
+#!script 20516
+Tev(<:CTimer:42,1,1,'L',2,12056,21600000,<:Null:>,PR_6hour_sum:>);
+Tev(<:CTimer:43,1,1,'L',2,12057,21600000,<:App_do:"CALC",0,1:>,PR_6hour_sum:>);
+END # End of script 20516
+#!script 20517
+Tev(<:CTimer:125,1,1,'L',2,12144,0,<:Null:>,PR_Alarm:>);
+END # End of script 20517
+#!script 20518
+
+END # End of script 20518
+#!script 20519
+
+END # End of script 20519
+#!script 20520
+Tev(<:CTimer:91,1,1,'L',2,12110,86400000,<:Null:>,PR_Duration_1d:>);
+Tev(<:CTimer:92,1,1,'L',2,12111,86400000,<:App_do:"CALC",0,1:>,PR_Duration_1d:>);
+END # End of script 20520
+#!script 20521
+Tev(<:CTimer:93,1,1,'L',2,12112,3600000,<:Null:>,PR_Duration_1h:>);
+Tev(<:CTimer:94,1,1,'L',2,12113,3600000,<:App_do:"CALC",0,1:>,PR_Duration_1h:>);
+END # End of script 20521
+#!script 20522
+
+END # End of script 20522
+#!script 20523
+Tev(<:CTimer:76,1,1,'L',2,12093,60000,<:Null:>,PR_On:>);
+END # End of script 20523
+#!script 20524
+Tev(<:CTimer:44,1,1,'L',2,12058,60000,<:Null:>,PR24h:>);
+Tev(<:CTimer:45,1,1,'L',2,12059,60000,<:App_do:"CALC",0,1:>,PR24h:>);
+END # End of script 20524
+#!script 20525
+Tev(<:CTimer:9,1,1,'L',2,2006,60000,<:App_do:"PR",0,1:>,Precipitation:>);
+END # End of script 20525
+#!script 20526
+Tev(<:CTimer:2,1,1,'L',2,0,10000,<:App_do:"PA",0,1:>,Pressure:>);
+END # End of script 20526
+#!script 20527
+Tev(<:CTimer:117,1,1,'L',2,12136,60000,<:App_do:"ptend",0,1:>,PTendCalc_1:>);
+END # End of script 20527
+#!script 20528
+Tev(<:CTimer:95,1,1,'L',2,12114,60000,<:Null:>,PTendStat_1:>);
+Tev(<:CTimer:96,1,1,'L',2,12115,60000,<:App_do:"CALC",0,1:>,PTendStat_1:>);
+END # End of script 20528
+#!script 20529
+Tev(<:CTimer:19,1,1,'L',2,12031,60000,<:App_do:"calc",0,1:>,PulsesToMM:>);
+END # End of script 20529
+#!script 20530
+Tev(<:CTimer:97,1,1,'L',2,12116,86400000,<:Null:>,QFE_Daily_avg:>);
+Tev(<:CTimer:98,1,1,'L',2,12117,86400000,<:App_do:"CALC",0,1:>,QFE_Daily_avg:>);
+END # End of script 20530
+#!script 20531
+Tev(<:CTimer:99,1,1,'L',2,12118,3600000,<:Null:>,QFE_Hourly_avg:>);
+Tev(<:CTimer:100,1,1,'L',2,12119,3600000,<:App_do:"CALC",0,1:>,QFE_Hourly_avg:>);
+END # End of script 20531
+#!script 20532
+Tev(<:CTimer:85,1,1,'L',2,12104,60000,<:App_do:"QF",0,1:>,QFECalc_1:>);
+END # End of script 20532
+#!script 20533
+Tev(<:CTimer:101,1,1,'L',2,12120,86400000,<:Null:>,QFF_Daily_avg:>);
+Tev(<:CTimer:102,1,1,'L',2,12121,86400000,<:App_do:"CALC",0,1:>,QFF_Daily_avg:>);
+END # End of script 20533
+#!script 20534
+Tev(<:CTimer:103,1,1,'L',2,12122,3600000,<:Null:>,QFF_Hourly_avg:>);
+Tev(<:CTimer:104,1,1,'L',2,12123,3600000,<:App_do:"CALC",0,1:>,QFF_Hourly_avg:>);
+END # End of script 20534
+#!script 20535
+Tev(<:CTimer:86,1,1,'L',2,12105,60000,<:App_do:"QF",0,1:>,QFFCalc_1:>);
+END # End of script 20535
+#!script 20536
+Tev(<:CTimer:138,1,1,'L',2,13164,10000,<:App_do:"",0,1:>,QMD_Network:>);
+END # End of script 20536
+#!script 20537
+Tev(<:CTimer:139,1,1,'L',2,13165,10000,<:App_do:"",0,1:>,QMD_Soil:>);
+END # End of script 20537
+#!script 20538
+Tev(<:CTimer:140,1,1,'L',2,13166,10000,<:App_do:"",0,1:>,QMD_System:>);
+END # End of script 20538
+#!script 20539
+Tev(<:CTimer:105,1,1,'L',2,12124,86400000,<:Null:>,QNH_Daily_avg:>);
+Tev(<:CTimer:106,1,1,'L',2,12125,86400000,<:App_do:"CALC",0,1:>,QNH_Daily_avg:>);
+END # End of script 20539
+#!script 20540
+Tev(<:CTimer:107,1,1,'L',2,12126,3600000,<:Null:>,QNH_Hourly_avg:>);
+Tev(<:CTimer:108,1,1,'L',2,12127,3600000,<:App_do:"CALC",0,1:>,QNH_Hourly_avg:>);
+END # End of script 20540
+#!script 20541
+Tev(<:CTimer:87,1,1,'L',2,12106,60000,<:App_do:"QNH",0,1:>,QNHCalc_1:>);
+END # End of script 20541
+#!script 20542
+Tev(<:CTimer:78,1,1,'L',2,12095,1000,<:Integer:0:>,QuickWind_1:>);
+Tev(<:CTimer:79,1,1,'L',2,12096,3000,<:Integer:1:>,QuickWind_1:>);
+Tev(<:CTimer:80,1,1,'L',2,12097,1000,<:App_do:"Wind3s",0,1:>,QuickWind_1:>);
+Tev(<:CTimer:81,1,1,'L',2,12098,15000,<:App_do:"Wind2m",0,1:>,QuickWind_1:>);
+Tev(<:CTimer:82,1,1,'L',2,12099,15000,<:App_do:"Wind10m",0,1:>,QuickWind_1:>);
+END # End of script 20542
+#!script 20543
+Tev(<:CTimer:46,1,1,'L',2,12060,10000,<:Null:>,RH_1min_avg:>);
+Tev(<:CTimer:47,1,1,'L',2,12061,10000,<:App_do:"CALC",0,1:>,RH_1min_avg:>);
+END # End of script 20543
+#!script 20544
+Tev(<:CTimer:48,1,1,'L',2,12062,86400000,<:Null:>,RH_Daily:>);
+Tev(<:CTimer:49,1,1,'L',2,12063,86400000,<:App_do:"CALC",0,1:>,RH_Daily:>);
+END # End of script 20544
+#!script 20545
+Tev(<:CTimer:50,1,1,'L',2,12064,3600000,<:Null:>,RH_Hourly_avg:>);
+Tev(<:CTimer:51,1,1,'L',2,12065,3600000,<:App_do:"CALC",0,1:>,RH_Hourly_avg:>);
+END # End of script 20545
+#!script 20546
+Tev(<:CTimer:4,1,1,'L',2,2001,60000,<:App_do:"SH",0,1:>,SnowDepth:>);
+END # End of script 20546
+#!script 20547
+Tev(<:CTimer:52,1,1,'L',2,12066,60000,<:Null:>,SnowDepth_1h:>);
+Tev(<:CTimer:53,1,1,'L',2,12067,60000,<:App_do:"CALC",0,1:>,SnowDepth_1h:>);
+END # End of script 20547
+#!script 20548
+Tev(<:CTimer:20,1,1,'L',2,12032,60000,<:App_do:"CALC",0,1:>,SnowDepth_to_cm:>);
+END # End of script 20548
+#!script 20549
+Tev(<:CTimer:6,1,1,'L',2,2003,10000,<:App_do:"TG",0,1:>,SoilTemp1:>);
+END # End of script 20549
+#!script 20550
+Tev(<:CTimer:7,1,1,'L',2,2004,10000,<:App_do:"TG",0,1:>,SoilTemp2:>);
+END # End of script 20550
+#!script 20551
+Tev(<:CTimer:11,1,1,'L',2,2008,10000,<:App_do:"SR",0,1:>,SolarRadiation:>);
+END # End of script 20551
+#!script 20552
+
+END # End of script 20552
+#!script 20553
+
+END # End of script 20553
+#!script 20554
+
+END # End of script 20554
+#!script 20555
+
+END # End of script 20555
+#!script 20556
+Tev(<:CTimer:88,1,1,'L',2,12107,60000,<:App_do:"SS",0,1:>,SunShineCalc_1:>);
+END # End of script 20556
+#!script 20557
+Tev(<:CTimer:109,1,1,'L',2,12128,86400000,<:Null:>,SunShineDuration_daily_min:>);
+Tev(<:CTimer:110,1,1,'L',2,12129,86400000,<:App_do:"CALC",0,1:>,SunShineDuration_daily_min:>);
+END # End of script 20557
+#!script 20558
+Tev(<:CTimer:54,1,1,'L',2,12068,10000,<:Null:>,TA_1min_avg:>);
+Tev(<:CTimer:55,1,1,'L',2,12069,10000,<:App_do:"CALC",0,1:>,TA_1min_avg:>);
+END # End of script 20558
+#!script 20559
+Tev(<:CTimer:124,1,1,'L',2,12143,0,<:Null:>,TA_AlarmHigh:>);
+END # End of script 20559
+#!script 20560
+Tev(<:CTimer:123,1,1,'L',2,12142,0,<:Null:>,TA_AlarmLow:>);
+END # End of script 20560
+#!script 20561
+
+END # End of script 20561
+#!script 20562
+
+END # End of script 20562
+#!script 20563
+Tev(<:CTimer:56,1,1,'L',2,12070,86400000,<:Null:>,TA_Daily_avg:>);
+Tev(<:CTimer:57,1,1,'L',2,12071,86400000,<:App_do:"CALC",0,1:>,TA_Daily_avg:>);
+END # End of script 20563
+#!script 20564
+Tev(<:CTimer:58,1,1,'L',2,12072,3600000,<:Null:>,TA_Hourly_avg:>);
+Tev(<:CTimer:59,1,1,'L',2,12073,3600000,<:App_do:"CALC",0,1:>,TA_Hourly_avg:>);
+END # End of script 20564
+#!script 20565
+Tev(<:CTimer:155,1,1,'L',2,64812074,3600000,<:Null:>,TA_Max_06_18:>);
+Tev(<:CTimer:156,1,1,'L',2,64812075,3600000,<:App_do:"CALC",0,1:>,TA_Max_06_18:>);
+END # End of script 20565
+#!script 20566
+Tev(<:CTimer:60,1,1,'L',2,12076,3600000,<:Null:>,TA_Min_18_06:>);
+Tev(<:CTimer:153,1,1,'L',2,21612077,3600000,<:App_do:"CALC",0,1:>,TA_Min_18_06:>);
+END # End of script 20566
+#!script 20567
+Tev(<:CTimer:61,1,1,'L',2,12078,86400000,<:Null:>,TA_PrecDay:>);
+Tev(<:CTimer:62,1,1,'L',2,12079,86400000,<:App_do:"CALC",0,1:>,TA_PrecDay:>);
+END # End of script 20567
+#!script 20568
+Tev(<:CTimer:12,1,1,'L',2,2009,10000,<:App_do:"TA",0,1:>,Temperature:>);
+END # End of script 20568
+#!script 20569
+Tev(<:CTimer:63,1,1,'L',2,12080,600000,<:Null:>,TG1_10Min_avg:>);
+Tev(<:CTimer:64,1,1,'L',2,12081,600000,<:App_do:"CALC",0,1:>,TG1_10Min_avg:>);
+END # End of script 20569
+#!script 20570
+Tev(<:CTimer:65,1,1,'L',2,12082,86400000,<:Null:>,TG1_Daily_Avg:>);
+Tev(<:CTimer:66,1,1,'L',2,12083,86400000,<:App_do:"CALC",0,1:>,TG1_Daily_Avg:>);
+END # End of script 20570
+#!script 20571
+Tev(<:CTimer:67,1,1,'L',2,12084,3600000,<:Null:>,TG1_Hourly_Avg:>);
+Tev(<:CTimer:68,1,1,'L',2,12085,3600000,<:App_do:"CALC",0,1:>,TG1_Hourly_Avg:>);
+END # End of script 20571
+#!script 20572
+Tev(<:CTimer:69,1,1,'L',2,12086,600000,<:Null:>,TG2_10Min_avg:>);
+Tev(<:CTimer:70,1,1,'L',2,12087,600000,<:App_do:"CALC",0,1:>,TG2_10Min_avg:>);
+END # End of script 20572
+#!script 20573
+Tev(<:CTimer:71,1,1,'L',2,12088,86400000,<:Null:>,TG2_Daily_avg:>);
+Tev(<:CTimer:72,1,1,'L',2,12089,86400000,<:App_do:"CALC",0,1:>,TG2_Daily_avg:>);
+END # End of script 20573
+#!script 20574
+Tev(<:CTimer:73,1,1,'L',2,12090,3600000,<:Null:>,TG2_Hourly_avg:>);
+Tev(<:CTimer:74,1,1,'L',2,12091,3600000,<:App_do:"CALC",0,1:>,TG2_Hourly_avg:>);
+END # End of script 20574
+#!script 20575
+Tev(<:CTimer:118,1,1,'L',2,12137,3600000,<:Null:>,VapourPressure_avg:>);
+Tev(<:CTimer:119,1,1,'L',2,12138,3600000,<:App_do:"CALC",0,1:>,VapourPressure_avg:>);
+END # End of script 20575
+#!script 20576
+Tev(<:CTimer:113,1,1,'L',2,12132,60000,<:App_do:"WCh",0,1:>,WChCalc_1:>);
+END # End of script 20576
+#!script 20577
+
+END # End of script 20577
+#!script 20578
+Tev(<:CTimer:120,1,1,'L',2,12139,3600000,<:Null:>,WetBulb_1hour_avg:>);
+Tev(<:CTimer:121,1,1,'L',2,12140,3600000,<:App_do:"CALC",0,1:>,WetBulb_1hour_avg:>);
+END # End of script 20578
+#!script 20579
+Tev(<:CTimer:116,1,1,'L',2,12135,60000,<:App_do:"MDI",0,1:>,WetBulb_1min_avg:>);
+END # End of script 20579
+#!script 20580
+Tev(<:CTimer:122,1,1,'L',2,12141,0,<:Null:>,WS_Alarm:>);
+END # End of script 20580
+#!script 20581
+
+END # End of script 20581
+#!script 20582
+
+END # End of script 20582
+#!script 20583
+Tev(<:CTimer:111,1,1,'L',2,12130,120000,<:Null:>,WS_day_avg:>);
+Tev(<:CTimer:112,1,1,'L',2,12131,120000,<:App_do:"CALC",0,1:>,WS_day_avg:>);
+END # End of script 20583
+#!script 20584
+
+END # End of script 20584
+#!script 30501
+
+END # End of script 30501
+#!script 30502
+
+END # End of script 30502
+#!script 30503
+
+END # End of script 30503
+#!script 30504
+
+END # End of script 30504
+#!script 30505
+
+END # End of script 30505
+#!script 30506
+
+END # End of script 30506
+#!script 30507
+
+END # End of script 30507
+#!script 30508
+
+END # End of script 30508
+#!script 30509
+
+END # End of script 30509
+#!script 30510
+
+END # End of script 30510
+#!script 30511
+
+END # End of script 30511
+#!script 30512
+
+END # End of script 30512
+#!script 30513
+
+END # End of script 30513
+#!script 30514
+
+END # End of script 30514
+#!script 30515
+
+END # End of script 30515
+#!script 30516
+
+END # End of script 30516
+#!script 30517
+
+END # End of script 30517
+#!script 30518
+
+END # End of script 30518
+#!script 30519
+
+END # End of script 30519
+#!script 30520
+
+END # End of script 30520
+#!script 30521
+
+END # End of script 30521
+#!script 30522
+
+END # End of script 30522
+#!script 30523
+
+END # End of script 30523
+#!script 30524
+
+END # End of script 30524
+#!script 30525
+
+END # End of script 30525
+#!script 30526
+
+END # End of script 30526
+#!script 30527
+
+END # End of script 30527
+#!script 30528
+
+END # End of script 30528
+#!script 30529
+
+END # End of script 30529
+#!script 30530
+
+END # End of script 30530
+#!script 30531
+
+END # End of script 30531
+#!script 30532
+
+END # End of script 30532
+#!script 30533
+
+END # End of script 30533
+#!script 30534
+
+END # End of script 30534
+#!script 30535
+
+END # End of script 30535
+#!script 30536
+link(QMD_Network,QMD_1);
+
+END # End of script 30536
+#!script 30537
+link(QMD_Soil,QMD_1);
+
+END # End of script 30537
+#!script 30538
+link(QMD_System,QMD_1);
+
+END # End of script 30538
+#!script 30539
+
+END # End of script 30539
+#!script 30540
+
+END # End of script 30540
+#!script 30541
+
+END # End of script 30541
+#!script 30542
+
+END # End of script 30542
+#!script 30543
+
+END # End of script 30543
+#!script 30544
+
+END # End of script 30544
+#!script 30545
+
+END # End of script 30545
+#!script 30546
+
+END # End of script 30546
+#!script 30547
+
+END # End of script 30547
+#!script 30548
+
+END # End of script 30548
+#!script 30549
+
+END # End of script 30549
+#!script 30550
+
+END # End of script 30550
+#!script 30551
+
+END # End of script 30551
+#!script 30552
+
+END # End of script 30552
+#!script 30553
+
+END # End of script 30553
+#!script 30554
+
+END # End of script 30554
+#!script 30555
+
+END # End of script 30555
+#!script 30556
+
+END # End of script 30556
+#!script 30557
+
+END # End of script 30557
+#!script 30558
+
+END # End of script 30558
+#!script 30559
+
+END # End of script 30559
+#!script 30560
+
+END # End of script 30560
+#!script 30561
+
+END # End of script 30561
+#!script 30562
+
+END # End of script 30562
+#!script 30563
+
+END # End of script 30563
+#!script 30564
+
+END # End of script 30564
+#!script 30565
+
+END # End of script 30565
+#!script 30566
+
+END # End of script 30566
+#!script 30567
+
+END # End of script 30567
+#!script 30568
+
+END # End of script 30568
+#!script 30569
+
+END # End of script 30569
+#!script 30570
+
+END # End of script 30570
+#!script 30571
+
+END # End of script 30571
+#!script 30572
+
+END # End of script 30572
+#!script 30573
+
+END # End of script 30573
+#!script 30574
+
+END # End of script 30574
+#!script 30575
+
+END # End of script 30575
+#!script 30576
+
+END # End of script 30576
+#!script 30577
+
+END # End of script 30577
+#!script 30578
+
+END # End of script 30578
+#!script 30579
+
+END # End of script 30579
+#!script 30580
+
+END # End of script 30580
+#!script 30581
+
+END # End of script 30581
+#!script 30582
+
+END # End of script 30582
+#!script 30583
+
+END # End of script 30583
+#!script 30584
+
+END # End of script 30584
+
+
+#Block 0 contains names of options
+#!BlockStart 0
+#!Str 1 "CMP6"
+#!Str 2 "EVAPCALC"
+#!Str 3 "HMP155"
+#!Str 4 "IRU_9429"
+#!Str 5 "MDICALC"
+#!Str 6 "PMT16A"
+#!Str 7 "PRESCALC"
+#!Str 8 "QMD"
+#!Str 9 "QMT110_1"
+#!Str 10 "QMT110_2"
+#!Str 11 "RG13"
+#!Str 12 "WCHCALC"
+#!Str 13 "WIND"
+#!BlockStop
+#Block 1 contains executable script numbers
+#!BlockStart 1
+#!Str 0 "1,10001,15000,15001,15002,15003,15004,15005,15006,15007,15008,15009,15010,15011,15012,15013,15014,15015,15016,15017,15018,15019,15020,15021,15022,15023,15024,15025,15026,15027,15028,20001,30001"
+#!Str 1 "504,10504,20504,30504,505,10505,20505,30505,506,10506,20506,30506,551,10551,20551,30551,556,10556,20556,30556,557,10557,20557,30557"
+#!Str 2 "503,10503,20503,30503,531,10531,20531,30531,545,10545,20545,30545,551,10551,20551,30551,563,10563,20563,30563,564,10564,20564,30564,583,10583,20583,30583"
+#!Str 3 "501,10501,20501,30501,502,10502,20502,30502,507,10507,20507,30507,508,10508,20508,30508,543,10543,20543,30543,544,10544,20544,30544,545,10545,20545,30545,553,10553,20553,30553,554,10554,20554,30554,558,10558,20558,30558,559,10559,20559,30559,560,10560,20560,30560,561,10561,20561,30561,562,10562,20562,30562,563,10563,20563,30563,564,10564,20564,30564,565,10565,20565,30565,566,10566,20566,30566,567,10567,20567,30567,568,10568,20568,30568"
+#!Str 4 "546,10546,20546,30546,547,10547,20547,30547,548,10548,20548,30548"
+#!Str 5 "575,10575,20575,30575,578,10578,20578,30578,579,10579,20579,30579"
+#!Str 6 "509,10509,20509,30509,526,10526,20526,30526"
+#!Str 7 "509,10509,20509,30509,527,10527,20527,30527,528,10528,20528,30528,530,10530,20530,30530,531,10531,20531,30531,532,10532,20532,30532,533,10533,20533,30533,534,10534,20534,30534,535,10535,20535,30535,539,10539,20539,30539,540,10540,20540,30540,541,10541,20541,30541,558,10558,20558,30558"
+#!Str 8 "536,10536,20536,30536,537,10537,20537,30537,538,10538,20538,30538"
+#!Str 9 "549,10549,20549,30549,569,10569,20569,30569,570,10570,20570,30570,571,10571,20571,30571"
+#!Str 10 "550,10550,20550,30550,572,10572,20572,30572,573,10573,20573,30573,574,10574,20574,30574"
+#!Str 11 "510,10510,20510,30510,511,10511,20511,30511,512,10512,20512,30512,513,10513,20513,30513,514,10514,20514,30514,515,10515,20515,30515,516,10516,20516,30516,517,10517,20517,30517,518,10518,20518,30518,519,10519,20519,30519,520,10520,20520,30520,521,10521,20521,30521,522,10522,20522,30522,523,10523,20523,30523,524,10524,20524,30524,525,10525,20525,30525,529,10529,20529,30529,555,10555,20555,30555"
+#!Str 12 "558,10558,20558,30558,576,10576,20576,30576,583,10583,20583,30583"
+#!Str 13 "542,10542,20542,30542,552,10552,20552,30552,577,10577,20577,30577,580,10580,20580,30580,581,10581,20581,30581,582,10582,20582,30582,584,10584,20584,30584"
+#!BlockStop
+
+#!BlockStart 3
+#!Str 1 "SlowMeasure	Humidity	CH0	RH\r
+SlowMeasure	SnowDepth	CH1	SH\r
+SlowMeasure	SoilTemp1	CH2	TG\r
+SlowMeasure	SoilTemp2	CH5	TG\r
+RadiationSensor	SolarRadiation	CH6	SR\r
+SlowMeasure	Temperature	CH7	TA\r
+FastFreqMeasure	WindSpeed	CHA	Meas\r
+CounterMeasure	Precipitation	CHB	PR\r
+PMT16	Pressure	FAST_CNT	PA"
+#!Str 2 "HHN"
+#!Str 3 "2010-12-21T11:09:22+00:00"
+#!Str 4 "1.01"
+#!Str 5 "8.00"
+#!BlockStop
+
+#!BlockStart 4
+#!Str 1 '%[/]1s'
+#!Str 2 'TA:%[/]1.1f WS:%[//////]6.1f PR:%[/]1.1f'
+#!Str 3 'TAAVG1M,%[/]1.1f,RHAVG1M,%[/]1.0f,DPAVG1M,%[/]1.1f,TBAVG1M,%[/]1.1f,QFEAVG1M,%[/]1.1f,QFFAVG1M,%[/]1.1f,QNHAVG1M,%[/]1.1f,WDAVG2M,%[/]1.0f,WDMIN2M,%[/]1.0f,WDMAX2M,%[/]1.0f,WSAVG2M,%[/]1.1f,WSMIN2M,%[/]1.1f,WSMAX2M,%[/]1.1f,PRSUM1M,%[/]1.1f,PRFSUM1H,%[/]1.0f,GIRRAVG1M,%[/]1.0f,SDUR1D,%[/]1.0f,TS1AVG10M,%[/]1.1f,TS2AVG10M,%[/]1.1f,SNAVG1M,%[/]1.1f,EVAP1D,%[/]1.1f'
+#!Str 4 '(S:%[/]1s;D:%[//]02d%[//]02d%[//]02d;T:%[//]02d%[//]02d00;ALARM:Supply voltage low;EXTDC:%[/]1.1f)\r\n'
+#!Str 5 '%[//////]6s'
+#!Str 6 '(S:%[/]1s;D:%[//]02d%[//]02d%[//]02d;T:%[//]02d%[//]02d00;TAAVG1M:%[/]1.1f;TAAVG1H:%[/]1.1f;TAAVG1D:%[/]1.1f;TAMIN1D:%[/]1.1f;TAMAX1D:%[/]1.1f;RHAVG1M:%[/]1.0f;RHAVG1H:%[/]1.0f;DPAVG1M:%[/]1.1f;DPAVG1H:%[/]1.1f;TBAVG1M:%[/]1.1f;TBAVG1H:%[/]1.1f;HIAVG1M:%[/]1.1f;WCHAVG1M:%[/]1.1f;QFEAVG1M:%[/]1.1f;QFEAVG1H:%[/]1.1f;QFEMIN1H:%[/]1.1f;QFEMAX1H:%[/]1.1f;QFEAVG1D:%[/]1.1f;QFEMIN1D:%[/]1.1f;QFEMAX1D:%[/]1.1f;QFFAVG1M:%[/]1.1f;QFFAVG1H:%[/]1.1f;QFFMIN1H:%[/]1.1f;QFFMAX1H:%[/]1.1f;QFFAVG1D:%[/]1.1f;QFFMIN1D:%[/]1.1f;QFFMAX1D:%[/]1.1f;QNHAVG1M:%[/]1.1f;QNHAVG1H:%[/]1.1f;QNHMIN1H:%[/]1.1f;QNHMAX1H:%[/]1.1f;QNHAVG1D:%[/]1.1f;QNHMIN1D:%[/]1.1f;QNHMAX1D:%[/]1.1f;PTREND3H:%[/]1.1f;PTEND3H:%[/]1d;VPAVG1H:%[/]1.1f;WS:%[/]1.1f;WD:%[/]1.0f;WDAVG2M:%[/]1.0f;WDMIN2M:%[/]1.0f;WDMAX2M:%[/]1.0f;WSAVG2M:%[/]1.1f;WSMIN2M:%[/]1.1f;WSMAX2M:%[/]1.1f;WDAVG10M:%[/]1.0f;WDMIN10M:%[/]1.0f;WDMAX10M:%[/]1.0f;WSAVG10M:%[/]1.1f;WSMIN10M:%[/]1.1f;WSMAX10M:%[/]1.1f;WDWSMAX10M:%[/]1.0f;PRSUM1M:%[/]1.1f;PRSUM10M:%[/]1.1f;PRSUM30M:%[/]1.1f;PRSUM1H:%[/]1.1f;PRSUM3H:%[/]1.1f;PRSUM6H:%[/]1.1f;PRSUM12H:%[/]1.1f;PRSUM1D:%[/]1.1f;PRFSUM1H:%[/]1.1f;SNAVG1H:%[/]1.1f;TS1AVG10M:%[/]1.1f;TS1AVG1H:%[/]1.1f;TS1MIN1H:%[/]1.1f;TS1MAX1H:%[/]1.1f;TS1AVG1D:%[/]1.1f;TS1MIN1D:%[/]1.1f;TS1MAX1D:%[/]1.1f;TS2AVG10M:%[/]1.1f;TS2AVG1H:%[/]1.1f;TS2MIN1H:%[/]1.1f;TS2MAX1H:%[/]1.1f;TS2AVG1D:%[/]1.1f;TS2MIN1D:%[/]1.1f;TS2MAX1D:%[/]1.1f;GIRRAVG1M:%[/]1.0f;GIRRAVG1H:%[/]1.0f;GIRRAVG1D:%[/]1.0f;SDUR1D:%[/]1.0f;EVAP1D:%[/]1.1f;UPTIME:%[/]1d;STATUS:%[/]1d;EXTDC:%[/]1.1f)'
+#!Str 7 '%[/]b'
+#!Str 8 '(S:%[/]1s;D:%[//]02d%[//]02d%[//]02d;T:%[//]02d%[//]02d00;ALARM:Precipitation;PRSUM1H:%[/]1.1f)\r\n'
+#!Str 9 '\x01    Meteorologic 1         \r\n TA %[//////]6.1f °C   %[n/a]-3d\r\n RH %[//////]6.0f %%    %[n/a]-3d\r\n PA %[//////]6.1f hPa  %[n/a]-3d\r\n WD %[//////]6.0f Deg  %[n/a]-3d\r\n WS %[//////]6.1f m/s  %[n/a]-3d\r\n'
+#!Str 10 '\x02    Meteorologic 2            \r\n PR %[////]4.1f mm/10mn %[n/a]-3d\r\n SR %[////]4.0f W/m2    %[n/a]-3d\r\n'
+#!Str 11 '\x05       Network\r\n\r\n IP %[//////]-6s\r\n SN %[//////]-6s\r\n GW %[//////]-6s\r\n D1 %[//////]-6s\r\n D2 %[//////]-6s\r\n'
+#!Str 12 '\x03       Soil \r\n    \r\n SN  %[//////]6.1f cm  %[n/a]-3d\r\n TS1 %[//////]6.1f °C  %[n/a]-3d\r\n TS2 %[//////]6.1f °C  %[///]-3d\r\n'
+#!Str 13 '\x04       System   \r\n\r\n DC  %[//////]-6.1f      V\r\n T   %[//////]-6.1f     °C\r\n Cfg %[//////]-6s       \r\n SW  %[//////]-6s       \r\n HW  %[//////]-6s       \r\n'
+#!Str 14 '%[/]b\r\n%[/]s'
+#!Str 15 '%[00]02d %[00]02d %[00]02d %[00]02d %[00]02d %[00]02d %[00]02d %[00]02d %[00]02d %[00]02d %[00]02d %[00]02d'
+#!Str 16 '(S:%[/]-1s;D:%[//]02d%[//]02d%[//]02d;T:%[//]02d%[//]02d00;TA:%[/]1.1f;RH:%[/]1.0f;DP:%[/]1.1f;PA:%[/]1.1f;PR:%[/]1.1f;WD:%[/]1.0f;WS:%[/]1.1f;SR:%[/]1.0f;TS1:%[/]1.1f;TS2:%[/]1.1f;SH:%[/]1.1f)'
+#!Str 17 '%D %T %[/]1s\r\n%[//////]6s'
+#!Str 18 '(S:%[/]1s;D:%[//]02d%[//]02d%[//]02d;T:%[//]02d%[//]02d00;ALARM:Air temperature;TAAVG1M:%[/]1.1f)\r\n'
+#!Str 19 '                     \t       \t       \t      \r\nStation name:        \t%[///////]7s\t       \t      \r\nDate:                \t%[/]b\t       \t      \r\n                     \t       \t       \t      \r\nMAWS:                \t       \t       \t      \r\nInternal temperature:\t%[///////]7.1f\t       \t      \r\nDC supply voltage:   \t%[///////]7.1f\t       \t      \r\n                     \t       \t       \t      \r\nSensors:             \t       \t       \t      \r\n                     \tInstant\tAverage\tStatus\r\nTemperature:         \t%[///////]7.1f\t%[///////]7.1f\t%[//////]6d\r\nAir pressure:        \t%[///////]7.1f\t%[///////]7.1f\t%[//////]6d\r\nRelative humidity:   \t%[///////]7.0f\t%[///////]7.0f\t%[//////]6d\r\nWind direction:      \t%[  /////]7.0f\t%[  /////]7.0f\t%[//////]6d\r\nWind speed:          \t%[ //////]7.1f\t%[ //////]7.1f\t%[//////]6d\r\nPrecipitation:       \t%[///////]7.1f\t%[///////]7.0f\t%[//////]6d\r\nSnow depth:          \t%[///////]7.0f\t%[///////]7.1f\t%[//////]6d\r\nSolar radiation:     \t%[///////]7.0f\t%[///////]7.0f\t%[//////]6d\r\nSoil temperature1:   \t%[///////]7.1f\t%[///////]7.1f\t%[//////]6d\r\nSoil temperature2:   \t%[///////]7.1f\t%[///////]7.1f\t%[//////]6d\r\n'
+#!Str 20 '(S:%[/]1s;D:%[//]02d%[//]02d%[//]02d;T:%[//]02d%[//]02d00;ALARM:%[/]1s)\r\n'
+#!Str 21 '(S:%[/]1s;D:%[//]02d%[//]02d%[//]02d;T:%[//]02d%[//]02d00;ALARM:Internal temperature;TINT:%[/]1.0f)\r\n'
+#!Str 22 '%[//]02d%[//]02d%[//]02d %[//]02d%[//]02d%[//]02d'
+#!Str 23 '(S:%[/]1s;D:%[//]02d%[//]02d%[//]02d;T:%[//]02d%[//]02d00;ALARM:Windspeed;WSMAX10M:%[/]1.1f)\r\n'
+#!BlockStop
+
+#!BlockStart 100
+#!Str 1 'value = (A*10 - B)/10;
+;
+;
+;
+;
+;
+writeselected();
+'
+#!Str 2 'value = A/60;
+;
+;
+;
+;
+;
+writeselected();
+'
+#!Str 3 'read speedup;
+if(isvalid(speedup))
+{
+ if(speedup > 0 && speedup <= 8)
+ {
+  int time=utctime(-1);
+  int offset=9-(time % 10);
+  if(offset > 1)
+  {
+   if(offset > speedup) offset=speedup;
+   ;
+   time=utctime(time+offset);
+  }
+  else ;
+ }
+}
+'
+#!Str 4 'int initialized;
+int invalidStatus;
+int csv_to_ftp;
+int csv_to_email;
+int csv_to_socket;
+int csv_to_local;
+int csv_to_com0;
+int table_to_ftp;
+int table_to_email;
+int table_to_socket;
+int table_to_local;
+int table_to_com0;
+int sms_to_ftp;
+int sms_to_email;
+int sms_to_socket;
+int sms_to_local;
+int sms_to_com0;
+int sms_to_sms;
+int alrmet_to_socket;
+int alrmet_to_ftp;
+int alrmet_to_email;
+int alrmet_to_sms;
+int alrmet_to_local;
+int alrmet_to_com0;
+int alrtech_to_socket;
+int alrtech_to_ftp;
+int alrtech_to_email;
+int alrtech_to_sms;
+int alrtech_to_local;
+int alrtech_to_com0;
+int alrtech_list;
+string err;
+try
+{
+  if (initialized == 0)
+  { 
+    initialized = 1;
+    invalidStatus = 2;
+  string cname=compname();
+   csv_to_ftp=spgetint(cname+":csv_to_ftp");
+  csv_to_email=spgetint(cname+":csv_to_email");
+  csv_to_socket=spgetint(cname+":csv_to_socket");
+  csv_to_local=spgetint(cname+":csv_to_local");
+  csv_to_com0=spgetint(cname+":csv_to_com0");
+  table_to_ftp=spgetint(cname+":table_to_ftp");
+  table_to_email=spgetint(cname+":table_to_email");
+  table_to_socket=spgetint(cname+":table_to_socket");
+  table_to_local=spgetint(cname+":table_to_local");
+  table_to_com0=spgetint(cname+":table_to_com0");
+  sms_to_ftp=spgetint(cname+":sms_to_ftp");
+  sms_to_email=spgetint(cname+":sms_to_email");
+  sms_to_socket=spgetint(cname+":sms_to_socket");
+  sms_to_local=spgetint(cname+":sms_to_local"); 
+  sms_to_com0=spgetint(cname+":sms_to_com0");
+  sms_to_sms=spgetint(cname+":sms_to_sms"); 
+  alrmet_to_socket=spgetint(cname+":alrmet_to_socket");
+  alrmet_to_ftp=spgetint(cname+":alrmet_to_ftp"); 
+  alrmet_to_email=spgetint(cname+":alrmet_to_email"); 
+  alrmet_to_sms=spgetint(cname+":alrmet_to_sms"); 
+  alrmet_to_local=spgetint(cname+":alrmet_to_local");
+  alrmet_to_com0=spgetint(cname+":alrmet_to_com0");
+  alrtech_to_socket=spgetint(cname+":alrtech_to_socket"); 
+  alrtech_to_ftp=spgetint(cname+":alrtech_to_ftp"); 
+  alrtech_to_email=spgetint(cname+":alrtech_to_email"); 
+  alrtech_to_sms=spgetint(cname+":alrtech_to_sms"); 
+  alrtech_to_local=spgetint(cname+":alrtech_to_local");
+  alrtech_to_com0=spgetint(cname+":alrtech_to_com0");
+  alrtech_list=spgetint(cname+":alrtech_list");
+  }
+  if(_flags & 0x00000100)
+ {
+  if(isvalid(CSV_REP))
+  {
+    ;
+   if(csv_to_ftp != 0)
+   {
+    ;
+    obs_out=CSV_REP;
+    write obs_ftp;
+   }
+   if(csv_to_email != 0)
+   {
+    ;   
+    obs_out=CSV_REP;
+    write obs_email;
+   }
+   if(csv_to_socket != 0)
+   { 
+    ;   
+    socket_out=CSV_REP;
+    write socket_out;  
+   }
+   if(csv_to_local != 0)
+   { 
+    ;   
+    local_out=CSV_REP;
+    write local_out;  
+   }
+   if(csv_to_com0 != 0)
+   { 
+    ;   
+    com0_out=CSV_REP;
+    write com0_out;  
+   }
+   statusof CSV_REP=invalidStatus;
+  }
+  else if(isvalid(TABLE_REP))
+  {
+    ;
+   if(table_to_ftp  != 0)
+   {
+    ;   
+    obs_out=TABLE_REP;
+    write obs_ftp;
+   }
+   if(table_to_email != 0)
+   { 
+    ;     
+    obs_out=TABLE_REP;
+    write obs_email;
+   }
+   if(table_to_socket != 0)
+   {   
+    ;   
+    socket_out=TABLE_REP;
+    write socket_out;
+   }
+   if(table_to_local != 0)
+   {   
+    ;   
+    local_out=TABLE_REP;
+    write local_out;
+   }
+   if(table_to_com0 != 0)
+   {   
+    ;   
+    com0_out=TABLE_REP;
+    write com0_out;
+   }
+   statusof TABLE_REP=invalidStatus;
+  }
+  else if(isvalid(SMS_REP))
+  {
+    ;
+   if(sms_to_ftp != 0)
+   {
+    ;
+    obs_out=SMS_REP;
+    write obs_ftp;
+   }
+   if(sms_to_email != 0)
+   { 
+    ;  
+    obs_out=SMS_REP;
+    write obs_email;
+   }
+   if(sms_to_socket != 0)
+   { 
+    ;    
+    socket_out=SMS_REP;
+    write socket_out;
+   }
+   if(sms_to_local != 0)
+   { 
+    ;    
+    local_out=SMS_REP;
+    write local_out;
+   }
+   if(sms_to_com0 != 0)
+   { 
+    ;    
+    com0_out=SMS_REP;
+    write com0_out;
+   }
+   if(sms_to_sms != 0)
+   { 
+    ;     
+    obs_out=SMS_REP;
+    write obs_sms;
+   }
+   statusof SMS_REP=invalidStatus;
+  }
+  else
+  {
+   statusof alarm_out=2;
+   if(isvalid(WS_AlarmMessage)) 
+   {
+     ;
+    alarm_out=WS_AlarmMessage;
+    statusof WS_AlarmMessage=2;
+   } 
+   else if(isvalid(TA_AlarmMessage))
+   {
+     ;
+     alarm_out=TA_AlarmMessage;
+    statusof TA_AlarmMessage=2; 
+   }
+   else if(isvalid(PR_AlarmMessage)) 
+   {
+     ;
+    alarm_out=PR_AlarmMessage;
+    statusof PR_AlarmMessage=2;
+   }
+   if(isvalid(alarm_out))
+   {
+    if(alrmet_to_ftp) 
+    {
+     ;
+     write alarm_ftp;
+    }
+     if(alrmet_to_email) 
+    {
+     ;
+     write alarm_email;
+    }
+    if(alrmet_to_sms)   
+    {
+     ;
+     write alarm_sms;
+    }
+    if(alrmet_to_socket) 
+    {
+     ;
+     socket_out=alarm_out;
+     write socket_out;
+    }
+    if(alrmet_to_local) 
+    {
+     ;
+     local_out=alarm_out;
+     write local_out;
+    }
+    if(alrmet_to_com0) 
+    {
+     ;
+     com0_out=alarm_out;
+     write com0_out;
+    }
+   }
+   else
+   {
+    if(isvalid(SensorAlarmMessage))
+    {
+     if(alrtech_list) 
+     {
+       ;
+      alarm_out=SensorAlarmMessage;
+     }
+     statusof SensorAlarmMessage=2; 
+    }
+    else if(isvalid(TechAlarmMessage))
+    {
+     if(alrtech_list==0) 
+     {
+       ;
+      alarm_out=TechAlarmMessage;
+     }
+     statusof TechAlarmMessage=2; 
+    }
+    else if(isvalid(DC_AlarmMessage))
+    {
+      ;
+     alarm_out=DC_AlarmMessage;
+     statusof DC_AlarmMessage=2;
+    }
+    else if(isvalid(TI_AlarmMessage)) 
+    {
+      ;
+     alarm_out=TI_AlarmMessage;
+     statusof TI_AlarmMessage=2;
+    }
+    if(isvalid(alarm_out))
+    {
+     if(alrtech_to_ftp) 
+     {
+      ;
+      write alarm_ftp;
+     }
+      if(alrtech_to_email) 
+     {
+      ;
+      write alarm_email;
+     }
+     if(alrtech_to_socket) 
+     {
+      ;
+      socket_out=alarm_out;
+      write socket_out;
+     }
+     if(alrtech_to_local) 
+     {
+      ;
+      local_out=alarm_out;
+      write local_out;
+     }
+     if(alrtech_to_com0) 
+     {
+      ;
+      com0_out=alarm_out;
+      write com0_out;
+     }
+     if(alrtech_to_sms) 
+     {
+      ;
+      write alarm_sms;
+     }
+    } 
+    else if(isvalid(SMS_SensorAlarmMessage))
+    {
+      alarm_out=SMS_SensorAlarmMessage;
+      if(alrtech_to_sms) 
+      {
+       ;
+       write alarm_sms;
+      }
+      statusof SMS_SensorAlarmMessage=2;
+    }
+   }
+  }
+ }
+}
+catch
+{
+ err="Unhandled exception occurred";
+ ;
+ warning(err);
+}
+'
+#!Str 5 'int initialized;
+int invalidStatus;
+string sErr;
+try
+{
+ if(isvalid(value_message))
+ {
+    string value=strstr(value_message,value_tag);
+  int valueLen=strlen(value);
+  if(valueLen > 0)
+  {
+   int tagLen=strlen(value_tag);
+   value=mid(value,tagLen+1,valueLen-tagLen-1);
+   if(strncmp(value,"/",1) != 0)
+   {
+    out_value=atof(value);
+    ;
+    ;
+   }
+   else 
+   {
+    statusof out_value=2;
+    ;
+   }
+  }
+  else
+  {
+   sErr="Tag not found: "+value_tag;
+   warning(sErr);
+   ;
+  }
+ }
+}
+catch
+{
+ sErr="Unhandled exception";
+ warning(sErr);
+ ;
+}
+'
+#!Str 6 'string sErr;
+int initialized;
+int doScan;
+int doTrig;
+int alarmSt[12];
+try
+{
+ ;
+ ;
+ ;
+ if(doScan)
+ {
+  write Table;
+  doTrig=0;
+   failure_description="";
+  int iAlarm;
+  int iLast=strlen(sensor_status_in)/3;
+  ;
+  for(iAlarm=0; iAlarm <= iLast; iAlarm++)
+  {
+   string sensorSt;
+   sensorSt=mid(sensor_status_in,iAlarm*3,2);
+   if(strcmp(sensorSt,"00")==0 || strcmp(sensorSt,"99")==0)
+   {
+    if(alarmSt[iAlarm]==1) doTrig=1;
+    alarmSt[iAlarm]=0; 
+   }
+   else
+   {
+    ;
+    int wasChanged=0;
+    if(alarmSt[iAlarm]==0) 
+    {
+     doTrig=1;
+     wasChanged=1;
+     alarmSt[iAlarm]=1;
+    }
+    if(iAlarm==0) 
+    {
+     failure_description=failure_description+TA_name;
+     currAlarmMessage=TA_name;
+    }
+    else if(iAlarm==1) 
+    {
+     failure_description=failure_description+RH_name;  
+     currAlarmMessage=RH_name;
+    }
+    else if(iAlarm==2) 
+    {
+     failure_description=failure_description+PA_name;
+     currAlarmMessage=PA_name;
+    }
+    else if(iAlarm==3) 
+    {
+     failure_description=failure_description+WD_name;
+     currAlarmMessage=WD_name;
+    }
+    else if(iAlarm==4)
+    {
+     failure_description=failure_description+WS_name;
+     currAlarmMessage=WS_name;
+    }
+    else if(iAlarm==5)
+    {
+     failure_description=failure_description+PR_name;
+     currAlarmMessage=PR_name;
+    }
+    else if(iAlarm==6)
+    {
+     failure_description=failure_description+SR_name;
+     currAlarmMessage=SR_name;
+    }
+    else if(iAlarm==7)
+    {
+     failure_description=failure_description+ST1_name;
+     currAlarmMessage=ST1_name;
+    }
+    else if(iAlarm==8)
+    {
+     failure_description=failure_description+ST2_name;
+     currAlarmMessage=ST2_name;
+    }
+      else if(iAlarm==9)
+    {
+     failure_description=failure_description+SH_name;
+     currAlarmMessage=SH_name;
+    }
+    else if(iAlarm==10)
+    {
+     wasChanged=0;
+    }
+    else if(iAlarm==11) 
+    {
+     wasChanged=0;
+    }
+    failure_description=failure_description+"\r\n";
+    if(wasChanged) write TechAlarmMessage;
+   }
+  }
+  if(strlen(failure_description)==0) failure_description="No technical alarms";
+  if(doTrig) 
+  {
+   write SensorAlarmMessage;
+  }
+ }
+ else if(initialized==0)
+ {
+  read start_delay;
+  if(isvalid(start_delay)==0) start_delay=120;
+  if(start_delay > 0) 
+  {
+   createtimer(start_delay,0x10000000); 
+   ;
+  }
+  else doScan=1;
+  initialized=1;
+ }
+ else if(_flags & 0x10000000)
+ {
+  ;
+  doScan=1;
+ }
+}
+catch
+{
+ sErr="Unhandled exception";
+ warning(sErr);
+ ;
+}
+'
+#!Str 7 'read TA_12h_Max_in;
+TA_12h_Max=TA_12h_Max_in;
+'
+#!Str 8 'read TA_12h_Min_in;
+TA_12h_Min=TA_12h_Min_in;
+'
+#!Str 9 'if(isvalid(_flags))
+{
+ minutes=minutes+1;
+}
+else 
+{
+ minutes=0;
+}
+'
+#!Str 10 'int gotmeasure;
+int initialized;
+try
+{
+ if(initialized==0)
+ {
+  read WA15;
+  if(isvalid(WA15)==1) initialized=1;
+  else warning("Wind sensor setting missing, parameter WA15"); 
+  read timeout; 
+  int htev=createtimer(0,1,timeout,timeout,0x800);
+ }
+ else
+ {
+  if(_flags & 0x100)
+  {
+   if(WA15)
+   { 
+    if(isvalid(meas_in_WA15))
+    {
+      meas_out=meas_in_WA15;
+     write meas_out;
+     statusof meas_in_WA15=2;
+     gotmeasure=1;
+    }
+   }
+   else
+   {
+    if(isvalid(meas_in_WMT700)) 
+    {
+     meas_out=meas_in_WMT700;
+     write meas_out;
+     statusof meas_in_WMT700=2;
+     gotmeasure=1;
+    }
+   }  
+  }
+  else if(_flags & 0x800)
+  {
+   if(gotmeasure==0)
+   {
+    statusof meas_out=2;
+    write meas_out;
+   } 
+   gotmeasure=0;
+   if(WA15)
+   {
+    sensorstout=99;
+   }
+   else
+   {
+    read sensorst;
+    sensorstout=sensorst;
+   }
+  }
+ }
+}
+catch
+{
+ string sErr="Unhandled exception";
+ warning(sErr);
+ ;
+}
+'
+#!BlockStop
+
+
+
+‘Ñf
