@@ -1,5 +1,5 @@
 ﻿{
-    "generated_at":  "2026-10-27 11:45:00",
+    "generated_at":  "2026-10-27 12:00:00",
     "files":  [
                   {
                       "key":  "Irradiance/poa_tilt36_distance382_all_on.txt",
@@ -332,6 +332,17 @@
                       "constant_target_w":  null
                   },
                   {
+                      "key":  "Weather/L0260430 - L0260831.csv",
+                      "path":  "../Weather/L0260430 - L0260831.csv",
+                      "name":  "L0260430 - L0260831.csv",
+                      "label":  "L0260430 - L0260831.csv",
+                      "type":  "weather",
+                      "tilt":  null,
+                      "distance":  null,
+                      "scenario":  null,
+                      "constant_target_w":  null
+                  },
+                  {
                       "key":  "Weather/L0260901 - L0260921.csv",
                       "path":  "../Weather/L0260901 - L0260921.csv",
                       "name":  "L0260901 - L0260921.csv",
@@ -343,21 +354,10 @@
                       "constant_target_w":  null
                   },
                   {
-                      "key":  "Weather/L0260928.csv",
-                      "path":  "../Weather/L0260928.csv",
-                      "name":  "L0260928.csv",
-                      "label":  "L0260928.csv",
-                      "type":  "weather",
-                      "tilt":  null,
-                      "distance":  null,
-                      "scenario":  null,
-                      "constant_target_w":  null
-                  },
-                  {
-                      "key":  "Weather/L0261008.csv",
-                      "path":  "../Weather/L0261008.csv",
-                      "name":  "L0261008.csv",
-                      "label":  "L0261008.csv",
+                      "key":  "Weather/L0260922 - L0261026.csv",
+                      "path":  "../Weather/L0260922 - L0261026.csv",
+                      "name":  "L0260922 - L0261026.csv",
+                      "label":  "L0260922 - L0261026.csv",
                       "type":  "weather",
                       "tilt":  null,
                       "distance":  null,
