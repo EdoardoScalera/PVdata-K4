@@ -1,5 +1,5 @@
 ﻿{
-    "generated_at":  "2026-11-16 13:45:00",
+    "generated_at":  "2026-11-16 13:47:54",
     "files":  [
                   {
                       "key":  "Irradiance/poa_tilt36_distance382_all_on.txt",
@@ -358,6 +358,17 @@
                       "path":  "../Weather/L0260922 - L0261026.csv",
                       "name":  "L0260922 - L0261026.csv",
                       "label":  "L0260922 - L0261026.csv",
+                      "type":  "weather",
+                      "tilt":  null,
+                      "distance":  null,
+                      "scenario":  null,
+                      "constant_target_w":  null
+                  },
+                  {
+                      "key":  "Weather/L0261027 - L0261115.csv",
+                      "path":  "../Weather/L0261027 - L0261115.csv",
+                      "name":  "L0261027 - L0261115.csv",
+                      "label":  "L0261027 - L0261115.csv",
                       "type":  "weather",
                       "tilt":  null,
                       "distance":  null,
